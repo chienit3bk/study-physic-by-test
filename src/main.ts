@@ -1,4 +1,21 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import PolarisVue from '@ownego/polaris-vue';
+import '@ownego/polaris-vue/dist/style.css';
+import { i18n } from './lang/i18n';
+import router from './router';
+import App from '@/App.vue';
 
-createApp(App).mount('#app')
+const app = createApp(App);
+const pinia = createPinia();
+
+app.use(pinia);
+app.use(PolarisVue);
+app.use(router);
+app.use(i18n);
+
+app.provide('isPortal', true);
+
+router.isReady().then(() => {
+  app.mount('#app');
+});

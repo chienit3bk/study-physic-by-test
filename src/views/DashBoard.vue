@@ -1,9 +1,7 @@
 <template lang="pug">
-.app abc
+.dashboard Dashboard
 </template>
 
 <script setup lang="ts">
-</script>
 
-<style scoped>
-</style>
+</script>
