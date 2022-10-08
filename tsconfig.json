@@ -18,6 +18,11 @@
     "allowJs": true,
     "types": ["@ownego/polaris-vue/dist/volar"]
   },
+  "vueCompilerOptions": {
+    "plugins": [
+      "@volar/vue-language-plugin-pug"
+    ]
+  },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
