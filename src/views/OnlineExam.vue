@@ -8,12 +8,21 @@
   )
     Layout
       LayoutSection(:one-third="true")
-        Select(
-          placeholder="Chọn dạng bài bạn muốn kiểm tra",
-          v-model="examType",
-          :options="options",
-        )
-          template(#label) Chọn dạng bài kiểm tra
+        Grid
+          GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
+            Select(
+              :placeholder="$t('select_exam.choose_type')",
+              v-model="examType",
+              :options="typeOptions",
+            )
+              template(#label) {{ $t('select_exam.type') }}
+          GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
+            Select(
+              :placeholder="$t('select_exam.choose_level')",
+              v-model="examLevel",
+              :options="levels",
+            )
+              template(#label) {{ $t('select_exam.level')}}
       LayoutSection(full-width)
         Grid
           GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
@@ -53,10 +62,16 @@
 import { ref } from 'vue';
 import { Question, CountDownBox, ExamTest } from '@/components/online-exam';
 const examType = ref('');
-const options = [
+const examLevel = ref('');
+const typeOptions = [
   { "label": "Chương 1: Dao động cơ", "value": "chuong1" },
   { "label": "Chương 2: Sóng cơ", "value": "chuong2" },
   { "label": "Chương 3: Điện xoay chiều", "value": "chuong3" },
+];
+const levels = [
+  { "label": "Lý thuyết", "value": "1" },
+  { "label": "Nhận biết thông hiểu", "value": "2" },
+  { "label": "Vận dụng thấp", "value": "3" },
 ];
 const questions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 </script>

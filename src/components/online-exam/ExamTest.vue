@@ -2,9 +2,9 @@
 Card
   template(#title) {{examTest.title}}
   CardSection
-    Text(as="p" variant="bodyMd") {{ $t('online_exam.exam_test.number_question') }} {{ examTest.number_question}}
-    Text(as="p" variant="bodyMd") {{ $t('online_exam.exam_test.test_time') }} {{ examTest.time}}
-    Text(as="p" variant="bodyMd") {{ $t('online_exam.exam_test.exam_type') }} {{ examTest.type}}
+    Text(as="p" variant="bodyMd") {{ $t('exam_test.number_question') }} {{ examTest.number_question}}
+    Text(as="p" variant="bodyMd") {{ $t('exam_test.test_time') }} {{ examTest.time}}
+    Text(as="p" variant="bodyMd") {{ $t('exam_test.exam_type') }} {{ examTest.type}}
 
 </template>
 <script setup lang="ts">

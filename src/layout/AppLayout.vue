@@ -54,12 +54,22 @@ const isCollapsed = ref<boolean>(false);
 const isUserMenuOpen = ref<boolean>(false);
 const isToastActive = ref<boolean>(false);
 const navItems = [
-  { url: '#', label: 'Home', icon: HomeMajor },
-  { url: '#', label: 'Online Exam', icon: VocabularyMajor },
+  {
+    label: 'Home',
+    icon: HomeMajor,
+    selected: (route.name === 'DashBoard'),
+    onClick: () => redirect('DashBoard'),
+  },
+  {
+    label: 'Online Exam',
+    icon: VocabularyMajor,
+    selected: (route.name === 'OnlineExam'),
+    onClick: () => redirect('OnlineExam'),
+  },
 ];
 
 
-const redirect = () => {
-  
-}
+const redirect = (routeName: string): void => {
+  router.push({ name: routeName });
+};
 </script>
