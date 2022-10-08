@@ -1,11 +1,20 @@
 import { createWebHistory, createRouter } from 'vue-router';
 
-import Dashboard from '@/views/DashBoard.vue';
+import {
+  Dashboard,
+  OnlineExam,
+} from '@/views';
+
 const routes = [
   {
     path: '',
     component: Dashboard,
     name: 'DashBoard',
+  },
+  {
+    path: '/online-exam',
+    component: OnlineExam,
+    name: 'OnlineExam',
   },
 ];
 

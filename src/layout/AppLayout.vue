@@ -5,7 +5,10 @@ Frame(
   @navigation-dismiss="isCollapsed = !isCollapsed",
 )
   template(#navigation)
-
+    Navigation(location="/")
+      NavigationSection(
+        :items="navItems"
+      )
   template(#topBar)
     TopBar(
       show-navigation-toggle,
@@ -24,18 +27,16 @@ Frame(
           @toggle="isUserMenuOpen = !isUserMenuOpen",
         )
   slot
-
-  <!-- Extra components -->
-  Toast(
-    v-if="isToastActive",
-    v-bind="toastConfig",
-    @dismiss="isToastActive = false",
-  )
 </template>
 
 <script setup lang="ts">
 import { provide, ref, reactive, computed } from 'vue';
-import type { Toast } from '@/utilities/types';
+import { useRouter, useRoute } from 'vue-router';
+import HomeMajor from '@icons/HomeMajor.svg';
+import VocabularyMajor from '@icons/VocabularyMajor.svg';
+
+const router = useRouter();
+const route = useRoute();
 
 interface Props {
   logo?: Record<string, any>,
@@ -52,21 +53,13 @@ defineProps<Props>();
 const isCollapsed = ref<boolean>(false);
 const isUserMenuOpen = ref<boolean>(false);
 const isToastActive = ref<boolean>(false);
-let toastConfig = reactive<Toast>({
-  content: '',
-  duration: 5000,
-  error: false,
-});
+const navItems = [
+  { url: '#', label: 'Home', icon: HomeMajor },
+  { url: '#', label: 'Online Exam', icon: VocabularyMajor },
+];
 
-const setToastActive = (value: boolean): void => {
-  isToastActive.value = value;
-};
-const setToastConfig = (config: Toast): void => {
-  toastConfig = config;
-};
 
-provide('toastContext', {
-  setToastActive,
-  setToastConfig,
-});
+const redirect = () => {
+  
+}
 </script>
