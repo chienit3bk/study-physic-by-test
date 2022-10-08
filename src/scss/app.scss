@@ -1,0 +1,17 @@
+@use "sass:math";
+
+@import 'common/pre-override-variables';
+
+// Variables
+@import '~/bootstrap/scss/functions';
+@import '~/bootstrap/scss/mixins';
+@import '~/bootstrap/scss/variables';
+
+@import 'common/variables';
+@import 'common/mixins';
+@import 'common/root';
+
+// Bootstrap
+@import 'common/bootstrap-custom';
+@import 'common/base';
+@import 'common/animations';

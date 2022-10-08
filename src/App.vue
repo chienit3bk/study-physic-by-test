@@ -8,5 +8,6 @@ AppProvider
 import { AppLayout } from '@/layout';
 </script>
 
-<style scoped>
+<style lang="scss">
+@import '@/scss/app.scss';
 </style>

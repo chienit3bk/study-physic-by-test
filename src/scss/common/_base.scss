@@ -1,0 +1,57 @@
+.Polaris-Label__Text,
+.Polaris-ChoiceList__Title,
+.form-field-label,
+.text-field-repeater__label,
+.i-picker-header__label {
+  font-weight: var(--p-font-weight-medium);
+}
+
+.form-field-label {
+  margin-bottom: var(--p-space-2);
+}
+
+.form-field-helpText {
+  color: var(--p-text-subdued);
+  margin-top: var(--p-space-1);
+}
+
+.img-full-width {
+  width: 100%;
+  height: auto;
+}
+
+.sticky-block {
+  position: sticky;
+  top: 4rem;
+}
+
+.Polaris-Icon {
+  &.icon-small {
+    position: relative;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.Polaris-TopBar__SearchField {
+  width: auto;
+}
+
+.truncate {
+  display: block;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  max-height: calc(var(--truncate-line-height) * var(--truncate-max-lines));
+  line-height: var(--truncate-line-height);
+
+  -webkit-line-clamp: var(--truncate-max-lines);
+  -webkit-box-orient: vertical;
+}
+
+.Polaris-Tooltip-TooltipOverlay__Content {
+  color: var(--p-text-on-dark);
+  background-color: var(--p-surface-dark);
+}
