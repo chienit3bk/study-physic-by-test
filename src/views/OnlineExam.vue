@@ -13,14 +13,14 @@
             Select(
               :placeholder="$t('select_exam.choose_type')",
               v-model="examType",
-              :options="typeOptions",
+              :options="TYPE_OPTIONS",
             )
               template(#label) {{ $t('select_exam.type') }}
           GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
             Select(
               :placeholder="$t('select_exam.choose_level')",
               v-model="examLevel",
-              :options="levels",
+              :options="LEVELS",
             )
               template(#label) {{ $t('select_exam.level')}}
       LayoutSection(full-width)
@@ -61,17 +61,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Question, CountDownBox, ExamTest } from '@/components/online-exam';
+import { TYPE_OPTIONS, LEVELS } from '@/configs/onlineExam';
 const examType = ref('');
 const examLevel = ref('');
-const typeOptions = [
-  { "label": "Chương 1: Dao động cơ", "value": "chuong1" },
-  { "label": "Chương 2: Sóng cơ", "value": "chuong2" },
-  { "label": "Chương 3: Điện xoay chiều", "value": "chuong3" },
-];
-const levels = [
-  { "label": "Lý thuyết", "value": "1" },
-  { "label": "Nhận biết thông hiểu", "value": "2" },
-  { "label": "Vận dụng thấp", "value": "3" },
-];
+
 const questions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 </script>

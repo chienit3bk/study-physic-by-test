@@ -32,8 +32,8 @@ Frame(
 <script setup lang="ts">
 import { provide, ref, reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import HomeMajor from '@icons/HomeMajor.svg';
-import VocabularyMajor from '@icons/VocabularyMajor.svg';
+import HomeMinor from '@icons/HomeMinor.svg';
+import NoteMinor from '@icons/NoteMinor.svg';
 
 const router = useRouter();
 const route = useRoute();
@@ -56,13 +56,13 @@ const isToastActive = ref<boolean>(false);
 const navItems = [
   {
     label: 'Home',
-    icon: HomeMajor,
+    icon: HomeMinor,
     selected: (route.name === 'DashBoard'),
     onClick: () => redirect('DashBoard'),
   },
   {
     label: 'Online Exam',
-    icon: VocabularyMajor,
+    icon: NoteMinor,
     selected: (route.name === 'OnlineExam'),
     onClick: () => redirect('OnlineExam'),
   },
