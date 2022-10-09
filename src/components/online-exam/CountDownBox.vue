@@ -5,7 +5,7 @@ VueCountdown.qsc2-countdown-timer(
   :key="resetTimeKey",
   :transform="timeTransform",
   v-slot="{ hours, minutes, seconds }",
-) {{ hours }}{{ minutes }}:{{ seconds }}
+) {{ $t('online_exam.time_remaining')}}{{ hours }}{{ minutes }}:{{ seconds }}
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
