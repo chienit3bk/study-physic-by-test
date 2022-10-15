@@ -1,24 +1,29 @@
 <template lang="pug">
 Card
-  template(#title) {{examTest.title}}
+  template(#title) {{ title }}
   CardSection
-    Text(as="p" variant="bodyMd") {{ $t('exam_test.number_question') }} {{ examTest.number_question}}
-    Text(as="p" variant="bodyMd") {{ $t('exam_test.test_time') }} {{ examTest.time}}
-    Text(as="p" variant="bodyMd") {{ $t('exam_test.exam_type') }} {{ examTest.type}}
-    Button(plain) {{ $t('exam_test.start')}}
+    Text(as="p" variant="bodyMd") {{ $t('exam_test.number_question') }} {{ numberQuestion }}
+    Text(as="p" variant="bodyMd") {{ $t('exam_test.test_time') }} {{ time }}
+    Text(as="p" variant="bodyMd") {{ $t('exam_test.exam_type') }} {{ type }}
+    Button(plain @click="getAndShowQuestions") {{ $t('exam_test.start')}}
 </template>
 <script setup lang="ts">
 
-const examTest = {
-  "id": 1,
-  "title": "Đề kiểm tra 15 phút chương 1: Dao động cơ - Đề số 01",
-  "number_question": 10,
-  "type": "Đề kiểm tra 15 phút",
-  "time": 900,
-  "tags": [
-    "Dao động cơ",
-    "Dao động",
-  ],
-  "points": "100",
+interface Props {
+  id: number,
+  title: string,
+  numberQuestion: number,
+  time: number,
+  type: string,
+  points: string,
+}
+
+const props = defineProps<Props>();
+
+const emit = defineEmits(['getAndShowQuestions']);
+
+const getAndShowQuestions = () => {
+  emit('getAndShowQuestions', props.id);
 };
+
 </script>

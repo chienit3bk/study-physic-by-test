@@ -4,21 +4,70 @@
     full-width,
     title="Online Exam",
     subtitle="50 minutes",
-    :breadcrumbs="[{content: 'DashBoard', url: '/'}]",
+    :breadcrumbs="[isShowExam ? {content: 'OnlineExam', url: '/online-exam'} : {content: 'DashBoard', url: '/'} ]",
   )
-    Layout
+    Layout(v-if="!isShowExam")
+      LayoutSection
+        Grid(
+          :columns="{ xs: 1, sm: 4, md: 4, lg: 6, xl: 6 }"
+        )
+          GridCell
+            Select(
+              :placeholder="$t('select_exam.choose_type')",
+              v-model="examChapter",
+              :options="chapters",
+            )
+              template(#label) {{ $t('select_exam.chapter_label') }}
+          GridCell(v-if="examChapter")
+            Select(
+              :placeholder="$t('select_exam.choose_type')",
+              v-model="examChapterOptions",
+              :options="chapterOptions",
+            )
+              template(#label) {{ $t('select_exam.chapter_options_label') }}
+          GridCell(v-if="examChapterOptions")
+            Select(
+              :placeholder="$t('select_exam.choose_level')",
+              v-model="examLevel",
+              :options="LEVELS",
+            )
+              template(#label) {{ $t('select_exam.level_label')}}
+      LayoutSection(full-width)
+        Grid
+          GridCell(
+            v-for="exam in exams"
+            :key="exam.id",
+            :column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }"
+          )
+            ExamTest(
+              :id="exam.id",
+              :title="exam.title",
+              :numberQuestion="exam.number_question",
+              :time="exam.time",
+              :type="exam.type",
+              :points="exam.points",
+              @get-and-show-questions="getAndShowQuestions"
+            )
+    Layout(v-else)
       LayoutSection
         Card
           template(#title)
             Text(as="h3" variant="heading2xl" alignment="center") {{ $t('online_exam.exam_title') }}
-          CardSection
-            Question(@update-answers="handleAnswerChange")
-          CardSection
-            Question(@update-answers="handleAnswerChange")
-          CardSection
-            Question(@update-answers="handleAnswerChange")
-          CardSection
-            Question(@update-answers="handleAnswerChange")
+          CardSection(
+            v-for="question in questions",
+            :key="question.id",
+          )
+            Question(
+              :id="question.id",
+              :number="question.number",
+              :question="question.question",
+              :answers="question.answers",
+              :instructions="question.instructions",
+              :level="question.level",
+              :tags="question.tags"
+              @update-answers="handleAnswerChange"
+            )
+
           Stack.pb-4(distribution="center")
             Button(primary, @click="handleSubmitAnswer") {{ $t('online_exam.submit_answer') }}
       Modal(
@@ -49,147 +98,59 @@
             CountDownBox(
               :time="60*60*20*50",
             )
-    Layout
-      LayoutSection(:one-third="true")
-        Grid
-          GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
-            Select(
-              :placeholder="$t('select_exam.choose_type')",
-              v-model="examType",
-              :options="chapters",
-            )
-              template(#label) {{ $t('select_exam.type') }}
-          GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
-            Select(
-              :placeholder="$t('select_exam.choose_level')",
-              v-model="examLevel",
-              :options="LEVELS",
-            )
-              template(#label) {{ $t('select_exam.level')}}
-      LayoutSection(full-width)
-        Grid
-          GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
-            ExamTest
-          GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
-            ExamTest
-          GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
-            ExamTest
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { Question, CountDownBox, ExamTest } from '@/components/online-exam';
-import { CHAPTER, LEVELS } from '@/configs/onlineExam';
+import { CHAPTERS, LEVELS } from '@/configs/onlineExam';
+import { questionsFake, examTestsFake } from './dataFake';
 
-const examType = ref('');
+const examChapter = ref('');
+const examChapterOptions = ref('');
 const examLevel = ref('');
+const isShowExam = ref(false);
 const isShowSubmitAnswerModal = ref(false);
 const isShowNotFillAllQuestion = ref(false);
 
-const chapters = CHAPTER.map((chapter, index) => {
+const currenAnswers = reactive({});
+const questions = reactive(questionsFake);
+const exams = reactive(examTestsFake);
+
+const chapters = CHAPTERS.map((chapter: Record<string, any>, index: number) => {
   return {
     label: `${index + 1}. ${chapter.name}`,
-    value: chapter.name,
+    value: chapter.id,
   };
 });
 
-const currenAnswers = reactive({
-  '1': '',
-  '2': '',
-  '3': '',
-  '4': '',
+const chapterOptions = computed(() => {
+  const currentChapter = CHAPTERS.find((chapter: Record<string, any>) => chapter.id === examChapter.value);
+
+  if (currentChapter) {
+    return  currentChapter.options.map((option: string, index: number) => {
+      return {
+        label: `Dang ${index + 1}. ${option}`,
+        value: option,
+      };
+    });
+  }
+
+  return [];
 });
 
-const questions = reactive([
-  {
-    id: '1',
-    number: 'Câu 1',
-    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
-    answers: [
-      "A. x = Acos(ωt + φ).",
-      "B. x = Acos(ωt + φ).",
-      "C. x = Acos(ωt + φ).",
-      "D. x = Acos(ωt + φ).",
-    ],
-    true_answer: "A. x = Acos(ωt + φ).",
-    instructions: "",
-    level: 3,
-    tags: [
-      "Dao động cơ",
-      "Chương 1",
-      "Dao động điều hòa",
-    ],
-    disabled: false,
-  },
-  {
-    id: '2',
-    number: 'Câu 2',
-    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
-    answers: [
-      "A. x = Acos(ωt + φ).",
-      "B. x = Acos(ωt + φ).",
-      "C. x = Acos(ωt + φ).",
-      "D. x = Acos(ωt + φ).",
-    ],
-    true_answer: "A. x = Acos(ωt + φ).",
-    instructions: "",
-    level: 3,
-    tags: [
-      "Dao động cơ",
-      "Chương 1",
-      "Dao động điều hòa",
-    ],
-  },
-  {
-    id: '3',
-    number: 'Câu 3',
-    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
-    answers: [
-      "A. x = Acos(ωt + φ).",
-      "B. x = Acos(ωt + φ).",
-      "C. x = Acos(ωt + φ).",
-      "D. x = Acos(ωt + φ).",
-    ],
-    true_answer: "A. x = Acos(ωt + φ).",
-    instructions: "",
-    level: 3,
-    tags: [
-      "Dao động cơ",
-      "Chương 1",
-      "Dao động điều hòa",
-    ],
-    disabled: false,
-  },
-  {
-    id: '4',
-    number: 'Câu 4',
-    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
-    answers: [
-      "A. x = Acos(ωt + φ).",
-      "B. x = Acos(ωt + φ).",
-      "C. x = Acos(ωt + φ).",
-      "D. x = Acos(ωt + φ).",
-    ],
-    true_answer: "A. x = Acos(ωt + φ).",
-    instructions: "",
-    level: 3,
-    tags: [
-      "Dao động cơ",
-      "Chương 1",
-      "Dao động điều hòa",
-    ],
-    disabled: false,
-  },
-]);
-
-const handleAnswerChange = (newAnswer: Record<string, any>): void => {
-  currenAnswers[newAnswer.id] = newAnswer.answer;
+const handleAnswerChange = (newAnswer: Record<string, string>): void => {
+  Object.assign(currenAnswers, newAnswer);
 
   const questionUpdate = questions.find(question => question.id === newAnswer.id);
 
   if (questionUpdate) {
     questionUpdate.disabled = true;
   }
+};
+
+const getAndShowQuestions = () => {
+  isShowExam.value = true;
 };
 
 const toggleModalSubmitAnswer = () => {
@@ -209,7 +170,4 @@ const handleSubmitAnswer = () => {
 const calculatePoints = () => {
   return;
 };
-
-
-
 </script>

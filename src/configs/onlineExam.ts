@@ -5,75 +5,75 @@ export const EXAM_OPTIONS = [
   { 'label': 'Chương 5: Sóng ánh sáng', 'value': 'Chương 5: Sóng ánh sáng' },
 ];
 
-export const CHAPTER = [
+export const CHAPTERS = [
   {
     id: 'chapter_1',
     name: 'Dao động cơ',
-    options: {
-      one: 'Dao động điều hòa',
-      two: 'Con lắc lò xo',
-      three: 'Con lắc đơn',
-      four: 'Dao động tắt dần - Dao động cưỡng bức',
-      five: 'Tổng hợp các dao động điều hòa',
-    },
+    options: [
+      'Dao động điều hòa',
+      'Con lắc lò xo',
+      'Con lắc đơn',
+      'Dao động tắt dần - Dao động cưỡng bức',
+      'Tổng hợp các dao động điều hòa',
+    ],
   },
   {
     id: 'chapter_2',
     name: 'Sóng cơ và sóng âm',
-    options: {
-      one: 'Sóng cơ và sự truyền sóng cơ',
-      two: 'Giao thoa sóng',
-      three: 'Sóng dừng',
-      four: 'Sóng âm',
-    },
+    options: [
+      'Sóng cơ và sự truyền sóng cơ',
+      'Giao thoa sóng',
+      'Sóng dừng',
+      'Sóng âm',
+    ],
   },
   {
     id: 'chapter_3',
     name: 'Dòng điện xoay chiều',
-    options: {
-      one: 'Đại cương về dòng điện xoay chiều',
-      two: 'Các loại điện xoay chiều',
-      three: 'Mạch có R, L, C mắc nối tiếp',
-      four: 'Công suốt của mạch điện xoay chiều',
-      five: 'Truyền tải điện năng, máy biến áp',
-      six: 'Máy phát điện, động cơ điện',
-    },
+    options: [
+      'Đại cương về dòng điện xoay chiều',
+      'Các loại điện xoay chiều',
+      'Mạch có R, L, C mắc nối tiếp',
+      'Công suốt của mạch điện xoay chiều',
+      'Truyền tải điện năng, máy biến áp',
+      'Máy phát điện, động cơ điện',
+    ],
   },
   {
     id: 'chapter_4',
     name: 'Dao động điện từ',
-    options: {
-      one: 'Mạch dao động',
-      two: 'Điện từ trường, sóng điện từ, truyền thông',
-    },
+    options: [
+      'Mạch dao động',
+      'Điện từ trường, sóng điện từ, truyền thông',
+    ],
   },
   {
     id: 'chapter_5',
     name: 'Sóng ánh sáng',
-    options: {
-      one: 'Tán sắc ánh sáng',
-      two: 'Nhiều xạ ánh sáng, giao thoa ánh sáng',
-      three: 'Quang phổ',
-      four: 'Tia hồng ngoại, tia tử ngoại, tia X',
-    },
+    options: [
+      'Tán sắc ánh sáng',
+      'Nhiều xạ ánh sáng, giao thoa ánh sáng',
+      'Quang phổ',
+      'Tia hồng ngoại, tia tử ngoại, tia X',
+    ],
   },
   {
     id: 'chapter_6',
     name: 'Lượng tử ánh sáng',
-    options: {
-      one: 'Hiện tượng quang điện, thuyết lượng tử ánh sáng',
-      two: 'Mẫu nguyên tử Bo',
-    },
+    options: [
+      'Hiện tượng quang điện, thuyết lượng tử ánh sáng',
+      'Mẫu nguyên tử Bo',
+    ],
   },
   {
     id: 'chapter_7',
     name: 'Vật lý hạt nhân',
-    options: {
-      one: 'Tính chất của cấu tạo hạt nhân',
-      two: 'Năng lượng liên kết, phản ứng hật nhân',
-      three: 'Phóng xạ',
-      four: 'Phản ứng phân hạch, phản ứng nhiệt hạch',
-    },
+    options: [
+      'Tính chất của cấu tạo hạt nhân',
+      'Năng lượng liên kết, phản ứng hật nhân',
+      'Phóng xạ',
+      'Phản ứng phân hạch, phản ứng nhiệt hạch',
+    ],
   },
 ];
 
