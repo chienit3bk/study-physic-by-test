@@ -56,7 +56,7 @@
             Select(
               :placeholder="$t('select_exam.choose_type')",
               v-model="examType",
-              :options="TYPE_OPTIONS",
+              :options="chapters",
             )
               template(#label) {{ $t('select_exam.type') }}
           GridCell(:column-span="{ xs: 6, sm: 3, md: 3, lg: 6, xl: 4 }")
@@ -79,12 +79,19 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { Question, CountDownBox, ExamTest } from '@/components/online-exam';
-import { TYPE_OPTIONS, LEVELS } from '@/configs/onlineExam';
+import { CHAPTER, LEVELS } from '@/configs/onlineExam';
 
 const examType = ref('');
 const examLevel = ref('');
 const isShowSubmitAnswerModal = ref(false);
 const isShowNotFillAllQuestion = ref(false);
+
+const chapters = CHAPTER.map((chapter, index) => {
+  return {
+    label: `${index + 1}. ${chapter.name}`,
+    value: chapter.name,
+  };
+});
 
 const currenAnswers = reactive({
   '1': '',
@@ -94,13 +101,85 @@ const currenAnswers = reactive({
 });
 
 const questions = reactive([
-  { id: '1', disabled: false },
-  { id: '2', disabled: false },
-  { id: '3', disabled: false },
-  { id: '4', disabled: false },
-  { id: '5', disabled: false },
-  { id: '6', disabled: false },
-  { id: '7', disabled: false },
+  {
+    id: '1',
+    number: 'Câu 1',
+    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    answers: [
+      "A. x = Acos(ωt + φ).",
+      "B. x = Acos(ωt + φ).",
+      "C. x = Acos(ωt + φ).",
+      "D. x = Acos(ωt + φ).",
+    ],
+    true_answer: "A. x = Acos(ωt + φ).",
+    instructions: "",
+    level: 3,
+    tags: [
+      "Dao động cơ",
+      "Chương 1",
+      "Dao động điều hòa",
+    ],
+    disabled: false,
+  },
+  {
+    id: '2',
+    number: 'Câu 2',
+    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    answers: [
+      "A. x = Acos(ωt + φ).",
+      "B. x = Acos(ωt + φ).",
+      "C. x = Acos(ωt + φ).",
+      "D. x = Acos(ωt + φ).",
+    ],
+    true_answer: "A. x = Acos(ωt + φ).",
+    instructions: "",
+    level: 3,
+    tags: [
+      "Dao động cơ",
+      "Chương 1",
+      "Dao động điều hòa",
+    ],
+  },
+  {
+    id: '3',
+    number: 'Câu 3',
+    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    answers: [
+      "A. x = Acos(ωt + φ).",
+      "B. x = Acos(ωt + φ).",
+      "C. x = Acos(ωt + φ).",
+      "D. x = Acos(ωt + φ).",
+    ],
+    true_answer: "A. x = Acos(ωt + φ).",
+    instructions: "",
+    level: 3,
+    tags: [
+      "Dao động cơ",
+      "Chương 1",
+      "Dao động điều hòa",
+    ],
+    disabled: false,
+  },
+  {
+    id: '4',
+    number: 'Câu 4',
+    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    answers: [
+      "A. x = Acos(ωt + φ).",
+      "B. x = Acos(ωt + φ).",
+      "C. x = Acos(ωt + φ).",
+      "D. x = Acos(ωt + φ).",
+    ],
+    true_answer: "A. x = Acos(ωt + φ).",
+    instructions: "",
+    level: 3,
+    tags: [
+      "Dao động cơ",
+      "Chương 1",
+      "Dao động điều hòa",
+    ],
+    disabled: false,
+  },
 ]);
 
 const handleAnswerChange = (newAnswer: Record<string, any>): void => {
@@ -130,5 +209,7 @@ const handleSubmitAnswer = () => {
 const calculatePoints = () => {
   return;
 };
+
+
 
 </script>
