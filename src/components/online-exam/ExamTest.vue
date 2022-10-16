@@ -23,7 +23,8 @@ const props = defineProps<Props>();
 const emit = defineEmits(['getAndShowQuestions']);
 
 const getAndShowQuestions = () => {
-  emit('getAndShowQuestions', props.id);
+  const dataExam =  { id: props.id, time: props.time / 60 };
+  emit('getAndShowQuestions', dataExam);
 };
 
 </script>

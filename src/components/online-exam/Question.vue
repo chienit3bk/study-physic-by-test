@@ -8,9 +8,10 @@ CardSection
     :choices="choices",
     @change="handleAnswerChange"
   )
-  Button(plain)
-    TextStyle(variation="negative") {{ $t('question.see_help_answer') }}
+  //- Button(plain)
+  //-   TextStyle(variation="negative") {{ $t('question.see_help_answer') }}
 </template>
+
 <script setup lang="ts">
 import { ref } from 'vue';
 
@@ -38,6 +39,7 @@ const choices = props.answers.map((answer: string) => {
 });
 
 const handleAnswerChange = () => {
+  console.log(props.id, user_answer.value);
   const newAnswer = {
     id: props.id,
     answer: user_answer.value,
