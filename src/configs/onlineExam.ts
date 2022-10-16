@@ -77,6 +77,16 @@ export const CHAPTERS = [
   },
 ];
 
+export const EXAM_TIME = [
+  3000,
+  2400,
+  1800,
+  1200,
+  900,
+  600,
+];
+
+
 
 
 export const LEVELS = [

@@ -9,7 +9,7 @@ CardSection
     @change="handleAnswerChange"
   )
   Button(plain)
-    TextStyle(variation="negative") Xem hướng dẫn
+    TextStyle(variation="negative") {{ $t('question.see_help_answer') }}
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';

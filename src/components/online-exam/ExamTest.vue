@@ -3,7 +3,7 @@ Card
   template(#title) {{ title }}
   CardSection
     Text(as="p" variant="bodyMd") {{ $t('exam_test.number_question') }} {{ numberQuestion }}
-    Text(as="p" variant="bodyMd") {{ $t('exam_test.test_time') }} {{ time }}
+    Text(as="p" variant="bodyMd") {{ $t('exam_test.test_time') }} {{ `${time / 60 } ${$t('minute')}` }}
     Text(as="p" variant="bodyMd") {{ $t('exam_test.exam_type') }} {{ type }}
     Button(plain @click="getAndShowQuestions") {{ $t('exam_test.start')}}
 </template>

@@ -2,8 +2,8 @@
 .online-exam
   Page.pb-5(
     full-width,
-    title="Online Exam",
-    subtitle="50 minutes",
+    :title="$t('online_exam.title')",
+    :subtitle="examTime ? `${parseInt(examTime) / 60} ${$t('minute')}` : $t('online_exam.subtitle')",
     :breadcrumbs="[isShowExam ? {content: 'OnlineExam', url: '/online-exam'} : {content: 'DashBoard', url: '/'} ]",
   )
     Layout(v-if="!isShowExam")
@@ -11,6 +11,7 @@
         Grid(
           :columns="{ xs: 1, sm: 4, md: 4, lg: 6, xl: 6 }"
         )
+          // Chọn các chương
           GridCell
             Select(
               :placeholder="$t('select_exam.choose_type')",
@@ -18,6 +19,8 @@
               :options="chapters",
             )
               template(#label) {{ $t('select_exam.chapter_label') }}
+
+          // Chọn các dạng
           GridCell(v-if="examChapter")
             Select(
               :placeholder="$t('select_exam.choose_type')",
@@ -25,14 +28,31 @@
               :options="chapterOptions",
             )
               template(#label) {{ $t('select_exam.chapter_options_label') }}
-          GridCell(v-if="examChapterOptions")
+      LayoutSection
+        Grid(
+          :columns="{ xs: 1, sm: 4, md: 4, lg: 6, xl: 6 }"
+        )
+          // Chọn thời gian làm bài
+          GridCell
+            Select(
+              :placeholder="$t('select_exam.choose_time')",
+              v-model="examTime",
+              :options="times",
+            )
+              template(#label) {{ $t('select_exam.time_label') }}
+
+          // Chọn độ khó
+          GridCell
             Select(
               :placeholder="$t('select_exam.choose_level')",
               v-model="examLevel",
               :options="LEVELS",
             )
               template(#label) {{ $t('select_exam.level_label')}}
-      LayoutSection(full-width)
+
+      LayoutSection(
+        full-width
+      )
         Grid
           GridCell(
             v-for="exam in exams"
@@ -103,24 +123,34 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
 import { Question, CountDownBox, ExamTest } from '@/components/online-exam';
-import { CHAPTERS, LEVELS } from '@/configs/onlineExam';
+import { CHAPTERS, LEVELS, EXAM_TIME } from '@/configs/onlineExam';
 import { questionsFake, examTestsFake } from './dataFake';
 
 const examChapter = ref('');
 const examChapterOptions = ref('');
 const examLevel = ref('');
+const examTime = ref('');
 const isShowExam = ref(false);
 const isShowSubmitAnswerModal = ref(false);
 const isShowNotFillAllQuestion = ref(false);
+const listExam = examTestsFake;
 
 const currenAnswers = reactive({});
 const questions = reactive(questionsFake);
-const exams = reactive(examTestsFake);
+
+const exams = listExam;
 
 const chapters = CHAPTERS.map((chapter: Record<string, any>, index: number) => {
   return {
     label: `${index + 1}. ${chapter.name}`,
     value: chapter.id,
+  };
+});
+
+const times = EXAM_TIME.map((time: number, index: number) => {
+  return {
+    label: `${time/60} phút`,
+    value: String(time),
   };
 });
 
