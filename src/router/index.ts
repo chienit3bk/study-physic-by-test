@@ -4,6 +4,7 @@ import {
   Dashboard,
   OnlineExam,
   OnlineExamTest,
+  NotFound,
 } from '@/views';
 
 const routes = [
@@ -21,6 +22,12 @@ const routes = [
     path: '/online-exam/:id',
     component: OnlineExamTest,
     name: 'OnlineExamTest',
+  },
+    // https://router.vuejs.org/guide/essentials/dynamic-matching.html#catch-all-404-not-found-route
+  {
+    path: '/:pathMatch(.*)*',
+    component: NotFound,
+    name: 'NotFound',
   },
 ];
 

@@ -21,12 +21,20 @@
 
           // Chọn các dạng
           GridCell(v-if="examChapter")
-            Select(
-              :placeholder="$t('select_exam.choose_type')",
-              v-model="examChapterOptions",
-              :options="chapterOptions",
-            )
-              template(#label) {{ $t('select_exam.chapter_options_label') }}
+            Card
+              ChoiceList.ps-2.pe-2(
+                allow-multiple,
+                :name="$t('select_exam.choose_type')",
+                v-model="examChapterOptions",
+                :choices="chapterOptions",
+              )
+          GridCell(v-if="examChapterOptions.length")
+            Stack
+              Tag(
+                v-for="option, index in examChapterOptions",
+                :key="index",
+                @remove="handleRemoveOptionTag(option)",
+              ) {{ option }}
       LayoutSection
         Grid(
           :columns="{ xs: 1, sm: 4, md: 4, lg: 6, xl: 6 }"
@@ -78,13 +86,14 @@ import { examTestsFake } from './dataFake';
 
 const router = useRouter();
 
-const examChapter = ref(['']);
-const examChapterOptions = ref('');
+const examChapter = ref([]);
+const examChapterOptions = ref([]);
 const examLevel = ref('');
 const examTime = ref('');
 
 const listExam = examTestsFake;
 const exams = listExam;
+
 
 const chapters = CHAPTERS.map((chapter: Record<string, any>, index: number) => {
   return {
@@ -101,7 +110,7 @@ const times = EXAM_TIME.map((time: number, index: number) => {
 });
 
 const chapterOptions = computed(() => {
-  const currentChapter = CHAPTERS.find((chapter: Record<string, any>) => chapter.id === examChapter.value);
+  const currentChapter = CHAPTERS.find((chapter: Record<string, any>) => chapter.id === examChapter.value[0]);
 
   if (currentChapter) {
     return  currentChapter.options.map((option: string, index: number) => {
@@ -118,6 +127,10 @@ const chapterOptions = computed(() => {
 const getAndShowQuestions = (dataExam: Record<string, number>) => {
   console.log(dataExam);
   router.push({name: 'OnlineExamTest', params: { id: dataExam.id , time: dataExam.time }});
+};
+
+const handleRemoveOptionTag = (tagOption: string) => {
+  examChapterOptions.value = examChapterOptions.value.filter(option => option !== tagOption);
 };
 
 </script>
