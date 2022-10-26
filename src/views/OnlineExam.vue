@@ -12,13 +12,12 @@
           :columns="{ xs: 1, sm: 4, md: 4, lg: 6, xl: 6 }"
         )
           // Chọn các chương
-          GridCell
-            Select(
-              :placeholder="$t('select_exam.choose_type')",
-              v-model="examChapter",
-              :options="chapters",
+          Card
+            OptionList(
+              v-model="examChapter"
+              :title="$t('select_exam.choose_type')"
+              :options="chapters"
             )
-              template(#label) {{ $t('select_exam.chapter_label') }}
 
           // Chọn các dạng
           GridCell(v-if="examChapter")
@@ -79,7 +78,7 @@ import { examTestsFake } from './dataFake';
 
 const router = useRouter();
 
-const examChapter = ref('');
+const examChapter = ref(['']);
 const examChapterOptions = ref('');
 const examLevel = ref('');
 const examTime = ref('');
@@ -90,7 +89,7 @@ const exams = listExam;
 const chapters = CHAPTERS.map((chapter: Record<string, any>, index: number) => {
   return {
     label: `${index + 1}. ${chapter.name}`,
-    value: chapter.id,
+    value: String(chapter.id),
   };
 });
 
