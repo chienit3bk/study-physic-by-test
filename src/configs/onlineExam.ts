@@ -7,7 +7,7 @@ export const EXAM_OPTIONS = [
 
 export const CHAPTERS = [
   {
-    id: 'chapter_1',
+    id: 1,
     name: 'Dao động cơ',
     options: [
       'Dao động điều hòa',
@@ -18,7 +18,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: 'chapter_2',
+    id: 2,
     name: 'Sóng cơ và sóng âm',
     options: [
       'Sóng cơ và sự truyền sóng cơ',
@@ -28,7 +28,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: 'chapter_3',
+    id: 3,
     name: 'Dòng điện xoay chiều',
     options: [
       'Đại cương về dòng điện xoay chiều',
@@ -40,7 +40,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: 'chapter_4',
+    id: 4,
     name: 'Dao động điện từ',
     options: [
       'Mạch dao động',
@@ -48,7 +48,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: 'chapter_5',
+    id: 5,
     name: 'Sóng ánh sáng',
     options: [
       'Tán sắc ánh sáng',
@@ -58,7 +58,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: 'chapter_6',
+    id: 6,
     name: 'Lượng tử ánh sáng',
     options: [
       'Hiện tượng quang điện, thuyết lượng tử ánh sáng',
@@ -66,7 +66,7 @@ export const CHAPTERS = [
     ],
   },
   {
-    id: 'chapter_7',
+    id: 7,
     name: 'Vật lý hạt nhân',
     options: [
       'Tính chất của cấu tạo hạt nhân',

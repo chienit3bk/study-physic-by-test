@@ -12,22 +12,41 @@
           :columns="{ xs: 1, sm: 4, md: 4, lg: 6, xl: 6 }"
         )
           // Chọn các chương
-          Card
-            OptionList(
-              v-model="examChapter"
-              :title="$t('select_exam.choose_type')"
-              :options="chapters"
+          GridCell
+            Card
+              OptionList(
+                v-model="examChapter"
+                :title="$t('select_exam.choose_type')"
+                :options="chapters"
+              )
+
+            Select.pt-3(
+              :placeholder="$t('select_exam.choose_time')",
+              v-model="examTime",
+              :options="times",
             )
+              template(#label) {{ $t('select_exam.time_label') }}
+
+            Select.pt-3(
+              :placeholder="$t('select_exam.choose_level')",
+              v-model="examLevel",
+              :options="LEVELS",
+            )
+              template(#label) {{ $t('select_exam.level_label')}}
 
           // Chọn các dạng
           GridCell(v-if="examChapter.length")
             Card
               ChoiceList.ps-2.pe-2(
+                v-for="chapter, index in examChapterChosen"
+                :key="index",
                 allow-multiple,
                 :name="$t('select_exam.choose_type')",
                 v-model="examChapterOptions",
-                :choices="chapterOptions",
+                :choices="getChapterOptions(chapter)",
               )
+                Text.pt-2(variant="headingSm" as="h6") {{ chapter.name }}
+
           GridCell(v-if="examChapterOptions.length")
             Stack
               Tag(
@@ -35,27 +54,6 @@
                 :key="index",
                 @remove="handleRemoveOptionTag(option)",
               ) {{ option }}
-      LayoutSection
-        Grid(
-          :columns="{ xs: 1, sm: 4, md: 4, lg: 6, xl: 6 }"
-        )
-          // Chọn thời gian làm bài
-          GridCell
-            Select(
-              :placeholder="$t('select_exam.choose_time')",
-              v-model="examTime",
-              :options="times",
-            )
-              template(#label) {{ $t('select_exam.time_label') }}
-
-          // Chọn độ khó
-          GridCell
-            Select(
-              :placeholder="$t('select_exam.choose_level')",
-              v-model="examLevel",
-              :options="LEVELS",
-            )
-              template(#label) {{ $t('select_exam.level_label')}}
 
       LayoutSection(
         full-width
@@ -98,31 +96,31 @@ const exams = listExam;
 const chapters = CHAPTERS.map((chapter: Record<string, any>, index: number) => {
   return {
     label: `${index + 1}. ${chapter.name}`,
-    value: String(chapter.id),
+    value: chapter.id,
   };
 });
 
 const times = EXAM_TIME.map((time: number, index: number) => {
   return {
     label: `${time/60} phút`,
-    value: String(time),
+    value: time,
   };
 });
 
-const chapterOptions = computed(() => {
-  const currentChapter = CHAPTERS.find((chapter: Record<string, any>) => chapter.id === examChapter.value[0]);
-
-  if (currentChapter) {
-    return  currentChapter.options.map((option: string, index: number) => {
-      return {
-        label: `Dang ${index + 1}. ${option}`,
-        value: option,
-      };
-    });
-  }
-
-  return [];
+const examChapterChosen = computed(() => {
+  return CHAPTERS
+    .filter((chapter: Record<string, any>) => chapter.id <= examChapter.value[0])
+    .reverse();
 });
+
+const getChapterOptions = (chapter: Record<string, any>) => {
+  return  chapter.options.map((option: string, index: number) => {
+    return {
+      label: `Dang ${index + 1}. ${option}`,
+      value: option,
+    };
+  });
+};
 
 const getAndShowQuestions = (dataExam: Record<string, number>) => {
   console.log(dataExam);
