@@ -1,5 +1,4 @@
 export const vi = {
-  minute: 'phút',
   common: {
     initial: 'Installing',
     loading: 'Loading',
@@ -7,6 +6,7 @@ export const vi = {
     error: 'Error',
     page_not_found: 'Không tìm thấy trang',
     setting: 'Cài đặt',
+    minute: 'phút',
   },
   exam_test: {
     number_question: 'Số lượng câu hỏi: ',

@@ -3,7 +3,7 @@
   Page.pb-5(
     full-width,
     :title="$t('online_exam.title')",
-    :subtitle="`${exam.time / 60} ${$t('minute')}`",
+    :subtitle="`${exam.time / 60} ${$t('common.minute')}`",
     :breadcrumbs="[{content: 'OnlineExam', url: '/online-exam'}]",
   )
     Layout(v-if="questions.length")

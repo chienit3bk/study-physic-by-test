@@ -20,7 +20,7 @@
             )
 
           // Chọn các dạng
-          GridCell(v-if="examChapter")
+          GridCell(v-if="examChapter.length")
             Card
               ChoiceList.ps-2.pe-2(
                 allow-multiple,
