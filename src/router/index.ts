@@ -4,24 +4,42 @@ import {
   Dashboard,
   OnlineExam,
   OnlineExamTest,
+  AdminIndex,
+  ListQuestion,
   NotFound,
 } from '@/views';
 
 const routes = [
   {
     path: '',
-    component: Dashboard,
     name: 'DashBoard',
+    component: Dashboard,
   },
   {
     path: '/online-exam',
-    component: OnlineExam,
     name: 'OnlineExam',
+    component: OnlineExam,
   },
   {
     path: '/online-exam/:id',
-    component: OnlineExamTest,
     name: 'OnlineExamTest',
+    component: OnlineExamTest,
+  },
+  {
+    path: '/admin',
+    // component: AdminIndex,
+    children: [
+      {
+        path: '',
+        name: 'admin',
+        component: AdminIndex,
+      },
+      {
+        path: 'list-question',
+        name: 'list-question',
+        component: ListQuestion,
+      },
+    ],
   },
     // https://router.vuejs.org/guide/essentials/dynamic-matching.html#catch-all-404-not-found-route
   {

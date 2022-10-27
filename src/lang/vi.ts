@@ -40,6 +40,11 @@ export const vi = {
     sure_to_submit: 'Bạn đã chắc chắn với các câu trả lời của mình ?',
     not_fill_all_question: 'Bạn chưa điền hết các câu trả lời !',
   },
+  list_question: {
+    title: 'Ngân hàng câu hỏi',
+    subtitle: 'Danh sách các câu hỏi',
+    add_question: 'Thêm câu hỏi',
+  },
   question: {
     see_help_answer: 'Xem hướng dẫn',
   }

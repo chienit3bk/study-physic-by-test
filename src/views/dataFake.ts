@@ -17,12 +17,13 @@ export const questionsFake = [
       "Chương 1",
       "Dao động điều hòa",
     ],
+    average_time: 1000,
     disabled: false,
   },
   {
     id: '2',
     number: 'Câu 2',
-    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    question: "Một vật dao lượt là",
     answers: [
       "A. x = Acos(ωt + φ).",
       "B. x = Acos(ωt + φ).",
