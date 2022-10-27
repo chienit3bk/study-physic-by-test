@@ -26,6 +26,8 @@ export const vi = {
     choose_time: 'Chọn thời gian kiểm tra',
     choose_level: 'Chọn độ khó',
     choose_level_point: 'Chọn mức điểm',
+    create_exam: 'Tạo đề kiểm tra',
+    choose_exam_template: 'Hoặc chọn bài kiểm tra dưới đây'
   },
   online_exam: {
     title: 'Kiểm tra',

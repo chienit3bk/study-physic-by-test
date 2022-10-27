@@ -9,10 +9,10 @@
     Layout
       LayoutSection
         Grid(
-          :columns="{ xs: 1, sm: 4, md: 4, lg: 6, xl: 6 }"
+          :columns="{ sm: 3 }"
         )
           // Chọn các chương
-          GridCell
+          GridCell(:columnSpan="{ xs: 6, sm: 2, md: 2, lg: 2, xl: 2 }")
             Card
               OptionList(
                 v-model="examChapter"
@@ -20,14 +20,14 @@
                 :options="chapters"
               )
 
-            Select.pt-3(
+            Select.pt-2(
               :placeholder="$t('select_exam.choose_time')",
               v-model="examTime",
               :options="times",
             )
               template(#label) {{ $t('select_exam.time_label') }}
 
-            Select.pt-3(
+            Select.pt-2(
               :placeholder="$t('select_exam.choose_level')",
               v-model="examLevel",
               :options="LEVELS",
@@ -35,19 +35,26 @@
               template(#label) {{ $t('select_exam.level_label')}}
 
           // Chọn các dạng
-          GridCell(v-if="examChapter.length")
-            Card
-              ChoiceList.ps-2.pe-2(
-                v-for="chapter, index in examChapterChosen"
-                :key="index",
-                allow-multiple,
-                :name="$t('select_exam.choose_type')",
-                v-model="examChapterOptions",
-                :choices="getChapterOptions(chapter)",
-              )
-                Text.pt-2(variant="headingSm" as="h6") {{ chapter.name }}
+          GridCell(
+            v-if="examChapter.length",
+            :columnSpan="{ xs: 6, sm: 4, md: 4, lg: 4, xl: 4 }",
+          )
+            Scrollable(:style="{height: '480px'}")
+              Card
+                ChoiceList.ps-2.pe-2(
+                  v-for="chapter, index in examChapterChosen"
+                  :key="index",
+                  allow-multiple,
+                  :name="$t('select_exam.choose_type')",
+                  v-model="examChapterOptions",
+                  :choices="getChapterOptions(chapter)",
+                )
+                  Text.pt-2(variant="headingSm" as="h6") {{ chapter.name }}
 
-          GridCell(v-if="examChapterOptions.length")
+          GridCell(
+            v-if="examChapterOptions.length",
+            :columnSpan="{ xs: 6, sm: 4, md: 4, lg: 4, xl: 4 }",
+          )
             Stack
               Tag(
                 v-for="option, index in examChapterOptions",
@@ -55,9 +62,12 @@
                 @remove="handleRemoveOptionTag(option)",
               ) {{ option }}
 
+        Stack.pt-3
+          Button(primary) {{ $t('select_exam.create_exam') }}
       LayoutSection(
         full-width
       )
+        Text.pb-2(as="h4" variant="headingLg") {{ $t('select_exam.choose_exam_template') }}
         Grid
           GridCell(
             v-for="exam in exams"
@@ -103,7 +113,7 @@ const chapters = CHAPTERS.map((chapter: Record<string, any>, index: number) => {
 const times = EXAM_TIME.map((time: number, index: number) => {
   return {
     label: `${time/60} phút`,
-    value: time,
+    value: String(time),
   };
 });
 
