@@ -3,7 +3,7 @@
   Page.pb-5(
     full-width,
     :title="$t('online_exam.title')",
-    :subtitle="`${exam.time / 60} ${$t('common.minute')}`",
+    :subtitle="`${exam.time} ${$t('common.minute')}`",
     :breadcrumbs="[{content: 'OnlineExam', url: '/online-exam'}]",
   )
     Layout(v-if="questions.length")
@@ -12,8 +12,8 @@
           template(#title)
             Text(as="h3" variant="heading2xl" alignment="center") {{ $t('online_exam.exam_title') }}
           CardSection(
-            v-for="question in questions",
-            :key="question.id",
+            v-for="question, index in questions",
+            :key="index",
           )
             Question(
               :id="question.id",
@@ -54,7 +54,7 @@
               ) {{index + 1}}
           CardSection
             CountDownBox(
-              :time="60*60*20*50",
+              :time="1000*60*exam.time",
             )
 </template>
 
@@ -75,10 +75,10 @@ const exam = reactive({
   time: 0,
 });
 
-
 onMounted(() => {
   if (route.params?.id) {
     exam.id = route.params.id as string;
+    exam.time = parseInt(route.params.time as string);
     Object.assign(questions, questionsFake);
   }
 });

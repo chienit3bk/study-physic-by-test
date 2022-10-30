@@ -110,7 +110,7 @@ const chapters = CHAPTERS.map((chapter: Record<string, any>, index: number) => {
   };
 });
 
-const times = EXAM_TIME.map((time: number, index: number) => {
+const times = EXAM_TIME.map((time: number) => {
   return {
     label: `${time/60} phút`,
     value: String(time),
@@ -133,7 +133,6 @@ const getChapterOptions = (chapter: Record<string, any>) => {
 };
 
 const getAndShowQuestions = (dataExam: Record<string, number>) => {
-  console.log(dataExam);
   router.push({name: 'OnlineExamTest', params: { id: dataExam.id , time: dataExam.time }});
 };
 

@@ -21,7 +21,7 @@ const routes = [
     component: OnlineExam,
   },
   {
-    path: '/online-exam/:id',
+    path: '/online-exam/:id/:time',
     name: 'OnlineExamTest',
     component: OnlineExamTest,
   },
