@@ -7,6 +7,21 @@
     :breadcrumbs="[{content: 'OnlineExam', url: '/online-exam'}]",
   )
     Layout(v-if="questions.length")
+      LayoutSection.sticky-block(:one-half="true")
+        Card
+          template(#title)
+            Text(as="h4" variant="heading2xl" alignment="center") {{ $t('online_exam.question') }}
+          CardSection
+            Stack
+              Button(
+                v-for="(question, index) in questions"
+                :disabled="question.disabled"
+              ) {{index + 1}}
+          CardSection
+            CountDownBox(
+              :time="1000*60*exam.time",
+            )
+
       LayoutSection
         Card
           template(#title)
@@ -42,20 +57,6 @@
               v-if="isShowNotFillAllQuestion"
             ) {{ $t('online_exam.not_fill_all_question')}}
 
-      LayoutSection.sticky-block(:one-third="true")
-        Card
-          template(#title)
-            Text(as="h4" variant="heading2xl" alignment="center") {{ $t('online_exam.question') }}
-          CardSection
-            Stack
-              Button(
-                v-for="(question, index) in questions"
-                :disabled="question.disabled"
-              ) {{index + 1}}
-          CardSection
-            CountDownBox(
-              :time="1000*60*exam.time",
-            )
 </template>
 
 <script setup lang="ts">

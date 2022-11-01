@@ -3,34 +3,14 @@ Page(
   :fullWidth="true"
   :title="$t('list_question.title')"
   :subtitle="$t('list_question.subtitle')",
-  :primaryAction="{ content: $t('list_question.add_question'), onAction: toggleModalAdd }"
+  :primaryAction="{ content: $t('list_question.add_question'), onAction: () => {} }"
   :breadcrumbs="[{content: 'Dashboard', url: '/'}]"
 )
-  Modal(
-    :open="showModalAddQuestion"
-    @close="toggleModalAdd"
-  )
-    template(#title)
-      h1 Thêm hàng hóa
-    template(#content)
-
-      Card(sectioned)
-        Form
-          FormLayout
-            TextField
-              template(#label) Mã hàng hóa
-            TextField
-              template(#label) Tên hàng
-            TextField
-              template(#label) Số lượng
-            TextField
-              template(#label) Mã đối tác
-            Button(primary submit) Thêm
-
   Card(sectioned)
     IndexTable(
       :item-count="questions.length",
       :headings="tableHeadings",
+      lastColumnSticky,
     )
       IndexTableRow(
         v-for="{ id, question, answers, tags, true_answer, level, average_time }, index in questions"
@@ -48,26 +28,16 @@ Page(
         IndexTableCell {{average_time}}
 
         IndexTableCell
-          Stack
-            //- ModalEditMerchandiseVue(
-            //-   :id="id"
-            //-   :name="name"
-            //-   :price="price"
-            //-   :timeIn="timeIn"
-            //-   :quantity="quantity"
-            //-   :idPartner="idPartner"
-            //- )
+          Stack(:vertical="false")
             Button(:icon="DeleteMinor")
+            Button(:icon="EditMinor")
 
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-// import ModalEditMerchandiseVue from './ModalEditMerchandise.vue';
 import DeleteMinor from '@icons/DeleteMinor.svg';
+import EditMinor from '@icons/EditMinor.svg';
 import { questionsFake } from '../dataFake';
-
-const showModalAddQuestion = ref(false);
 
 const tableHeadings = [
   {title: 'Mã câu hỏi'},
@@ -77,14 +47,8 @@ const tableHeadings = [
   {title: 'Tags'},
   {title: 'Đô khó'},
   {title: 'AT'},
+  {title: 'Hành động'},
 ];
 
 const questions = questionsFake;
-
-const toggleModalAdd = () => {
-  showModalAddQuestion.value = !showModalAddQuestion.value;
-};
-
-
-
 </script>

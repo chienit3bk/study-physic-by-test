@@ -1,6 +1,6 @@
 <template lang="pug">
 CardSection
-  template(#title) {{number}}
+  template(#title) {{ number }}
   p {{ question }}
   ChoiceList(
     v-model="user_answer",
@@ -39,7 +39,6 @@ const choices = props.answers.map((answer: string) => {
 });
 
 const handleAnswerChange = () => {
-  console.log(props.id, user_answer.value);
   const newAnswer = {
     id: props.id,
     answer: user_answer.value,
