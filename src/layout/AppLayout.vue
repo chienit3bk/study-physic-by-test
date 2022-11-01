@@ -66,6 +66,12 @@ const navItems = [
     selected: (route.name === 'OnlineExam'),
     onClick: () => redirect('OnlineExam'),
   },
+  {
+    label: 'Question Bank',
+    icon: NoteMinor,
+    selected: (route.name === 'list-question'),
+    onClick: () => redirect('list-question'),
+  },
 ];
 
 
