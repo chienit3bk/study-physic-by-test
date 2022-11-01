@@ -21,6 +21,31 @@
             CountDownBox(
               :time="1000*60*exam.time",
             )
+        Card.mt-4
+          template(#title)
+            Text(as="h4" variant="heading2xl" alignment="center") {{ $t('online_exam.current_question') }}
+          CardSection
+            Question(
+              :id="currentQuestion.id",
+              :number="currentQuestion.number",
+              :question="currentQuestion.question",
+              :answers="currentQuestion.answers",
+              :instructions="currentQuestion.instructions",
+              :level="currentQuestion.level",
+              :tags="currentQuestion.tags"
+              @update-answers="handleAnswerChange"
+            )
+            Stack.pb-4(distribution="center")
+              Pagination(
+                has-previous
+                has-next
+                :nextKeys="['']"
+                :previousKeys="['j']"
+                :nextTooltip="$t('online_exam.next_question')"
+                :previousTooltip="$t('online_exam.prev_question')"
+                @previous="showPrevQuestion"
+                @next="showNextQuestion"
+              ) {{ currentQuestion.number }}
 
       LayoutSection
         Card
@@ -70,6 +95,7 @@ const isShowSubmitAnswerModal = ref(false);
 const isShowNotFillAllQuestion = ref(false);
 
 const questions = reactive(questionsFake);
+const currentQuestion = reactive(questions[0]);
 const currenAnswers = reactive({});
 const exam = reactive({
   id: '',
@@ -107,6 +133,16 @@ const handleSubmitAnswer = () => {
     isShowNotFillAllQuestion.value = true;
   }
 };
+
+const showPrevQuestion = () => {
+  return;
+};
+
+const showNextQuestion = () => {
+  return;
+};
+
+
 
 const calculatePoints = () => {
   return;

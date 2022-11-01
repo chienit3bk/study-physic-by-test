@@ -31,12 +31,17 @@ export const vi = {
   },
   online_exam: {
     title: 'Kiểm tra',
+    question_number: 'Câu',
     subtitle: 'Bài kiểm tra đánh giá kiến thức',
     time_remaining: 'Thời gian còn lại: ',
     submit_answer: 'Nộp bài',
     back_to_exam: 'Trở lại',
     question: 'Câu hỏi',
+    current_question: 'Câu hỏi đang làm',
+    next_question: 'Câu sau',
+    prev_question: 'Câu trước',
     exam_title: 'Đề thi',
+
     sure_to_submit: 'Bạn đã chắc chắn với các câu trả lời của mình ?',
     not_fill_all_question: 'Bạn chưa điền hết các câu trả lời !',
   },
