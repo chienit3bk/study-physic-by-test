@@ -18,7 +18,6 @@ export const questionsFake = [
       "Dao động điều hòa",
     ],
     average_time: 1000,
-    disabled: false,
   },
   {
     id: '2',
@@ -38,6 +37,7 @@ export const questionsFake = [
       "Chương 1",
       "Dao động điều hòa",
     ],
+    average_time: 1000,
   },
   {
     id: '3',
@@ -57,7 +57,7 @@ export const questionsFake = [
       "Chương 1",
       "Dao động điều hòa",
     ],
-    disabled: false,
+    average_time: 1000,
   },
   {
     id: '4',
@@ -77,7 +77,7 @@ export const questionsFake = [
       "Chương 1",
       "Dao động điều hòa",
     ],
-    disabled: false,
+    average_time: 1000,
   },
 ];
 

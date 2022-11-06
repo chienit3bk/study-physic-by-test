@@ -17,5 +17,10 @@ export default defineConfig({
   },
   server: {
     port: 3600,
+    // https://github.com/vitejs/vite/issues/4259
+    hmr: {
+      protocol: 'ws',
+      host: 'localhost',
+    },
   },
 });
