@@ -41,7 +41,6 @@ Page(
         IndexTableCell {{tags}}
         IndexTableCell {{level}}
         IndexTableCell {{average_time}}
-
         IndexTableCell
           Stack(:vertical="false")
             Button(:icon="DeleteMinor")

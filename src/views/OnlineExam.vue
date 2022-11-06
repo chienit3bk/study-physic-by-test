@@ -133,7 +133,7 @@ const getChapterOptions = (chapter: Record<string, any>) => {
 };
 
 const getAndShowQuestions = (dataExam: Record<string, number>) => {
-  router.push({name: 'OnlineExamTest', params: { id: dataExam.id , time: dataExam.time }});
+  router.push({name: 'online-exam-test', params: { id: dataExam.id , time: dataExam.time }});
 };
 
 const handleRemoveOptionTag = (tagOption: string) => {

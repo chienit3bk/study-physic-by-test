@@ -57,14 +57,14 @@ const navItems = [
   {
     label: 'Home',
     icon: HomeMinor,
-    selected: (route.name === 'DashBoard'),
-    onClick: () => redirect('DashBoard'),
+    selected: (route.name === 'dash-board'),
+    onClick: () => redirect('dash-board'),
   },
   {
     label: 'Online Exam',
     icon: NoteMinor,
-    selected: (route.name === 'OnlineExam'),
-    onClick: () => redirect('OnlineExam'),
+    selected: (route.name === 'online-exam'),
+    onClick: () => redirect('online-exam'),
   },
   {
     label: 'Question Bank',

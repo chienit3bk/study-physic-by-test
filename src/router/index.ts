@@ -12,17 +12,17 @@ import {
 const routes = [
   {
     path: '',
-    name: 'DashBoard',
+    name: 'dash-board',
     component: Dashboard,
   },
   {
     path: '/online-exam',
-    name: 'OnlineExam',
+    name: 'online-exam',
     component: OnlineExam,
   },
   {
     path: '/online-exam/:id/:time',
-    name: 'OnlineExamTest',
+    name: 'online-exam-test',
     component: OnlineExamTest,
   },
   {
@@ -45,7 +45,7 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     component: NotFound,
-    name: 'NotFound',
+    name: 'not-found',
   },
 ];
 
