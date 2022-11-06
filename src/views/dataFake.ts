@@ -11,7 +11,7 @@ export const questionsFake = [
     ],
     true_answer: "A. x = Acos(ωt + φ).",
     instructions: "",
-    level: 3,
+    level: '3',
     tags: [
       "Dao động cơ",
       "Chương 1",
@@ -31,7 +31,7 @@ export const questionsFake = [
     ],
     true_answer: "A. x = Acos(ωt + φ).",
     instructions: "",
-    level: 3,
+    level: '3',
     tags: [
       "Dao động cơ",
       "Chương 1",
@@ -51,7 +51,7 @@ export const questionsFake = [
     ],
     true_answer: "A. x = Acos(ωt + φ).",
     instructions: "",
-    level: 3,
+    level: '3',
     tags: [
       "Dao động cơ",
       "Chương 1",
@@ -71,7 +71,7 @@ export const questionsFake = [
     ],
     true_answer: "A. x = Acos(ωt + φ).",
     instructions: "",
-    level: 3,
+    level: '3',
     tags: [
       "Dao động cơ",
       "Chương 1",

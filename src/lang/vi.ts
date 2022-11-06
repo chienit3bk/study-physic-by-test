@@ -7,6 +7,8 @@ export const vi = {
     page_not_found: 'Không tìm thấy trang',
     setting: 'Cài đặt',
     minute: 'phút',
+    choose_level: 'Chọn độ khó',
+    level_label: 'Độ khó',
   },
   exam_test: {
     number_question: 'Số lượng câu hỏi: ',
@@ -49,6 +51,21 @@ export const vi = {
     title: 'Ngân hàng câu hỏi',
     subtitle: 'Danh sách các câu hỏi',
     add_question: 'Thêm câu hỏi',
+    question_id: 'Mã câu hỏi',
+    question_title: 'Nội dung câu hỏi',
+    question_answers: 'Các đáp án',
+    question_true_answer: 'Đáp án đúng',
+    question_select_true_answer: 'Chọn đáp án đúng',
+    question_tags: 'Các tag',
+    question_level: 'Độ khó',
+    question_add_tag: 'Thêm tag',
+    question_answer_a: 'A.',
+    question_answer_b: 'B.',
+    question_answer_c: 'C.',
+    question_answer_d: 'D.',
+
+
+
   },
   question: {
     see_help_answer: 'Xem hướng dẫn',

@@ -139,26 +139,21 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@ownego/polaris-vue@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.npmjs.org/@ownego/polaris-vue/-/polaris-vue-1.1.4.tgz"
-  integrity sha512-/BpYLmNPQhn+BWkERxHlmMYD5aC6BUuie7pyzKvsL3PR7n8wcfJmT5rtshtAtEs+TsMwJK+Qmy7WtjRfZ28vug==
+"@ownego/polaris-vue@^1.1.6":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@ownego/polaris-vue/-/polaris-vue-1.2.0.tgz#d717ada1a8d5edafbe6ca8957b468c30505a34b8"
+  integrity sha512-T8VOktiURI6Cz3FpP0k8wYORdmTqXQydOeSTaC6rnA9F0dnM27S6o61XV6VOmKQzc0W4lo0FSi5e2psVxgn6LA==
   dependencies:
-    "@shopify/polaris-icons" "^5.4.0"
+    "@shopify/polaris-icons" "^6.4.0"
     polaris "https://github.com/juzser/polaris.git"
     vite-svg-loader "^3.1.2"
     vue "^3.2.31"
     vue-router "^3.1.6"
 
-"@shopify/polaris-icons@^5.4.0":
-  version "5.4.0"
-  resolved "https://registry.npmjs.org/@shopify/polaris-icons/-/polaris-icons-5.4.0.tgz"
-  integrity sha512-RzVSdwJuObO/4hS+DUCzY0jEQE0d6WFH5yFjTYqotMUGxe3tCUVdbuxxk/G1QbLVGQXYHmAvDXKbt+xSHwf+ow==
-
 "@shopify/polaris-icons@^6.4.0":
-  version "6.4.0"
-  resolved "https://registry.npmjs.org/@shopify/polaris-icons/-/polaris-icons-6.4.0.tgz"
-  integrity sha512-vwOhz+oahAdjtixYNB1KSmyTP68AsVyMn6TsNYEMxF9ufNDtQk3qeU3fP8gV69foWuS8N+9aM77NWFeGr+yw/w==
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris-icons/-/polaris-icons-6.5.0.tgz#2192b52e9909388ddc02ba9a58fbd161def7f5c1"
+  integrity sha512-/PtTzYNsGzhrg+1B07o+Gxp2W9s83YY/4+JszP05zbKsr9iW7rza15pa03P3C9RoGb/1GR0ZKhxVIpaxpljNwA==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"

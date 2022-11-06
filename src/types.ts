@@ -5,7 +5,7 @@ export type QuestionType = {
   answers: string[],
   true_answer: string,
   instructions: string,
-  level: number,
+  level: string,
   tags: string[],
   average_time: number,
   have_answer: boolean,

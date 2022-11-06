@@ -28,7 +28,7 @@
               template(#label) {{ $t('select_exam.time_label') }}
 
             Select.pt-2(
-              :placeholder="$t('select_exam.choose_level')",
+              :placeholder="$t('common.choose_level')",
               v-model="examLevel",
               :options="LEVELS",
             )
@@ -89,7 +89,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { ExamTest } from '@/components/online-exam';
-import { CHAPTERS, LEVELS, EXAM_TIME } from '@/configs/onlineExam';
+import { CHAPTERS, LEVELS, EXAM_TIME } from '@/configs';
 import { examTestsFake } from './dataFake';
 
 const router = useRouter();

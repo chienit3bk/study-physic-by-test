@@ -1,14 +1,9 @@
 {
   "compilerOptions": {
     "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "module": "esnext",
+    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true
-  },
-  "vueCompilerOptions": {
-    "plugins": [
-      "@volar/vue-language-plugin-pug"
-    ]
   },
   "include": ["vite.config.ts"]
 }

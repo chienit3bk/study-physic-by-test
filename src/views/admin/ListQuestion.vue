@@ -3,9 +3,13 @@ Page(
   :fullWidth="true"
   :title="$t('list_question.title')"
   :subtitle="$t('list_question.subtitle')",
-  :primaryAction="{ content: $t('list_question.add_question'), onAction: () => {} }"
+  :primaryAction="{ content: $t('list_question.add_question'), onAction: toggleCreateQuestionModal }"
   :breadcrumbs="[{content: 'Dashboard', url: '/'}]"
 )
+  CreateQuestionModal(
+    :isActive="isActiveAddQuestion",
+    @close="toggleCreateQuestionModal"
+  )
   Card(sectioned)
     Filters.pb-2(
       :queryValue="queryValue",
@@ -62,9 +66,12 @@ Page(
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { CreateQuestionModal } from '@/components';
 import DeleteMinor from '@icons/DeleteMinor.svg';
 import EditMinor from '@icons/EditMinor.svg';
 import { questionsFake } from '../dataFake';
+
+const isActiveAddQuestion = ref<boolean>(false);
 
 const taggedWith = ref<string | undefined>('Chương 1');
 const queryValue = ref<string | undefined>(undefined);
@@ -120,6 +127,10 @@ const showPrevQuestions = () => {
 
 const showNextQuestions = () => {
   return;
+};
+
+const toggleCreateQuestionModal = (): void => {
+  isActiveAddQuestion.value = !isActiveAddQuestion.value;
 };
 
 const questions = questionsFake;
