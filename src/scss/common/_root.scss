@@ -1,0 +1,22 @@
+:root {
+  --star-rating-secondary-color: #e5e5e5;
+  --star-rating-primary-color: #ffc124;
+
+  --truncate-max-lines: 1;
+  --truncate-line-height: 1.5em;
+
+  --pricing-section-width: 360px;
+  --pricing-section-min-height: 650px;
+  --pricing-section-label-top-position: -5px;
+  --pricing-section-label-left-position: -15px;
+
+  --metric-block-border-color: black;
+
+  --button-icon-plain-backdrop-bg-color: #cce6df;
+
+  --notification-dot-new-size: 8px;
+  --notification-number-bg-color: rgb(236 65 53);
+
+  --tab-button-padding-vertical: var(--p-space-3);
+  --tab-button-padding-horizontal: var(--p-space-8);
+}
