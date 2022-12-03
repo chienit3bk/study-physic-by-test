@@ -32,7 +32,7 @@ interface Props {
   question: string,
   answers: Record<string, any>,
   instructions: string,
-  level: number,
+  level: string,
   tags: string[],
   isViewOnly: boolean,
   currentAnswer: string | null,
