@@ -18,7 +18,6 @@
     "joi": "^13.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "mongoose": "^5.13.13",
     "node-schedule": "^2.1.0",
     "nodemon": "^2.0.15",
     "pg": "^8.8.0"

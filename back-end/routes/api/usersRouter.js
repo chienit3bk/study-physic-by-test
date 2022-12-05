@@ -1,7 +1,7 @@
-const { User, validate } = require('../models/user');
+const { User, validate } = require('../../models/user');
 const _ = require('lodash');
-const auth = require('../middleware/auth');
-const admin = require('../middleware/admin');
+const auth = require('../../middleware/auth');
+const admin = require('../../middleware/admin');
 const bcrypt = require('bcrypt');
 const express = require('express');
 const { Timekeeping } = require('../models/timekeeping');
@@ -37,8 +37,8 @@ router.post('/create', [auth, admin],  async (req, res) => {
 router.put('/:id', async (req, res) => {
   const user = await User.findById(req.params.id)
   if(!user) return res.status(400).send('The user with the given ID was not found.')
-  
-  
+
+
   user.phone_number = req.body.phone_number ? req.body.phone_number : user.phone_number;
   user.username = req.body.username ? req.body.username : user.username;
   user.name = req.body.name ? req.body.name : user.name;

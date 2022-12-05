@@ -1,8 +1,8 @@
 const express = require('express');
 const { Salary } = require('../models/salary')
 const { Timekeeping } = require('../models/timekeeping');
-const { User } = require('../models/user');
-const { search } = require('./tickets');
+const { User } = require('../../models/user');
+const { search } = require('./answerRouter');
 const payroll = require('./utils/payroll');
 const router = express.Router()
 
@@ -17,9 +17,9 @@ router.get('/', async (req, res) => {
     console.log(new Date(year, month - 1));
     console.log(new Date());
     return res.status(400).send(`Hiện tại mới chỉ là tháng ${new Date().getMonth() + 1}`)
-  } 
+  }
 
-  // nếu query theo tên, 
+  // nếu query theo tên,
   if (req.query.name) {
     // tháng phải khác tháng hiện tại thì mới lấy trong bảng vì tháng hiện tại vẫn cập nhật
     // console.log(year, month)

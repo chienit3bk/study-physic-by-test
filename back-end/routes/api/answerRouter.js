@@ -1,6 +1,6 @@
 const { Ticket, validate, validateMonthTicket } = require('../models/ticket')
 const { Revenue } = require('../models/revenue')
-const auth = require('../middleware/auth');
+const auth = require('../../middleware/auth');
 const mongoose = require('mongoose');
 const _ = require('lodash')
 const express = require('express');
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
   res.send(ticket);
 });
 
-// soát vé đầu vào cho vé ngày 
+// soát vé đầu vào cho vé ngày
 router.put('/in/:IDs', auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -84,7 +84,7 @@ router.put('/in/:IDs', auth, async (req, res) => {
   res.send(ticket);
 });
 
-// soát vé đầu ra vào cho vé ngày 
+// soát vé đầu ra vào cho vé ngày
 router.put('/out/:IDs', auth, async (req, res) => {
   const ticket = await Ticket.findOne({ IDs: req.params.IDs });
 
@@ -219,7 +219,7 @@ router.put('/renewal/:IDs', async (req, res) => {
 })
 
 
-// tạo vé tháng: kiểm tra IDs nếu vé ngày đang được sử dụng thì báo lỗi, nếu IDs đó là vé tháng thì báo lỗi, 
+// tạo vé tháng: kiểm tra IDs nếu vé ngày đang được sử dụng thì báo lỗi, nếu IDs đó là vé tháng thì báo lỗi,
 // IDs đúng khi used=false và ticket_type == ngày
 router.put('/create_monthly_ticket/:IDs', async (req, res) => {
   const { error } = validate(req.body);
@@ -259,4 +259,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
