@@ -12,7 +12,7 @@ let errorLogger;
 let warnLogger;
 let allLogger;
 
-class Logger {
+class Logger { 
 	constructor() {
 		if (!fs.existsSync(logDir)) {
 			fs.mkdirSync(logDir);
