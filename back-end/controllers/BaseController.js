@@ -1,9 +1,6 @@
-
-
 const _ = require('lodash');
 const RequestHandler = require('../utils/RequestHandler');
 const Logger = require('../utils/logger');
-
 
 const logger = new Logger();
 const errHandler = new RequestHandler(logger);
