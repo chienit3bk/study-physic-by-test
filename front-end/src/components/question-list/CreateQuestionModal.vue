@@ -118,15 +118,5 @@ const isOptionSelected = (tag: string) => {
   .Polaris-Choice {
     display: flex;
   }
-
-  .co-element__extra-product__item--hidePrice {
-    .co-element__extra-product__price {
-      display: none;
-    }
-  }
-
-  .co-element__extra-product__price {
-    margin-right: var(--p-space-3);
-  }
 }
 </style>

@@ -62,12 +62,11 @@ Page(
         @previous="showPrevQuestions",
         @next="showNextQuestions",
       )
-
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { CreateQuestionModal } from '@/components';
+import { CreateQuestionModal, EditQuestionModal } from '@/components';
 import DeleteMinor from '@icons/DeleteMinor.svg';
 import EditMinor from '@icons/EditMinor.svg';
 import { questionsFake } from '../dataFake';
@@ -78,14 +77,14 @@ const taggedWith = ref<string | undefined>('Chương 1');
 const queryValue = ref<string | undefined>(undefined);
 
 const tableHeadings = [
-  {title: 'Mã'},
-  {title: 'Câu hỏi'},
-  {title: 'Các đáp án'},
-  {title: 'Đáp án đúng'},
-  {title: 'Tags'},
-  {title: 'Đô khó'},
-  {title: 'AT'},
-  {title: 'Hành động'},
+  { title: 'Mã' },
+  { title: 'Câu hỏi' },
+  { title: 'Các đáp án' },
+  { title: 'Đáp án đúng' },
+  { title: 'Tags' },
+  { title: 'Đô khó' },
+  { title: 'AT' },
+  { title: 'Hành động' },
 ];
 
 const filters = [

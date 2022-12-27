@@ -40,8 +40,8 @@ export const vi = {
     back_to_exam: 'Trở lại',
     question: 'Câu hỏi',
     current_question: 'Câu hỏi đang làm',
-    next_question: 'Câu sau',
-    prev_question: 'Câu trước',
+    next_question: 'Các câu sau',
+    prev_question: 'Các câu trước',
     exam_title: 'Đề thi',
 
     sure_to_submit: 'Bạn đã chắc chắn với các câu trả lời của mình ?',
