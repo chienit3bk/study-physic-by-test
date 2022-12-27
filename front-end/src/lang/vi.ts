@@ -63,11 +63,13 @@ export const vi = {
     question_answer_b: 'B.',
     question_answer_c: 'C.',
     question_answer_d: 'D.',
-
-
-
   },
   question: {
     see_help_answer: 'Xem hướng dẫn',
+  },
+  list_user: {
+    title: 'Danh sách người dùng',
+    subtitle: 'Thông tin những người dùng của hệ thống',
+    see_info: 'Xem thông tin',
   }
 };

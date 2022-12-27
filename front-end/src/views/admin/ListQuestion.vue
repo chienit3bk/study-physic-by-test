@@ -1,6 +1,6 @@
 <template lang="pug">
 Page(
-  :fullWidth="true"
+  full-width,
   :title="$t('list_question.title')"
   :subtitle="$t('list_question.subtitle')",
   :primaryAction="{ content: $t('list_question.add_question'), onAction: toggleCreateQuestionModal }"
@@ -29,6 +29,7 @@ Page(
     IndexTable(
       :item-count="questions.length",
       :headings="tableHeadings",
+      :selectable="false",
       lastColumnSticky,
     )
       IndexTableRow(
@@ -38,13 +39,13 @@ Page(
         :position="index"
         :selectable="false"
       )
-        IndexTableCell {{id}}
-        IndexTableCell.w-50 {{question}}
-        IndexTableCell {{answers}}
-        IndexTableCell {{true_answer}}
-        IndexTableCell {{tags}}
-        IndexTableCell {{level}}
-        IndexTableCell {{average_time}}
+        IndexTableCell {{ id }}
+        IndexTableCell.w-50 {{ question }}
+        IndexTableCell {{ answers }}
+        IndexTableCell {{ true_answer }}
+        IndexTableCell {{ tags }}
+        IndexTableCell {{ level }}
+        IndexTableCell {{ average_time }}
         IndexTableCell
           Stack(:vertical="false")
             Button(:icon="DeleteMinor")

@@ -1,5 +1,6 @@
 <template lang="pug">
-.dashboard Dashboard
+.dashboard
+  Page() Dashboard
 </template>
 
 <script setup lang="ts">

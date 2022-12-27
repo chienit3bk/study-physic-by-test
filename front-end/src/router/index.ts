@@ -6,6 +6,7 @@ import {
   OnlineExamTest,
   AdminIndex,
   ListQuestion,
+  ListUser,
   NotFound,
 } from '@/views';
 
@@ -38,6 +39,11 @@ const routes = [
         path: 'list-question',
         name: 'list-question',
         component: ListQuestion,
+      },
+      {
+        path: 'list-user',
+        name: 'list-user',
+        component: ListUser,
       },
     ],
   },

@@ -34,7 +34,8 @@ import { provide, ref, reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import HomeMinor from '@icons/HomeMinor.svg';
 import NoteMinor from '@icons/NoteMinor.svg';
-
+import CustomersMinor from '@icons/CustomersMinor.svg';
+import QuestionMarkMinor from '@icons/QuestionMarkMinor.svg';
 const router = useRouter();
 const route = useRoute();
 
@@ -53,26 +54,34 @@ defineProps<Props>();
 const isCollapsed = ref<boolean>(false);
 const isUserMenuOpen = ref<boolean>(false);
 const isToastActive = ref<boolean>(false);
-const navItems = [
-  {
-    label: 'Home',
-    icon: HomeMinor,
-    selected: (route.name === 'dash-board'),
-    onClick: () => redirect('dash-board'),
-  },
-  {
-    label: 'Online Exam',
-    icon: NoteMinor,
-    selected: (route.name === 'online-exam'),
-    onClick: () => redirect('online-exam'),
-  },
-  {
-    label: 'Question Bank',
-    icon: NoteMinor,
-    selected: (route.name === 'list-question'),
-    onClick: () => redirect('list-question'),
-  },
-];
+const navItems = computed(() => {
+  return [
+    {
+      label: 'Trang chủ',
+      icon: HomeMinor,
+      selected: (route.name === 'dash-board'),
+      onClick: () => redirect('dash-board'),
+    },
+    {
+      label: 'Kiểm tra',
+      icon: NoteMinor,
+      selected: (route.name === 'online-exam'),
+      onClick: () => redirect('online-exam'),
+    },
+    {
+      label: 'Ngân hàng câu hỏi',
+      icon: QuestionMarkMinor,
+      selected: (route.name === 'list-question'),
+      onClick: () => redirect('list-question'),
+    },
+    {
+      label: 'Danh sách người dùng',
+      icon: CustomersMinor,
+      selected: (route.name === 'list-user'),
+      onClick: () => redirect('list-user'),
+    },
+  ]
+});
 
 
 const redirect = (routeName: string): void => {
