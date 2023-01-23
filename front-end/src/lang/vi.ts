@@ -3,7 +3,9 @@ export const vi = {
     initial: 'Installing',
     loading: 'Loading',
     edit: 'Chỉnh sửa',
-    error: 'Error',
+    error: 'Lỗi',
+    cancel: 'Hủy',
+    delete: 'Xóa',
     page_not_found: 'Không tìm thấy trang',
     setting: 'Cài đặt',
     minute: 'phút',
@@ -71,5 +73,7 @@ export const vi = {
     title: 'Danh sách người dùng',
     subtitle: 'Thông tin những người dùng của hệ thống',
     see_info: 'Xem thông tin',
+    title_modal_delete: 'Xóa người dùng',
+    content_modal_delete: 'Xác nhận xóa người dùng {gmail}.'
   }
 };

@@ -13,7 +13,7 @@ import {
 const routes = [
   {
     path: '',
-    name: 'dash-board',
+    name: 'dashboard',
     component: Dashboard,
   },
   {

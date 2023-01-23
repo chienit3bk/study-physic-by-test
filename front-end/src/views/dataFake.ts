@@ -107,3 +107,41 @@ export const examTestsFake = [
     "points": "100",
   },
 ];
+
+export const userFake = [
+  {
+    "id": 1,
+    "name": 'Nguyen Van Chien',
+    "username": 'chien@gmail.com',
+    "average_point": '7.8',
+    "total_time": '10',
+  },
+  {
+    "id": 1,
+    "name": 'Nguyen Van Chien',
+    "username": 'chien@gmail.com',
+    "average_point": '7.8',
+    "total_time": '10',
+  },
+  {
+    "id": 1,
+    "name": 'Nguyen Van Chien',
+    "username": 'chien@gmail.com',
+    "average_point": '7.8',
+    "total_time": '10',
+  },
+  {
+    "id": 1,
+    "name": 'Nguyen Van Chien',
+    "username": 'chien@gmail.com',
+    "average_point": '7.8',
+    "total_time": '10',
+  },
+  {
+    "id": 1,
+    "name": 'Nguyen Van Chien',
+    "username": 'chien@gmail.com',
+    "average_point": '7.8',
+    "total_time": '10',
+  }
+]

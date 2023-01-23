@@ -59,8 +59,8 @@ const navItems = computed(() => {
     {
       label: 'Trang chủ',
       icon: HomeMinor,
-      selected: (route.name === 'dash-board'),
-      onClick: () => redirect('dash-board'),
+      selected: (route.name === 'dashboard'),
+      onClick: () => redirect('dashboard'),
     },
     {
       label: 'Kiểm tra',
