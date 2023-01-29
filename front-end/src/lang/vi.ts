@@ -75,5 +75,17 @@ export const vi = {
     see_info: 'Xem thông tin',
     title_modal_delete: 'Xóa người dùng',
     content_modal_delete: 'Xác nhận xóa người dùng {gmail}.'
+  },
+  user_profile: {
+    title: 'Thông tin người dùng',
+    name: 'Tên',
+    gmail: 'Gmail / Tên đăng nhập',
+    phone: 'Số điện thoại',
+    address: 'Địa chỉ',
+    total_time: 'Tổng thời gian',
+    average_score: 'Điểm trung bình',
+  },
+  user_history: {
+    list_exam: 'Danh sách các bài thi',
   }
 };

@@ -100,7 +100,7 @@ const handleClearQuery = () => {
 const handleChangeQuery = debounce(() => getListUsers(), 500);
 
 const redirectToUserInfor = (id: number) => {
-  router.push({ name: 'user-information', params: { id }})
+  router.push({ name: 'user-profile', params: { id }})
 };
 
 const requestDeleteUser = (user: Record<string, any>) => {

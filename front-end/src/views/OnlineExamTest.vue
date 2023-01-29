@@ -97,9 +97,9 @@ import type { QuestionType } from '@/types';
 import { questionsFake } from './dataFake';
 
 const route = useRoute();
-const isShowSubmitAnswerModal = ref(false);
-const isShowNotFillAllQuestion = ref(false);
-const currentQuestionIndex = ref(0);
+const isShowSubmitAnswerModal = ref<boolean>(false);
+const isShowNotFillAllQuestion = ref<boolean>(false);
+const currentQuestionIndex = ref<number>(0);
 const currentAnswers = ref<Record<string | number, any>>({});
 const exam = reactive({ id: '', time: 0 });
 

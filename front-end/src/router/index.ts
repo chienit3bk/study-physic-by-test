@@ -7,6 +7,7 @@ import {
   AdminIndex,
   ListQuestion,
   ListUser,
+  UserProfile,
   NotFound,
 } from '@/views';
 
@@ -46,6 +47,11 @@ const routes = [
         component: ListUser,
       },
     ],
+  },
+  {
+    path: '/users/:id',
+    name: 'user-profile',
+    component: UserProfile,
   },
     // https://router.vuejs.org/guide/essentials/dynamic-matching.html#catch-all-404-not-found-route
   {
