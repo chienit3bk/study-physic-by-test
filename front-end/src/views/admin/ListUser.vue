@@ -16,6 +16,8 @@
         :item-count="users.length",
         :headings="headings",
         :selectable="false",
+        lastColumnSticky,
+
       )
         IndexTableRow(
           v-for="user, index in users",
@@ -31,13 +33,13 @@
             Stack
               Button(
                 plain,
-                :icon="ViewMinor",
-                @click="redirectToUserInfor(user.id)"
+                :icon="DeleteMinor",
+                @click="requestDeleteUser(user.id)"
               )
               Button(
                 plain,
-                :icon="DeleteMinor",
-                @click="requestDeleteUser(user.id)"
+                :icon="ViewMinor",
+                @click="redirectToUserInfor(user.id)"
               )
       .mt-3
         Stack(distribution="center", alignment="center")

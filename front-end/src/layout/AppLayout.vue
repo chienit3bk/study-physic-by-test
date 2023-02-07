@@ -32,10 +32,10 @@ Frame(
 <script setup lang="ts">
 import { provide, ref, reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import HomeMinor from '@icons/HomeMinor.svg';
-import NoteMinor from '@icons/NoteMinor.svg';
-import CustomersMinor from '@icons/CustomersMinor.svg';
-import QuestionMarkMinor from '@icons/QuestionMarkMinor.svg';
+import HomeMajor from '@icons/HomeMajor.svg';
+import NoteMajor from '@icons/NoteMajor.svg';
+import CustomersMajor from '@icons/CustomersMajor.svg';
+import QuestionMarkMajor from '@icons/QuestionMarkMajor.svg';
 const router = useRouter();
 const route = useRoute();
 
@@ -58,25 +58,25 @@ const navItems = computed(() => {
   return [
     {
       label: 'Trang chủ',
-      icon: HomeMinor,
+      icon: HomeMajor,
       selected: (route.name === 'dashboard'),
       onClick: () => redirect('dashboard'),
     },
     {
       label: 'Kiểm tra',
-      icon: NoteMinor,
+      icon: NoteMajor,
       selected: (route.name === 'online-exam'),
       onClick: () => redirect('online-exam'),
     },
     {
       label: 'Ngân hàng câu hỏi',
-      icon: QuestionMarkMinor,
+      icon: QuestionMarkMajor,
       selected: (route.name === 'list-question'),
       onClick: () => redirect('list-question'),
     },
     {
       label: 'Danh sách người dùng',
-      icon: CustomersMinor,
+      icon: CustomersMajor,
       selected: (route.name === 'list-user'),
       onClick: () => redirect('list-user'),
     },

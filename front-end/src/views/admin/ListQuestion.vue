@@ -33,7 +33,7 @@ Page(
       lastColumnSticky,
     )
       IndexTableRow(
-        v-for="{ id, question, answers, tags, true_answer, level, average_time }, index in questions"
+        v-for="{ id, question, answers, tags, true_answer, level, average_time }, index in questions",
         :key="id"
         :id="id"
         :position="index"
@@ -47,9 +47,9 @@ Page(
         IndexTableCell {{ level }}
         IndexTableCell {{ average_time }}
         IndexTableCell
-          Stack(:vertical="false")
-            Button(:icon="DeleteMinor")
-            Button(:icon="EditMinor")
+          Stack()
+            Button(plain :icon="DeleteMinor")
+            Button(plain :icon="EditMinor")
 
     Stack(distribution="center")
       Pagination(
