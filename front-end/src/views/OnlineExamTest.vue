@@ -15,8 +15,8 @@
             Stack
               Button(
                 v-for="(question, index) in data.questions",
-                :primary="question.have_answer",
-                @click="handleButtonChangeQuestion(question.id)",
+                :primary="!!question.current_answer",
+                @click="handleButtonChangeQuestion(question, index)",
               ) {{index + 1}}
           CardSection
             CountDownBox(
@@ -37,7 +37,7 @@
               :instructions="currentQuestion.instructions",
               :level="currentQuestion.level",
               :tags="currentQuestion.tags"
-              :current-answer="currentAnswers[currentQuestionIndex] || null",
+              :current-answer="currentQuestion.current_answer || null",
               :is-view-only="false",
               @update-answers="handleAnswerChange"
             )
@@ -69,7 +69,7 @@
               :instructions="question.instructions",
               :level="question.level",
               :tags="question.tags",
-              :current-answer="currentAnswers[index] || null"
+              :current-answer="question.current_answer || null"
               :is-view-only="true",,
             )
 
@@ -100,9 +100,9 @@ const route = useRoute();
 const isShowSubmitAnswerModal = ref<boolean>(false);
 const isShowNotFillAllQuestion = ref<boolean>(false);
 const currentQuestionIndex = ref<number>(0);
-const currentAnswers = ref<Record<string | number, any>>({});
-const exam = reactive({ id: '', time: 0 });
+const currentQuestion = ref<Record<string, any>>({});
 
+const exam = reactive({ id: '', time: 0 });
 const data = reactive<Record<string, QuestionType[]>>({questions: []});
 
 const disabledPaginationButton = computed(() => {
@@ -111,31 +111,41 @@ const disabledPaginationButton = computed(() => {
     next: currentQuestionIndex.value !== data.questions.length -1 };
 });
 
-const currentQuestion = computed(() => {
-  return { ...data.questions[currentQuestionIndex.value]};
-});
+const showPrevQuestion = () => {
+  if (currentQuestionIndex.value > 0) {
+    currentQuestionIndex.value -= 1;
+    currentQuestion.value = data.questions[currentQuestionIndex.value];
+  }
+};
+
+const showNextQuestion = () => {
+  if (currentQuestionIndex.value < data.questions.length - 1) {
+    currentQuestionIndex.value += 1;
+    currentQuestion.value = data.questions[currentQuestionIndex.value];
+  }
+};
 
 onMounted(() => {
   if (route.params?.id) {
     exam.id = route.params.id as string;
     exam.time = parseInt(route.params.time as string);
-    data.questions = questionsFake.map(question => ({...question, have_answer: false}));
+    data.questions = questionsFake;
+    currentQuestion.value = data.questions[0];
   }
 });
 
-const handleAnswerChange = (newAnswer: Record<string, string>): void => {
-  currentAnswers.value[currentQuestionIndex.value] = newAnswer.answer;
+const handleAnswerChange = (newAnswer: Record<string, any>): void => {
+  currentQuestion.value.current_answer = newAnswer.answer;
   const questionUpdate = data.questions.find(question => question.id === newAnswer.id);
 
   if (questionUpdate) {
-    questionUpdate.have_answer = true;
+    questionUpdate.current_answer = newAnswer.answer;
   }
 };
 
-const handleButtonChangeQuestion = (questionId: string) => {
-  const index = data.questions.findIndex((question: QuestionType) => question.id === questionId);
-
+const handleButtonChangeQuestion = (question: Record<string, any>, index: number) => {
   currentQuestionIndex.value = index;
+  currentQuestion.value = question;
 };
 
 const toggleModalSubmitAnswer = () => {
@@ -145,25 +155,12 @@ const toggleModalSubmitAnswer = () => {
 const handleSubmitAnswer = () => {
   toggleModalSubmitAnswer();
 
-  const isFillAllQuestions = data.questions.some(question => question. have_answer);
+  const isFillAllQuestions = data.questions.some(question => question.current_answer);
 
   if (!isFillAllQuestions) {
     isShowNotFillAllQuestion.value = true;
   }
 };
-
-const showPrevQuestion = () => {
-  if (currentQuestionIndex.value > 0) {
-    currentQuestionIndex.value -= 1;
-  }
-};
-
-const showNextQuestion = () => {
-  if (currentQuestionIndex.value < data.questions.length - 1) {
-    currentQuestionIndex.value += 1;
-  }
-};
-
 
 const calculatePoints = () => {
   return;

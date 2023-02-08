@@ -8,5 +8,5 @@ export type QuestionType = {
   level: string,
   tags: string[],
   average_time: number,
-  have_answer: boolean,
+  current_answer?: string,
 };

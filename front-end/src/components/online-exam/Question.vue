@@ -35,7 +35,7 @@ interface Props {
   level: string,
   tags: string[],
   isViewOnly: boolean,
-  currentAnswer: string | null,
+  currentAnswer?: string | null,
 }
 
 const props = defineProps<Props>();
