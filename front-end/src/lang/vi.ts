@@ -6,6 +6,7 @@ export const vi = {
     error: 'Lỗi',
     cancel: 'Hủy',
     delete: 'Xóa',
+    confirm: 'Xác nhận',
     page_not_found: 'Không tìm thấy trang',
     setting: 'Cài đặt',
     minute: 'phút',
@@ -65,6 +66,9 @@ export const vi = {
     question_answer_b: 'B.',
     question_answer_c: 'C.',
     question_answer_d: 'D.',
+    title_modal_delete: 'Xóa câu hỏi',
+    content_modal_delete: 'Bạn có có chắc chắn muốn xóa câu hỏi này?',
+    title_modal_edit: 'Chỉnh sửa câu hỏi',
   },
   question: {
     see_help_answer: 'Xem hướng dẫn',

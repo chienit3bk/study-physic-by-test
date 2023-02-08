@@ -33,23 +33,31 @@ Page(
       lastColumnSticky,
     )
       IndexTableRow(
-        v-for="{ id, question, answers, tags, true_answer, level, average_time }, index in questions",
-        :key="id"
-        :id="id"
+        v-for="question, index in questions",
+        :key="question.id"
+        :id="question.id"
         :position="index"
         :selectable="false"
       )
-        IndexTableCell {{ id }}
-        IndexTableCell.w-50 {{ question }}
-        IndexTableCell {{ answers }}
-        IndexTableCell {{ true_answer }}
-        IndexTableCell {{ tags }}
-        IndexTableCell {{ level }}
-        IndexTableCell {{ average_time }}
+        IndexTableCell {{ question.id }}
+        IndexTableCell.w-50 {{ question.question }}
+        IndexTableCell {{ question.answers }}
+        IndexTableCell {{ question.true_answer }}
+        IndexTableCell {{ question.tags }}
+        IndexTableCell {{ question.level }}
+        IndexTableCell {{ question.average_time }}
         IndexTableCell
           Stack()
-            Button(plain :icon="DeleteMinor")
-            Button(plain :icon="EditMinor")
+            Button(
+              plain, 
+              :icon="EditMinor",
+              @click="requestEditQuestion(question)",
+            )
+            Button(
+              plain, 
+              :icon="DeleteMinor",
+              @click="requestDeleteQuestion(question)",
+            )
 
     Stack(distribution="center")
       Pagination(
@@ -62,6 +70,21 @@ Page(
         @previous="showPrevQuestions",
         @next="showNextQuestions",
       )
+Modal(
+  :open="isActiveModalDelete",
+  @close="toggleModalDeleteQuestion",
+  :primary-action="{ content: $t('common.cancel'), onAction: toggleModalDeleteQuestion }",
+  :secondary-actions="[{ content: $t('common.delete'), onAction: confirmDeleteQuestion }]"
+)
+  template(#title) {{ $t('list_question.title_modal_delete') }}
+  template(#content)
+    ModalSection {{  $t('list_question.content_modal_delete') }}
+EditQuestionModal(
+  :is-active="isActiveModalEdit", 
+  :question="selectedQuestion",
+  @close="toggleModalEditQuestion",
+)
+
 </template>
 
 <script setup lang="ts">
@@ -72,9 +95,11 @@ import EditMinor from '@icons/EditMinor.svg';
 import { questionsFake } from '../dataFake';
 
 const isActiveAddQuestion = ref<boolean>(false);
-
+const isActiveModalDelete = ref<boolean>(false);
+const isActiveModalEdit = ref<boolean>(false);
 const taggedWith = ref<string | undefined>('Chương 1');
 const queryValue = ref<string | undefined>(undefined);
+const selectedQuestion = ref<Record<string, any>>({});
 
 const tableHeadings = [
   { title: 'Mã' },
@@ -111,6 +136,32 @@ function isEmpty(value: Record<string, string> | string | null) {
   } else {
     return value === "" || value == null;
   }
+};
+
+const toggleModalDeleteQuestion = () => {
+  isActiveModalDelete.value = !isActiveModalDelete.value;
+};
+
+const toggleModalEditQuestion = () => {
+  isActiveModalEdit.value = !isActiveModalEdit.value;
+};
+
+const requestDeleteQuestion = (question: Record<string, any>) => {
+  toggleModalDeleteQuestion();
+  selectedQuestion.value = question;
+};
+
+const confirmDeleteQuestion = () => {
+
+}
+
+const requestEditQuestion = (question: Record<string, any>) => {
+  toggleModalEditQuestion();
+  selectedQuestion.value = question;
+}
+
+const confirmEditQuestion = () => {
+
 }
 
 const handleTaggedWithChange = (value: string) => { taggedWith.value = value; };

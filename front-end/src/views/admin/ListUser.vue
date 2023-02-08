@@ -33,13 +33,13 @@
             Stack
               Button(
                 plain,
-                :icon="DeleteMinor",
-                @click="requestDeleteUser(user.id)"
+                :icon="ViewMinor",
+                @click="redirectToUserInfor(user.id)"
               )
               Button(
                 plain,
-                :icon="ViewMinor",
-                @click="redirectToUserInfor(user.id)"
+                :icon="DeleteMinor",
+                @click="requestDeleteUser(user.id)"
               )
       .mt-3
         Stack(distribution="center", alignment="center")
@@ -52,8 +52,8 @@
           )
 Modal(
   :open="isActiveModalDelete",
-  @close="toggleModalDeleteSubscriber",
-  :primary-action="{ content: $t('common.cancel'), onAction: toggleModalDeleteSubscriber }",
+  @close="toggleModalDeleteUser",
+  :primary-action="{ content: $t('common.cancel'), onAction: toggleModalDeleteUser }",
   :secondary-actions="[{ content: $t('common.delete'), onAction: () => confirmDeleteUser(selectedUser.id) }]"
 )
   template(#title) {{ $t('list_user.title_modal_delete') }}
@@ -114,7 +114,7 @@ const confirmDeleteUser = (id: number) => {
 
 };
 
-const toggleModalDeleteSubscriber = () => {
+const toggleModalDeleteUser = () => {
   isActiveModalDelete.value = !isActiveModalDelete.value;
 };
 
