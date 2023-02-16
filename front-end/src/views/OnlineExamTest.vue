@@ -6,7 +6,11 @@
     :subtitle="`${exam.time} ${$t('common.minute')}`",
     :breadcrumbs="[{content: 'OnlineExam', url: '/online-exam'}]",
   )
-    Layout(v-if="data.questions.length")
+    Banner(
+      title="Không tải lại trang lúc làm bài thi",
+      status="warning"
+    )
+    Layout.mt-2(v-if="data.questions.length")
       LayoutSection.sticky-block(:one-half="true")
         Card
           template(#title)
@@ -23,7 +27,7 @@
               :time="1000*60*exam.time",
             )
           Stack.pb-4(distribution="center")
-            Button(primary, @click="handleSubmitAnswer") {{ $t('online_exam.submit_answer') }}
+            Button(primary, @click="requestSubmitAnswer") {{ $t('online_exam.submit_answer') }}
 
         Card.mt-4
           template(#title)
@@ -36,7 +40,7 @@
               :answers="currentQuestion.answers",
               :instructions="currentQuestion.instructions",
               :level="currentQuestion.level",
-              :tags="currentQuestion.tags"
+              :tags="currentQuestion.tags",
               :current-answer="currentQuestion.current_answer || null",
               :is-view-only="false",
               @update-answers="handleAnswerChange"
@@ -63,19 +67,21 @@
           )
             Question(
               :id="question.id",
-              :number="question.number",
+              :number="`Câu ${index + 1}`",
               :question="question.question",
               :answers="question.answers",
               :instructions="question.instructions",
               :level="question.level",
               :tags="question.tags",
               :current-answer="question.current_answer || null"
-              :is-view-only="true",,
+              :is-view-only="true",
+              :true-answer="currentQuestion.true_answer",
+              :is-submited="isSubmited",
             )
 
 Modal(
   :open="isShowSubmitAnswerModal",
-  :primary-action="{ content: $t('online_exam.submit_answer') }",
+  :primary-action="{ content: $t('online_exam.submit_answer'), onAction: handleSubmitAnser }",
   :secondary-actions="[{content: $t('online_exam.back_to_exam'), onAction: toggleModalSubmitAnswer }]",
   @close="toggleModalSubmitAnswer",
 )
@@ -97,6 +103,7 @@ import { questionsFake } from './dataFake';
 const route = useRoute();
 const isShowSubmitAnswerModal = ref<boolean>(false);
 const isShowNotFillAllQuestion = ref<boolean>(false);
+const isSubmited = ref<boolean>(false);
 const currentQuestionIndex = ref<number>(0);
 const currentQuestion = ref<Record<string, any>>({});
 
@@ -122,6 +129,7 @@ const showNextQuestion = () => {
     currentQuestion.value = data.questions[currentQuestionIndex.value];
   }
 };
+
 
 onMounted(() => {
   if (route.params?.id) {
@@ -150,7 +158,7 @@ const toggleModalSubmitAnswer = () => {
   isShowSubmitAnswerModal.value = !isShowSubmitAnswerModal.value;
 };
 
-const handleSubmitAnswer = () => {
+const requestSubmitAnswer = () => {
   toggleModalSubmitAnswer();
 
   const isFillAllQuestions = data.questions.some(question => question.current_answer);
@@ -160,7 +168,13 @@ const handleSubmitAnswer = () => {
   }
 };
 
+const handleSubmitAnser = () => {
+  isSubmited.value = true;
+}
+
+
 const calculatePoints = () => {
   return;
 };
+
 </script>

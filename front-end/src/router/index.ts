@@ -8,52 +8,67 @@ import {
   ListQuestion,
   ListUser,
   UserProfile,
+  Login,
   NotFound,
 } from '@/views';
+import { AppLayout } from '@/layout';
 
 const routes = [
   {
+    path: '/login',
+    name: 'login',
+    component: Login,
+  },
+  // auth router
+  {
     path: '',
-    name: 'dashboard',
-    component: Dashboard,
-  },
-  {
-    path: '/online-exam',
-    name: 'online-exam',
-    component: OnlineExam,
-  },
-  {
-    path: '/online-exam/:id/:time',
-    name: 'online-exam-test',
-    component: OnlineExamTest,
-  },
-  {
-    path: '/admin',
-    // component: AdminIndex,
+    component: AppLayout,
     children: [
       {
         path: '',
-        name: 'admin',
-        component: AdminIndex,
+        name: 'dashboard',
+        component: Dashboard,
+      },
+
+      {
+        path: '/online-exam',
+        name: 'online-exam',
+        component: OnlineExam,
       },
       {
-        path: 'list-question',
-        name: 'list-question',
-        component: ListQuestion,
+        path: '/online-exam/:id/:time',
+        name: 'online-exam-test',
+        component: OnlineExamTest,
       },
       {
-        path: 'list-user',
-        name: 'list-user',
-        component: ListUser,
+        path: '/admin',
+        // component: AdminIndex,
+        children: [
+          {
+            path: '',
+            name: 'admin',
+            component: AdminIndex,
+          },
+          {
+            path: 'list-question',
+            name: 'list-question',
+            component: ListQuestion,
+          },
+          {
+            path: 'list-user',
+            name: 'list-user',
+            component: ListUser,
+          },
+        ],
+      },
+      {
+        path: '/users/:id',
+        name: 'user-profile',
+        component: UserProfile,
       },
     ],
   },
-  {
-    path: '/users/:id',
-    name: 'user-profile',
-    component: UserProfile,
-  },
-    // https://router.vuejs.org/guide/essentials/dynamic-matching.html#catch-all-404-not-found-route
+  // https://router.vuejs.org/guide/essentials/dynamic-matching.html#catch-all-404-not-found-route
   {
     path: '/:pathMatch(.*)*',
     component: NotFound,

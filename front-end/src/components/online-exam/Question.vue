@@ -9,7 +9,7 @@ CardSection
       as="p",
       variant="bodyMd",
     )
-      TextStyle(:variation="choice.value === currentAnswer ? 'strong' : undefined") {{ choice.label }}
+      TextStyle(:variation="answerStyle(choice)") {{ choice.label }}
   ChoiceList(
     v-else,
     :id="id",
@@ -18,28 +18,45 @@ CardSection
     :choices="choices",
     @change="handleAnswerChange"
   )
+  Stack.mt-1(v-if="isSubmited" spacing="tight")
+    Icon(v-if="currentAnswer === trueAnswer", :source="TickMinor", color="success")
+    Icon(v-else, :source="CancelMinor", color="default")
+    TextStyle(variation="negative") Đáp án: {{  trueAnswer }}
 
-  Button(plain)
+  Button(plain v-if="instructions")
     TextStyle(variation="negative") {{ $t('question.see_help_answer') }}
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUpdated } from 'vue';
+import TickMinor from '@icons/TickMinor.svg?component';
+import CancelMinor from '@icons/CancelMinor.svg?component';
 
 interface Props {
   id: string,
   number: string,
   question: string,
   answers: Record<string, any>,
-  instructions: string,
+  instructions?: string,
   level: string,
   tags: string[],
   isViewOnly: boolean,
+  trueAnswer?: string,
   currentAnswer?: string | null,
+  isSubmited?: boolean,
 }
 
 const props = defineProps<Props>();
+
 const questionTimeStart = ref<number>(0);
+
+const answerStyle = (choice: Record<string, any>) => {
+  if (choice.value === props.currentAnswer) {
+    return 'strong';
+  }
+
+  return undefined;
+};
 
 onMounted(() => {
   if (!props.isViewOnly) {

@@ -1,11 +1,10 @@
 <template lang="pug">
 AppProvider
-  AppLayout
-    router-view
+  router-view
 </template>
 
 <script setup lang="ts">
-import { AppLayout } from '@/layout';
+import { Login } from '@/views';
 </script>
 
 <style lang="scss">

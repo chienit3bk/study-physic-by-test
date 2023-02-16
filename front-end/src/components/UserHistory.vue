@@ -34,7 +34,7 @@ Card(sectioned)
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import ViewMinor from '@icons/ViewMinor.svg';
+import ViewMinor from '@icons/ViewMinor.svg?component';
 
 interface Props {
   userExam: Record<string, any>[];

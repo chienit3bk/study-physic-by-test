@@ -26,16 +26,16 @@ Frame(
           :actions="userMenuAction || []",
           @toggle="isUserMenuOpen = !isUserMenuOpen",
         )
-  slot
+  router-view
 </template>
 
 <script setup lang="ts">
-import { provide, ref, reactive, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import HomeMajor from '@icons/HomeMajor.svg';
-import NoteMajor from '@icons/NoteMajor.svg';
-import CustomersMajor from '@icons/CustomersMajor.svg';
-import QuestionMarkMajor from '@icons/QuestionMarkMajor.svg';
+import HomeMajor from '@icons/HomeMajor.svg?component';
+import NoteMajor from '@icons/NoteMajor.svg?component';
+import CustomersMajor from '@icons/CustomersMajor.svg?component';
+import QuestionMarkMajor from '@icons/QuestionMarkMajor.svg?component';
 const router = useRouter();
 const route = useRoute();
 
