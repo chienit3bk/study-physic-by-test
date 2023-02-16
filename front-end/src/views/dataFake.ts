@@ -79,6 +79,87 @@ export const questionsFake = [
     ],
     average_time: 1000,
   },
+  {
+    id: '5',
+    number: 'Câu 5',
+    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    answers: [
+      "A. x = Acos(ωt + φ).",
+      "B. x = Acos(ωt + φ).",
+      "C. x = Acos(ωt + φ).",
+      "D. x = Acos(ωt + φ).",
+    ],
+    true_answer: "A. x = Acos(ωt + φ).",
+    instructions: "",
+    level: '3',
+    tags: [
+      "Dao động cơ",
+      "Chương 1",
+      "Dao động điều hòa",
+    ],
+    average_time: 1000,
+  },
+  {
+    id: '6',
+    number: 'Câu 6',
+    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    answers: [
+      "A. x = Acos(ωt + φ).",
+      "B. x = Acos(ωt + φ).",
+      "C. x = Acos(ωt + φ).",
+      "D. x = Acos(ωt + φ).",
+    ],
+    true_answer: "A. x = Acos(ωt + φ).",
+    instructions: "",
+    level: '3',
+    tags: [
+      "Dao động cơ",
+      "Chương 1",
+      "Dao động điều hòa",
+    ],
+    average_time: 1000,
+  },
+  {
+    id: '7',
+    number: 'Câu 7',
+    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    answers: [
+      "A. x = Acos(ωt + φ).",
+      "B. x = Acos(ωt + φ).",
+      "C. x = Acos(ωt + φ).",
+      "D. x = Acos(ωt + φ).",
+    ],
+    true_answer: "A. x = Acos(ωt + φ).",
+    instructions: "",
+    level: '3',
+    tags: [
+      "Dao động cơ",
+      "Chương 1",
+      "Dao động điều hòa",
+    ],
+    average_time: 1000,
+  },
+  {
+    id: '8',
+    number: 'Câu 8',
+    question: "Một vật dao động điều hòa trên trục Ox quanh vị trí cân bằng O. Gọi A, ω và φ lần lượt là biên độ, tần số góc và pha ban đầu của dao động. Biểu thức li độ của vật theo thời gian t là",
+    answers: [
+      "A. x = Acos(ωt + φ).",
+      "B. x = Acos(ωt + φ).",
+      "C. x = Acos(ωt + φ).",
+      "D. x = Acos(ωt + φ).",
+    ],
+    true_answer: "A. x = Acos(ωt + φ).",
+    instructions: "",
+    level: '3',
+    tags: [
+      "Dao động cơ",
+      "Chương 1",
+      "Dao động điều hòa",
+    ],
+    average_time: 1000,
+  },
+
 ];
 
 export const examTestsFake = [

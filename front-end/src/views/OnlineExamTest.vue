@@ -73,19 +73,17 @@
               :is-view-only="true",,
             )
 
-      Modal(
-        :open="isShowSubmitAnswerModal",
-        :primary-action="{ content: $t('online_exam.submit_answer') }",
-        :secondary-actions="[{content: $t('online_exam.back_to_exam'), onAction: toggleModalSubmitAnswer }]",
-        @close="toggleModalSubmitAnswer",
-      )
-        template(#title)
-          span {{ $t('online_exam.sure_to_submit') }}
-        template(#content)
-          Card(sectioned)
-            span(
-              v-if="isShowNotFillAllQuestion"
-            ) {{ $t('online_exam.not_fill_all_question')}}
+Modal(
+  :open="isShowSubmitAnswerModal",
+  :primary-action="{ content: $t('online_exam.submit_answer') }",
+  :secondary-actions="[{content: $t('online_exam.back_to_exam'), onAction: toggleModalSubmitAnswer }]",
+  @close="toggleModalSubmitAnswer",
+)
+  template(#title)
+    span {{ $t('online_exam.sure_to_submit') }}
+  template(#content v-if="isShowNotFillAllQuestion")
+    Card(sectioned)
+      span {{ $t('online_exam.not_fill_all_question')}}
 
 </template>
 

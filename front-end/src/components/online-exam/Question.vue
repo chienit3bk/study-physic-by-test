@@ -19,8 +19,8 @@ CardSection
     @change="handleAnswerChange"
   )
 
-  //- Button(plain)
-  //-   TextStyle(variation="negative") {{ $t('question.see_help_answer') }}
+  Button(plain)
+    TextStyle(variation="negative") {{ $t('question.see_help_answer') }}
 </template>
 
 <script setup lang="ts">

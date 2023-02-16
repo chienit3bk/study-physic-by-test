@@ -67,7 +67,7 @@ Modal(
 import { ref, computed } from 'vue';
 import { TAGS, LEVELS } from '@/configs';
 import type { QuestionType } from '@/types';
-import SearchMinor from '@icons/SearchMinor.svg';
+import SearchMinor from '@icons/SearchMinor.svg?component';
 
 const tagsSelected = ref('');
 

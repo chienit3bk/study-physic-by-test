@@ -22,7 +22,7 @@ Page(
         TextField(
           label="Tagged with"
           v-model="taggedWith"
-          autoComplete="off"
+          autoComplete="off"  
           labelHidden
         )
 
@@ -90,8 +90,8 @@ EditQuestionModal(
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { CreateQuestionModal, EditQuestionModal } from '@/components';
-import DeleteMinor from '@icons/DeleteMinor.svg';
-import EditMinor from '@icons/EditMinor.svg';
+import DeleteMinor from '@icons/DeleteMinor.svg?component';
+import EditMinor from '@icons/EditMinor.svg?component';
 import { questionsFake } from '../dataFake';
 
 const isActiveAddQuestion = ref<boolean>(false);
