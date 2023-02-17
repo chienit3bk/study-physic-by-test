@@ -7,6 +7,7 @@
     :breadcrumbs="[{content: 'OnlineExam', url: '/online-exam'}]",
   )
     Banner(
+      v-if="!isSubmited"
       title="Không tải lại trang lúc làm bài thi",
       status="warning"
     )
@@ -27,9 +28,9 @@
               :time="1000*60*exam.time",
             )
           Stack.pb-4(distribution="center")
-            Button(primary, @click="requestSubmitAnswer") {{ $t('online_exam.submit_answer') }}
+            Button(primary, @click="requestSubmitAnswer", :disabled="isSubmited ") {{ $t('online_exam.submit_answer') }}
 
-        Card.mt-4
+        Card.mt-4(v-if="!isSubmited")
           template(#title)
             Text(as="h4" variant="heading2xl" alignment="center") {{ $t('online_exam.current_question') }}
           CardSection
@@ -56,6 +57,14 @@
                 @previous="showPrevQuestion",
                 @next="showNextQuestion",
               ) {{ currentQuestion.number }}
+        Card(v-else)
+          template(#title)
+            Text(as="h3" variant="heading2xl" alignment="center") Kết quả
+            CardSection
+              Stack(vertical)
+                TextStyle(variation="strong") Số câu đúng: {{ numberTrueAnswer() }}
+                TextStyle(variation="strong") Thời gian làm bài:
+                TextStyle(variation="negative") Điểm số: {{  numberTrueAnswer() / data.questions.length * 10 }}
 
       LayoutSection
         Card
@@ -168,9 +177,21 @@ const requestSubmitAnswer = () => {
   }
 };
 
+const numberTrueAnswer = () => {
+  return data.questions.reduce((sum, question) => {
+    if (question.current_answer === question.true_answer) {
+      return sum + 1;
+    }
+
+    return sum;
+  }, 0)
+
+}
+
 const handleSubmitAnser = () => {
   isSubmited.value = true;
 }
+
 
 
 const calculatePoints = () => {
