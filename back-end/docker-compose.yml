@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  physic-test-postgres:
+    image: postgres:latest
+    container_name: physic-test-postgres
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: postgres
+    volumes:
+      - './data:/var/lib/postgresql/data'
+    ports:
+      - 4002:5432
+    networks:
+      - physic-test-network
+
+  physic-test-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: physic-test-network
+    container_name: physic-test-api
+    working_dir: /usr/src/app
+    ports:
+      - 4000:3000
+    volumes:
+      - ./:/usr/src/app
+    depends_on:
+      - physic-test-postgres
+    networks:
+      - physic-test-network
+networks:
+  physic-test-network:
+    driver: bridge
