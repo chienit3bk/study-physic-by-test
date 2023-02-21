@@ -1,6 +1,5 @@
 <template lang="pug">
 Frame(
-  :logo="logo",
   :show-mobile-navigation="isCollapsed",
   @navigation-dismiss="isCollapsed = !isCollapsed",
 )
@@ -17,70 +16,95 @@ Frame(
 
       template(#userMenu)
         TopBarUserMenu(
-          :color-scheme="darkUserMenu ? 'dark' : 'light'",
-          name="userName",
-          initials="initials",
-          detail="shopOwner",
-          :message="userMenuMessage",
+          :name="user.name",
+          :detail="user.email",
           :open="isUserMenuOpen",
-          :actions="userMenuAction || []",
           @toggle="isUserMenuOpen = !isUserMenuOpen",
         )
   router-view
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { authStore } from '@/stores'
 import HomeMajor from '@icons/HomeMajor.svg?component';
 import NoteMajor from '@icons/NoteMajor.svg?component';
 import CustomersMajor from '@icons/CustomersMajor.svg?component';
 import QuestionMarkMajor from '@icons/QuestionMarkMajor.svg?component';
+import TimelineAttachmentMajor from '@icons/TimelineAttachmentMajor.svg?component';
+import InsertDynamicSourceMajor from '@icons/InsertDynamicSourceMajor.svg?component';
+import ProfileMajor from '@icons/ProfileMajor.svg?component';
+
 const router = useRouter();
 const route = useRoute();
 
-interface Props {
-  logo?: Record<string, any>,
-  navigationLocation?: string,
-  navigationSections?: Record<string, Record<string, any>>,
-  userMenuAction?: Record<string, any>[],
-  userMenuMessage?: Record<string, any>,
-  secondaryMenuAction?: Record<string, any>[],
-  darkUserMenu?: boolean,
-}
+const user = authStore();
 
-defineProps<Props>();
-
+const isAdmin = inject('isAdmin', false);
 const isCollapsed = ref<boolean>(false);
 const isUserMenuOpen = ref<boolean>(false);
-const isToastActive = ref<boolean>(false);
+
 const navItems = computed(() => {
-  return [
+  const layouts = [
     {
       label: 'Trang chủ',
       icon: HomeMajor,
       selected: (route.name === 'dashboard'),
       onClick: () => redirect('dashboard'),
+      isAdmin: false,
     },
     {
       label: 'Kiểm tra',
       icon: NoteMajor,
       selected: (route.name === 'online-exam'),
       onClick: () => redirect('online-exam'),
+      isAdmin: false,
+    },
+    {
+      label: 'Lịch sử  làm bài',
+      icon: TimelineAttachmentMajor,
+      selected: (route.name === 'user-test-history'),
+      onClick: () => redirect('list-user'),
+      isAdmin: false,
+    },
+    {
+      label: 'Đóng góp câu hỏi',
+      icon: InsertDynamicSourceMajor,
+      selected: (route.name === 'user-question-addd'),
+      onClick: () => redirect('user-question-addd'),
+      isAdmin: false,
+    },
+    {
+      label: 'Thông tin người dùng',
+      icon: ProfileMajor,
+      selected: (route.name === 'user-profile'),
+      onClick: () => redirect('user-profile'),
+      isAdmin: false,
     },
     {
       label: 'Ngân hàng câu hỏi',
       icon: QuestionMarkMajor,
       selected: (route.name === 'list-question'),
       onClick: () => redirect('list-question'),
+      isAdmin: true,
     },
     {
       label: 'Danh sách người dùng',
       icon: CustomersMajor,
       selected: (route.name === 'list-user'),
       onClick: () => redirect('list-user'),
+      isAdmin: true,
     },
   ]
+
+  return layouts.filter((nav: Record<string, any>) => {
+    if (!isAdmin) {
+      return !nav.isAdmin;
+    }
+
+    return nav;
+  });
 });
 
 

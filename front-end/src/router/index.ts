@@ -10,6 +10,8 @@ import {
   UserProfile,
   Login,
   NotFound,
+  QuestionFromUser,
+  UserTestHistory,
 } from '@/views';
 import { AppLayout } from '@/layout';
 
@@ -41,6 +43,16 @@ const routes = [
         component: OnlineExamTest,
       },
       {
+        path: '/user-test-history',
+        name: 'user-test-history',
+        component: UserTestHistory,
+      },
+      {
+        path: '/user-question-addd',
+        name: 'user-question-addd',
+        component: QuestionFromUser,
+      },
+      {
         path: '/admin',
         // component: AdminIndex,
         children: [
@@ -62,7 +74,7 @@ const routes = [
         ],
       },
       {
-        path: '/users/:id',
+        path: '/users/:id?',
         name: 'user-profile',
         component: UserProfile,
       },

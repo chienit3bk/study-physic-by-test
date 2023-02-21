@@ -10,7 +10,7 @@ export const questionsFake = [
       "D. x = Acos(ωt + φ).",
     ],
     true_answer: "A. x = Acos(ωt + φ).",
-    instructions: "",
+    instruction: "Abc",
     level: '3',
     tags: [
       "Dao động cơ",
@@ -169,6 +169,30 @@ export const examTestsFake = [
     "number_question": 10,
     "type": "Đề kiểm tra 15 phút",
     "time": 900,
+    "tags": [
+      "Dao động cơ",
+      "Dao động",
+    ],
+    "points": "100",
+  },
+  {
+    "id": 2,
+    "title": "Đề kiểm tra 50 phút chương 1: Dao động cơ - Đề số 01",
+    "number_question": 40,
+    "type": "Đề kiểm tra 15 phút",
+    "time": 3000,
+    "tags": [
+      "Dao động cơ",
+      "Dao động",
+    ],
+    "points": "100",
+  },
+  {
+    "id": 2,
+    "title": "Đề kiểm tra 50 phút chương 1: Dao động cơ - Đề số 01",
+    "number_question": 40,
+    "type": "Đề kiểm tra 15 phút",
+    "time": 3000,
     "tags": [
       "Dao động cơ",
       "Dao động",
