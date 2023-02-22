@@ -1,20 +1,27 @@
-module.exports = (sequelize, DataTypes) => {
-  const Users = sequelize.define('Users', {
-    id: {
-      type: DataTypes.INTEGER(11),
-			allowNull: false,
-			primaryKey: true,
-			autoIncrement: true
-    },
-    name: {
-      
-    }
-  })
+const { Sequelize, DataTypes } = require("sequelize");
 
-  // Users.associate = function (models) {
-  //   Users.hasMany(models.Roles, {
-  //     foreignKey: ''
-  //   })
-  // }
-  return Users;
-}
+const User = Sequelize.define("users", {
+  name: {
+    type: DataTypes.STRING,
+  },
+  email: {
+    type: DataTypes.STRING,
+  },
+  password: {
+    type: DataTypes.INTEGER,
+  },
+  phone: {
+    type: DataTypes.STRING,
+  },
+  address: {
+    type: DataTypes.STRING,
+  },
+  role: {
+    type: DataTypes.STRING,
+  },
+  level: {
+    type: DataTypes.FLOAT,
+  },
+});
+
+module.exports = User;
