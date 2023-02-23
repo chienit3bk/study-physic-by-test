@@ -1,13 +1,11 @@
 <template lang="pug">
-Modal(
-  :open="isActive"
-  @close="handleClose"
-)
-  template(#title)
-    h1 {{ $t('list_question.add_question') }}
-
-  template(#content)
-    ModalSection
+.dashboard
+  Page(
+    title="Đóng góp câu hỏi",
+    subtitle="Thêm câu hỏi giúp cho ngân hàng câu hỏi chung thêm phần phong phú"
+    :full-width="false",
+  )
+    Card(sectioned)
       Form
         FormLayout
           TextField(v-model="questionCreate.id")
@@ -61,13 +59,17 @@ Modal(
               :key="index",
               @remove="handleTagSelected(tag)",
             ) {{ tag }}
-          Button(primary submit) Thêm
+          Button(primary submit) Đóng góp
 </template>
+
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { TAGS, LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
 
+import { questionsFake } from './dataFake';
+
+// Question from user
 const questionCreate = reactive<Record<string, any>>({
   id: '0',
   number: '0',
@@ -78,24 +80,9 @@ const questionCreate = reactive<Record<string, any>>({
   level: '0',
   average_time: 0,
   instructions: '',
-  have_answer: false,
 });
-
 const tagsSelected = ref('');
 
-interface Props {
-  isActive: boolean;
-}
-
-defineProps<Props>();
-
-const emits = defineEmits<{
-  (event: 'close'): void
-}>();
-
-const handleClose = (): void => {
-  emits('close');
-};
 
 const handleTagSelected = (tag: string): void => {
   const index = questionCreate.tags.indexOf(tag);
@@ -111,11 +98,5 @@ const isOptionSelected = (tag: string) => {
   return questionCreate.tags?.some((item: string) => item === tag);
 };
 
+// Created
 </script>
-<style lang="scss">
-.list-question__create-question__tag {
-  .Polaris-Choice {
-    display: flex;
-  }
-}
-</style>

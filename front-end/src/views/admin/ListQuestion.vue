@@ -22,7 +22,7 @@ Page(
         TextField(
           label="Tagged with"
           v-model="taggedWith"
-          autoComplete="off"  
+          autoComplete="off"
           labelHidden
         )
 
@@ -46,15 +46,16 @@ Page(
         IndexTableCell {{ question.tags }}
         IndexTableCell {{ question.level }}
         IndexTableCell {{ question.average_time }}
+        IndexTableCell {{ question.instruction }}
         IndexTableCell
           Stack()
             Button(
-              plain, 
+              plain,
               :icon="EditMinor",
               @click="requestEditQuestion(question)",
             )
             Button(
-              plain, 
+              plain,
               :icon="DeleteMinor",
               @click="requestDeleteQuestion(question)",
             )
@@ -80,7 +81,7 @@ Modal(
   template(#content)
     ModalSection {{  $t('list_question.content_modal_delete') }}
 EditQuestionModal(
-  :is-active="isActiveModalEdit", 
+  :is-active="isActiveModalEdit",
   :question="selectedQuestion",
   @close="toggleModalEditQuestion",
 )
@@ -108,7 +109,8 @@ const tableHeadings = [
   { title: 'Đáp án đúng' },
   { title: 'Tags' },
   { title: 'Đô khó' },
-  { title: 'AT' },
+  { title: 'Thời gian' },
+  { title: 'Hướng dẫn' },
   { title: 'Hành động' },
 ];
 
