@@ -16,7 +16,7 @@ class UsersController extends BaseController {
     } catch (err) {
       res.send(400, err);
     }
-  }
+  }q
 
   // static async getProfile(req, res) {
   // 	try {
