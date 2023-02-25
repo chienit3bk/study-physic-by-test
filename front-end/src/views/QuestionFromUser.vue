@@ -4,16 +4,16 @@
     title="Đóng góp câu hỏi",
     subtitle="Thêm câu hỏi giúp cho ngân hàng câu hỏi chung thêm phần phong phú"
     :full-width="false",
+    :breadcrumbs="[{content: 'DashBoard', url: '/'} ]",
+    :primary-action="{content: 'Đóng góp', onAction: () => handleAddQuestionFromUser}"
   )
     Card(sectioned)
-      Form
+      Form.p-3
         FormLayout
-          TextField(v-model="questionCreate.id")
-            template(#label) {{ $t('list_question.question_id') }}
           TextField(:multiline="4" v-model="questionCreate.question")
             template(#label) {{ $t('list_question.question_title') }}
           TextStyle {{ $t('list_question.question_answers') }}
-          Stack(distribution="equalSpacing")
+          Stack(distribution="equalSpacing" vertical)
             Stack
               TextField(v-model="questionCreate.answers[0]")
             Stack
@@ -35,6 +35,7 @@
             :options="LEVELS",
           )
               template(#label) {{ $t('select_exam.level_label')}}
+          Text(as="p" variant="bodyMd") Chọn nhãn
           Combobox(allow-multiple)
             template(#activator)
               ComboboxTextField(
@@ -45,7 +46,6 @@
               )
                 template(#prefix)
                   Icon(:source="SearchMinor", color="inkLighter")
-
             Listbox(@select="handleTagSelected")
               ListboxOption(
                 v-for="tag, index in TAGS"
@@ -59,7 +59,14 @@
               :key="index",
               @remove="handleTagSelected(tag)",
             ) {{ tag }}
-          Button(primary submit) Đóng góp
+Modal(
+  :open="isShowModalThank",
+  :primary-action="{ content: 'Đóng', onAction: () => isShowModalThank = !isShowModalThank}"
+  @close="isShowModalThank = !isShowModalThank",
+)
+  template(#title) Bạn đã đóng góp câu hỏi
+  template(#content)
+    ModalSection Bạn đã đóng góp câu hỏi thành công, câu hỏi này sẽ được phê duyệt vào ngân hàng câu hỏi!. Cảm ơn bạn"
 </template>
 
 <script setup lang="ts">
@@ -82,8 +89,7 @@ const questionCreate = reactive<Record<string, any>>({
   instructions: '',
 });
 const tagsSelected = ref('');
-
-
+const isShowModalThank = ref(false);
 const handleTagSelected = (tag: string): void => {
   const index = questionCreate.tags.indexOf(tag);
 
@@ -98,5 +104,8 @@ const isOptionSelected = (tag: string) => {
   return questionCreate.tags?.some((item: string) => item === tag);
 };
 
+const handleAddQuestionFromUser = () => {
+
+}
 // Created
 </script>

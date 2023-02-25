@@ -1,9 +1,8 @@
 <template lang="pug">
 Page(
   full-width,
-  :title="$t('list_question.title')"
-  :subtitle="$t('list_question.subtitle')",
-  :primaryAction="{ content: $t('list_question.add_question'), onAction: toggleCreateQuestionModal }"
+  title="Câu hỏi từ người dùng"
+  subtitle="Danh sách các câu hỏi được cung cấp từ người dùng",
   :breadcrumbs="[{content: 'Dashboard', url: '/'}]"
 )
   CreateQuestionModal(
@@ -41,7 +40,7 @@ Page(
         IndexTableCell {{ question.tags }}
         IndexTableCell {{ question.level }}
         IndexTableCell {{ question.average_time }}
-        IndexTableCell {{ question.instruction }}
+        IndexTableCell {{ question.instructions  }}
         IndexTableCell
           Stack()
             Button(
@@ -75,7 +74,7 @@ Modal(
   template(#title) {{ $t('list_question.title_modal_delete') }}
   template(#content)
     ModalSection {{  $t('list_question.content_modal_delete') }}
-EditQuestionModal(
+EditQuestionFromUserModal(
   :is-active="isActiveModalEdit",
   :question="selectedQuestion",
   @close="toggleModalEditQuestion",
@@ -85,7 +84,7 @@ EditQuestionModal(
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { CreateQuestionModal, EditQuestionModal } from '@/components';
+import { CreateQuestionModal, EditQuestionFromUserModal } from '@/components';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
 import { questionsFake } from '../dataFake';

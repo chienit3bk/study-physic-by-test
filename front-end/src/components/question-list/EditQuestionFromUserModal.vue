@@ -61,7 +61,9 @@ Modal(
               :key="index",
               @remove="handleTagSelected(tag)",
             ) {{ tag }}
-          Button(primary submit) Thêm
+          Stack(distribution="center")
+            Button(primary submit) Thêm
+            Button(destructive) Xóa bỏ
 </template>
 <script setup lang="ts">
 import { ref, computed } from 'vue';
@@ -89,12 +91,12 @@ const handleClose = (): void => {
 };
 
 const handleTagSelected = (tag: string): void => {
-  const index = questionEdit.value.tags.indexOf(tag);
+  const index = questionEdit.value.tags?.indexOf(tag);
 
   if (index === -1) {
-    questionEdit.value.tags.push(tag);
+    questionEdit.value.tags?.push(tag);
   } else {
-    questionEdit.value.tags = questionEdit.value.tags.filter((item: string) => item !== tag);
+    questionEdit.value.tags = questionEdit.value.tags?.filter((item: string) => item !== tag);
   }
 };
 

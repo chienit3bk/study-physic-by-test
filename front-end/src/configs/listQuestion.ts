@@ -1,4 +1,11 @@
 export const TAGS = [
+  'Chương 1. Dao động cơ',
+  'Chương 2. Sóng cơ và sóng âm',
+  'Chương 3. Dòng điện xoay chiều',
+  'Chương 4. Dao động điển từ',
+  'Chương 5. Sóng anh sáng',
+  'Chương 6. Lượng tử ánh sáng',
+  'Chương 7. Vật lý hạt nhân',
   'Dao động điều hòa',
   'Con lắc lò xo',
   'Con lắc đơn',

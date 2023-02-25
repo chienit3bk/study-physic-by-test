@@ -1,0 +1,53 @@
+.vertical-tab-list-card {
+  .Polaris-Tabs__Wrapper {
+    padding: 0;
+  }
+
+  .Polaris-Tabs {
+    flex-direction: column !important;;
+
+    background-color: var(--p-surface-subdued);
+  }
+
+  .Polaris-Tabs__Tab {
+    border-right: .0625rem solid var(--p-divider);
+    border-bottom: .0625rem solid var(--p-divider);
+    border-left: .0625rem solid var(--p-divider);
+  }
+
+  .Polaris-Tabs__Tab--selected {
+    border-right: none;
+
+    background: var(--p-surface);
+
+    .Polaris-Tabs__Title {
+      color: var(--p-action-primary);
+    }
+
+    &:before {
+      content: '';
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      background: var(--p-action-primary);
+      width: .1875rem;
+      height: 100%;
+    }
+  }
+
+  .Polaris-Tabs__Title {
+    display: flex;
+    align-items: center;
+
+    padding: 1rem;
+
+    text-align: left;
+    white-space: normal;
+
+    &:before {
+      content: none;
+    }
+  }
+}

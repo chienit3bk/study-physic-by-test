@@ -1,5 +1,5 @@
 <template lang="pug">
-.user-profile 
+.user-profile
   Page(:title="$t('user_profile.title')")
     Layout
       LayoutSection(one-half)
@@ -28,7 +28,7 @@
             template(#title) {{ $t('user_profile.average_score') }}
             CardSubsection {{ user.average_score || '-' }}
 
-    .mt-3 
+    .mt-3
       UserHistory(:userExam="userExam")
 </template>
 

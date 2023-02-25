@@ -35,6 +35,7 @@
             Text(as="h4" variant="heading2xl" alignment="center") {{ $t('online_exam.current_question') }}
           CardSection
             Question(
+              :key="currentQuestion.id",
               :id="currentQuestion.id",
               :number="currentQuestion.number",
               :question="currentQuestion.question",
@@ -75,6 +76,7 @@
             :key="index",
           )
             Question(
+              :key="currentQuestion.id",
               :id="question.id",
               :number="`Câu ${index + 1}`",
               :question="question.question",
@@ -170,10 +172,12 @@ const toggleModalSubmitAnswer = () => {
 const requestSubmitAnswer = () => {
   toggleModalSubmitAnswer();
 
-  const isFillAllQuestions = data.questions.some(question => question.current_answer);
+  const isFillAllQuestions = data.questions.every(question => question.current_answer);
 
   if (!isFillAllQuestions) {
     isShowNotFillAllQuestion.value = true;
+  } else {
+    isShowNotFillAllQuestion.value = false;
   }
 };
 
@@ -190,6 +194,7 @@ const numberTrueAnswer = () => {
 
 const handleSubmitAnser = () => {
   isSubmited.value = true;
+  isShowSubmitAnswerModal.value = false;
 }
 
 

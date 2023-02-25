@@ -10,7 +10,7 @@ export const questionsFake = [
       "D. x = Acos(ωt + φ).",
     ],
     true_answer: "A. x = Acos(ωt + φ).",
-    instruction: "Abc",
+    instructions: "anh em ut it oi",
     level: '3',
     tags: [
       "Dao động cơ",

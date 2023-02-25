@@ -16,10 +16,12 @@ Frame(
 
       template(#userMenu)
         TopBarUserMenu(
+          :actions="actions",
+          :initials="user.name[0]",
           :name="user.name",
           :detail="user.email",
           :open="isUserMenuOpen",
-          @toggle="isUserMenuOpen = !isUserMenuOpen",
+          @toggle="isUserMenuOpen = !isUserMenuOpen"
         )
   router-view
 </template>
@@ -35,18 +37,61 @@ import QuestionMarkMajor from '@icons/QuestionMarkMajor.svg?component';
 import TimelineAttachmentMajor from '@icons/TimelineAttachmentMajor.svg?component';
 import InsertDynamicSourceMajor from '@icons/InsertDynamicSourceMajor.svg?component';
 import ProfileMajor from '@icons/ProfileMajor.svg?component';
+import ListMajor from '@icons/ListMajor.svg?component';
 
 const router = useRouter();
 const route = useRoute();
 
 const user = authStore();
 
-const isAdmin = inject('isAdmin', false);
+const isAdmin = inject('isAdmin', true);
 const isCollapsed = ref<boolean>(false);
 const isUserMenuOpen = ref<boolean>(false);
+const actions = ref<Record<string, any>[]>([
+  { items: [{ content: 'Thông tin cá nhân', onAction: () => router.push({ name: 'user-profile'})  }] },
+  { items: [{ content: 'Đăng xuất', onAction: () => router.push({ name: 'login'}) }] },
+]);
 
 const navItems = computed(() => {
-  const layouts = [
+  const adminLayout = [
+    {
+      label: 'Trang chủ',
+      icon: HomeMajor,
+      selected: (route.name === 'dashboard'),
+      onClick: () => redirect('dashboard'),
+      isAdmin: false,
+    },
+    {
+      label: 'Câu hỏi từ dùng',
+      icon: ListMajor,
+      selected: (route.name === 'list-question-from-user'),
+      onClick: () => redirect('list-question-from-user'),
+      isAdmin: false,
+    },
+    {
+      label: 'Ngân hàng câu hỏi',
+      icon: QuestionMarkMajor,
+      selected: (route.name === 'list-question'),
+      onClick: () => redirect('list-question'),
+      isAdmin: true,
+    },
+    {
+      label: 'Danh sách người dùng',
+      icon: CustomersMajor,
+      selected: (route.name === 'list-user'),
+      onClick: () => redirect('list-user'),
+      isAdmin: true,
+    },
+    {
+      label: 'Thông tin cá nhân',
+      icon: ProfileMajor,
+      selected: (route.name === 'user-profile'),
+      onClick: () => redirect('user-profile'),
+      isAdmin: false,
+    },
+  ];
+
+  const userLayouts = [
     {
       label: 'Trang chủ',
       icon: HomeMajor,
@@ -65,7 +110,7 @@ const navItems = computed(() => {
       label: 'Lịch sử  làm bài',
       icon: TimelineAttachmentMajor,
       selected: (route.name === 'user-test-history'),
-      onClick: () => redirect('list-user'),
+      onClick: () => redirect('user-test-history'),
       isAdmin: false,
     },
     {
@@ -82,29 +127,9 @@ const navItems = computed(() => {
       onClick: () => redirect('user-profile'),
       isAdmin: false,
     },
-    {
-      label: 'Ngân hàng câu hỏi',
-      icon: QuestionMarkMajor,
-      selected: (route.name === 'list-question'),
-      onClick: () => redirect('list-question'),
-      isAdmin: true,
-    },
-    {
-      label: 'Danh sách người dùng',
-      icon: CustomersMajor,
-      selected: (route.name === 'list-user'),
-      onClick: () => redirect('list-user'),
-      isAdmin: true,
-    },
   ]
 
-  return layouts.filter((nav: Record<string, any>) => {
-    if (!isAdmin) {
-      return !nav.isAdmin;
-    }
-
-    return nav;
-  });
+  return isAdmin ? adminLayout : userLayouts;
 });
 
 

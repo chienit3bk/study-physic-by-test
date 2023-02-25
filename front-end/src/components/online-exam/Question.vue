@@ -23,8 +23,8 @@ CardSection
     Icon(v-else, :source="CancelMinor", color="default")
     TextStyle(variation="negative") Đáp án: {{  trueAnswer }}
 
-  Button(plain v-if="instructions")
-    TextStyle(variation="negative") {{ $t('question.see_help_answer') }}
+  Button(plain v-if="instructions && isSubmited" @click="isShowInstruction = !isShowInstruction") {{ $t('question.see_help_answer') }}
+  Text(v-if="isShowInstruction" as="p", variant="bodyMd") {{ props.instructions }}
 </template>
 
 <script setup lang="ts">
@@ -34,13 +34,13 @@ import CancelMinor from '@icons/CancelMinor.svg?component';
 
 interface Props {
   id: string,
-  number: string,
-  question: string,
+  number?: string,
+  question?: string,
   answers: Record<string, any>,
   instructions?: string,
-  level: string,
-  tags: string[],
-  isViewOnly: boolean,
+  level?: string,
+  tags?: string[],
+  isViewOnly?: boolean,
   trueAnswer?: string,
   currentAnswer?: string | null,
   isSubmited?: boolean,
@@ -48,6 +48,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const isShowInstruction = ref<boolean>(false);
 const questionTimeStart = ref<number>(0);
 
 const answerStyle = (choice: Record<string, any>) => {

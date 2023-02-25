@@ -11,6 +11,7 @@ import {
   Login,
   NotFound,
   QuestionFromUser,
+  ListQuestionFromUser,
   UserTestHistory,
 } from '@/views';
 import { AppLayout } from '@/layout';
@@ -70,6 +71,11 @@ const routes = [
             path: 'list-user',
             name: 'list-user',
             component: ListUser,
+          },
+          {
+            path: 'list-question-from-user',
+            name: 'list-question-from-user',
+            component: ListQuestionFromUser,
           },
         ],
       },

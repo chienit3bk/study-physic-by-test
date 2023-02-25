@@ -3,3 +3,4 @@ export * from './question-list';
 
 export { default as UserHistory } from './UserHistory.vue';
 export { default as UserQuestionAdd } from './UserQuestionAdd.vue';
+export { default as VerticalTabList } from './VerticalTabList.vue';

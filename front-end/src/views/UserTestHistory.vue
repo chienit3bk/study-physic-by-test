@@ -1,26 +1,27 @@
 <template lang="pug">
-Card(sectioned)
-  template(#title) {{ $t('user_history.list_exam') }}
-  IndexTable(
-    :item-count="userExam.length",
-    :headings="headings",
-    :selectable="false",
-  )
-    IndexTableRow(
-      v-for="exam, index in userExam",
-      :key="exam.id",
-      :id="exam.id",
-      :position="index",
+Page(
+  :full-width="false",
+  :title="$t('user_history.list_exam')",
+  subtitle="Kết quả các bài kiểm tra mà học sinh đã làm."
+  :breadcrumbs="[{content: 'DashBoard', url: '/'} ]",
+)
+  Card(sectioned)
+    IndexTable(
+      :item-count="userResults.length",
+      :headings="headings",
+      :selectable="false",
     )
-      IndexTableCell {{ exam.id }}
-      IndexTableCell {{ exam.time }}
-      IndexTableCell {{ exam.average_point }}
-      IndexTableCell
-        Stack
-          Button(
-            plain,
-            :icon="ViewMinor",
-          )
+      IndexTableRow(
+        v-for="exam, index in userResults",
+        :key="exam.id",
+        :id="exam.id",
+        :position="index",
+      )
+        IndexTableCell {{ exam.id }}
+        IndexTableCell {{ exam.time }}
+        IndexTableCell {{ exam.total_question }}
+        IndexTableCell {{ exam.total_true_answer }}
+        IndexTableCell {{ exam.average_point }}
   //- .mt-3
   //-   Stack(distribution="center", alignment="center")
   //-     Pagination(
@@ -35,18 +36,45 @@ Card(sectioned)
   <script setup lang="ts">
   import { ref } from 'vue';
   import ViewMinor from '@icons/ViewMinor.svg?component';
-
-  interface Props {
-    userExam: Record<string, any>[];
+  const userExam = [
+  {
+    id: 1,
+    time: 50,
+    total_question: 50,
+    total_true_answer: 39,
+    average_point: 7.8,
+  },
+  {
+    id: 1,
+    time: 50,
+    total_question: 50,
+    total_true_answer: 39,
+    average_point: 7.8,
+  },
+  {
+    id: 1,
+    time: 50,
+    total_question: 50,
+    total_true_answer: 39,
+    average_point: 7.8,
+  },
+  {
+    id: 1,
+    time: 50,
+    total_question: 50,
+    total_true_answer: 39,
+    average_point: 7.8,
   }
-  const props = defineProps<Props>();
+]
 
   const isLoading = ref<boolean>(false);
+  const userResults = ref<Record<string, any>[]>(userExam)
 
   const headings = [
     { title: 'Mã bài thi' },
     { title: 'Thời gian' },
+    { title: 'Số câu hỏi' },
+    { title: 'Số câu trả lời đúng' },
     { title: 'Điểm' },
-    { title: 'Hành động' },
   ]
   </script>
