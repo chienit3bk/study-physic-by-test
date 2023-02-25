@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   physic-test-postgres:
-    image: postgres:latest
+    image: postgres:14-alpine3.17
     container_name: physic-test-postgres
     environment:
       POSTGRES_DB: ${DB_DATABASE}
