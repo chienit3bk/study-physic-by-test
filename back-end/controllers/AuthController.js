@@ -26,6 +26,7 @@ class AuthController extends BaseController {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
             }
             const token = jwt.sign({ payload }, config.auth.jwt_secret, { expiresIn: config.auth.jwt_expiresin, algorithm: 'HS512' });
             res.status(200).send({ token });
@@ -69,8 +70,6 @@ class AuthController extends BaseController {
                 res.status(400).send('Invalid token');
                 return;
             }
-
-            const data = req.body;
 
             jwt.verify(token, config.auth.jwt_secret, {
                 clockTimestamp: 60 * 60 * 24, // Allow refresh with less than 1 day expired token

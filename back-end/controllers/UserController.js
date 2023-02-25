@@ -1,9 +1,20 @@
+const _ = require('lodash');
 const BaseController = require('./BaseController');
 class UserController extends BaseController {
   static async getUserById(req, res) {
     try {
       const result = await super.getById(req, 'User');
-      res.status(200).send(result);
+      res.status(200).send(_.pick(result, [
+        'id',
+        'name',
+        'email',
+        'phone',
+        'address',
+        'role',
+        'level',
+        'createdAt',
+        'updatedAt',
+      ]));
     } catch (error) {
       res.status(400).send(error);
     }
