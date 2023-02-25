@@ -9,7 +9,7 @@
             template(#label) Email (Tên đăng nhập)
           TextField(v-model="userInput.password")
             template(#label) Mật khẩu
-          Stack(distribution="center" alignment="center")
+          Stack(distribution="center" alignment="center", vertical)
             Button(primary) Đăng nhập
             Button(plain @click="isLogin = false") Đăng ký tại đây
             Button(plain)
