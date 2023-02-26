@@ -17,9 +17,16 @@ class QuestionController extends BaseController {
 
   static async getList(req, res) {
     try {
-      const result = await super.getList(req, 'Question', {
+      const mainTag = req.query.mainTag;
+      const queryOptions = {
         include: req.app.get('db').Tag,
-      });
+      }
+      if (mainTag) {
+        queryOptions.where = {
+          mainTag: mainTag,
+        };
+      }
+      const result = await super.getList(req, 'Question', queryOptions);
       res.status(200).send(result);
     } catch (error) {
       res.status(400).send(error);

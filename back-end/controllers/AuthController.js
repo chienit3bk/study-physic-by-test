@@ -44,7 +44,7 @@ class AuthController extends BaseController {
             if (!createdUser) {
                 res.status(500).send('Sign up failed, please try again in a few minutes');
             } else {
-                res.status(200).send(_.pick(result, [
+                res.status(200).send(_.pick(createdUser, [
                     'id',
                     'name',
                     'email',
