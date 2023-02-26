@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 const config = require('../config/appconfig');
 const BaseController = require('./BaseController');
 
@@ -43,7 +44,17 @@ class AuthController extends BaseController {
             if (!createdUser) {
                 res.status(500).send('Sign up failed, please try again in a few minutes');
             } else {
-                res.status(200).send(createdUser);
+                res.status(200).send(_.pick(result, [
+                    'id',
+                    'name',
+                    'email',
+                    'phone',
+                    'address',
+                    'role',
+                    'level',
+                    'createdAt',
+                    'updatedAt',
+                ]));
             }
         } catch (err) {
             console.log(err);

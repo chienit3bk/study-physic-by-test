@@ -1,9 +1,9 @@
 const BaseController = require('./BaseController');
-class DocumentController extends BaseController {
+class QuestionController extends BaseController {
   static async getById(req, res) {
     try {
-      const { Document, Tag } = req.app.get('db');
-      const result = await Document.findOne({
+      const { Question, Tag } = req.app.get('db');
+      const result = await Question.findOne({
         where: {
           'id': req.params.id,
         },
@@ -17,7 +17,7 @@ class DocumentController extends BaseController {
 
   static async getList(req, res) {
     try {
-      const result = await super.getList(req, 'Document', {
+      const result = await super.getList(req, 'Question', {
         include: req.app.get('db').Tag,
       });
       res.status(200).send(result);
@@ -28,12 +28,12 @@ class DocumentController extends BaseController {
 
   static async create(req, res) {
     try {
-      const createdDocument = await super.create(req, 'Document');
-      if (!createdDocument) {
+      const createdQuestion = await super.create(req, 'Question');
+      if (!createdQuestion) {
         res.status(500).send('Somethings went wrong, please contact our support');
       } else {
-        await DocumentController.attachTags(req, createdDocument);
-        res.status(200).send(createdDocument);
+        await QuestionController.attachTags(req, createdQuestion);
+        res.status(200).send(createdQuestion);
       }
     } catch (error) {
       console.log(error);
@@ -43,11 +43,11 @@ class DocumentController extends BaseController {
 
   static async updateById(req, res) {
     try {
-      const result = await super.updateById(req, 'Document', req.body);
-      const document = await super.getById(req, 'Document');
-      if (result && document) {
+      const result = await super.updateById(req, 'Question', req.body);
+      const question = await super.getById(req, 'Question');
+      if (result && question) {
         res.status(200).send(result);
-        await DocumentController.attachTags(req, document);
+        await QuestionController.attachTags(req, question);
       } else {
         res.status(500).send('Somethings went wrong, please try again in a few minute');
       }
@@ -59,14 +59,14 @@ class DocumentController extends BaseController {
 
   static async deleteById(req, res) {
     try {
-      const result = await super.deleteById(req, 'Document');
+      const result = await super.deleteById(req, 'Question');
       res.send(200, result);
     } catch (err) {
       res.send(400, err);
     }
   }
 
-  static async attachTags(req, document) {
+  static async attachTags(req, question) {
     const { Tag } = req.app.get('db');
     const tagIds = req.body.tagIds;
     if (Array.isArray(tagIds)) {
@@ -76,9 +76,9 @@ class DocumentController extends BaseController {
         },
       });
 
-      document.setTags(tags);
+      question.setTags(tags);
     }
   }
 }
 
-module.exports = DocumentController;
+module.exports = QuestionController;
