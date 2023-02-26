@@ -76,9 +76,7 @@ class DocumentController extends BaseController {
         },
       });
 
-      tags.forEach(tag => {
-        document.addTag(tag);
-      });
+      document.setTags(tags);
     }
   }
 }

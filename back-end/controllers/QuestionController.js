@@ -76,9 +76,7 @@ class QuestionController extends BaseController {
         },
       });
 
-      tags.forEach(tag => {
-        question.addTag(tag);
-      });
+      question.setTags(tags);
     }
   }
 }
