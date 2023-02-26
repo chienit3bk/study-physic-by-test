@@ -32,6 +32,7 @@ class DocumentController extends BaseController {
       if (!createdDocument) {
         res.status(500).send('Somethings went wrong, please contact our support');
       } else {
+        await DocumentController.attachTags(req, createdDocument);
         res.status(200).send(createdDocument);
       }
     } catch (error) {
@@ -43,8 +44,10 @@ class DocumentController extends BaseController {
   static async updateById(req, res) {
     try {
       const result = await super.updateById(req, 'Document', req.body);
-      if (result) {
+      const document = await super.getById(req, 'Document');
+      if (result && document) {
         res.status(200).send(result);
+        await DocumentController.attachTags(req, document);
       } else {
         res.status(500).send('Somethings went wrong, please try again in a few minute');
       }
@@ -63,13 +66,8 @@ class DocumentController extends BaseController {
     }
   }
 
-  static async attachTags(req, res) {
-    const { Tag, Document } = req.app.get('db');
-    const document = await Document.findByPk(req.params.id);
-    if (!document) {
-      res.status(400).send('Not found');
-      return;
-    }
+  static async attachTags(req, document) {
+    const { Tag } = req.app.get('db');
     const tagIds = req.body.tagIds;
     if (Array.isArray(tagIds)) {
       const tags = await Tag.findAll({
@@ -82,7 +80,6 @@ class DocumentController extends BaseController {
         document.addTag(tag);
       });
     }
-    res.status(200).send(document);
   }
 }
 

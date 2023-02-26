@@ -32,6 +32,7 @@ class QuestionController extends BaseController {
       if (!createdQuestion) {
         res.status(500).send('Somethings went wrong, please contact our support');
       } else {
+        await QuestionController.attachTags(req, createdQuestion);
         res.status(200).send(createdQuestion);
       }
     } catch (error) {
@@ -43,8 +44,10 @@ class QuestionController extends BaseController {
   static async updateById(req, res) {
     try {
       const result = await super.updateById(req, 'Question', req.body);
-      if (result) {
+      const question = await super.getById(req, 'Question');
+      if (result && question) {
         res.status(200).send(result);
+        await QuestionController.attachTags(req, question);
       } else {
         res.status(500).send('Somethings went wrong, please try again in a few minute');
       }
@@ -63,13 +66,8 @@ class QuestionController extends BaseController {
     }
   }
 
-  static async attachTags(req, res) {
-    const { Tag, Question } = req.app.get('db');
-    const question = await Question.findByPk(req.params.id);
-    if (!question) {
-      res.status(400).send('Not found');
-      return;
-    }
+  static async attachTags(req, question) {
+    const { Tag } = req.app.get('db');
     const tagIds = req.body.tagIds;
     if (Array.isArray(tagIds)) {
       const tags = await Tag.findAll({
@@ -82,7 +80,6 @@ class QuestionController extends BaseController {
         question.addTag(tag);
       });
     }
-    res.status(200).send(question);
   }
 }
 
