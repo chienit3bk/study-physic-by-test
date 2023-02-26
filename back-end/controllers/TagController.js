@@ -1,6 +1,6 @@
 const BaseController = require('./BaseController');
 class TagController extends BaseController {
-  static async getTagById(req, res) {
+  static async getById(req, res) {
     try {
       const result = await super.getById(req, 'Tag');
       res.status(200).send(result);
@@ -9,7 +9,7 @@ class TagController extends BaseController {
     }
   }
 
-  static async getTags(req, res) {
+  static async getList(req, res) {
     try {
       const result = await super.getList(req, 'Tag');
       res.status(200).send(result);
@@ -18,7 +18,7 @@ class TagController extends BaseController {
     }
   }
 
-  static async createTag(req, res) {
+  static async create(req, res) {
     try {
       const createdTag = await super.create(req, 'Tag');
       if (!createdTag) {
@@ -27,6 +27,21 @@ class TagController extends BaseController {
         res.status(200).send(createdTag);
       }
     } catch (error) {
+      console.log(error);
+      res.status(500).send('Somethings went wrong, please contact our support');
+    }
+  }
+
+  static async updateById(req, res) {
+    try {
+      const result = await super.updateById(req, 'Tag', req.body);
+      if (result) {
+        res.status(200).send(result);
+      } else {
+        res.status(500).send('Somethings went wrong, please try again in a few minute');
+      }
+    } catch (error) {
+      console.log(error);
       res.status(500).send('Somethings went wrong, please contact our support');
     }
   }

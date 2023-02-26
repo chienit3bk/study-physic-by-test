@@ -23,14 +23,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   QuestionTag.init({
-    idQuestion: {
+    QuestionId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'questions',
         key: 'id',
       },
     },
-    idTag: {
+    TagId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'tags',

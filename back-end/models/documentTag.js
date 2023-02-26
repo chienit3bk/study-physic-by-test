@@ -23,14 +23,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   DocumentTag.init({
-    idDocument: {
+    DocumentId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'documents',
         key: 'id',
       },
     },
-    idTag: {
+    TagId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'tags',
@@ -42,8 +42,6 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'DocumentTag',
     tableName: 'document_tag',
   });
-
-  DocumentTag.belongsToMany()
 
   return DocumentTag;
 };
