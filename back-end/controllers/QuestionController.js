@@ -1,9 +1,9 @@
 const BaseController = require('./BaseController');
-class DocumentController extends BaseController {
+class QuestionController extends BaseController {
   static async getById(req, res) {
     try {
-      const { Document, Tag } = req.app.get('db');
-      const result = await Document.findOne({
+      const { Question, Tag } = req.app.get('db');
+      const result = await Question.findOne({
         where: {
           'id': req.params.id,
         },
@@ -17,7 +17,7 @@ class DocumentController extends BaseController {
 
   static async getList(req, res) {
     try {
-      const result = await super.getList(req, 'Document', {
+      const result = await super.getList(req, 'Question', {
         include: req.app.get('db').Tag,
       });
       res.status(200).send(result);
@@ -28,11 +28,11 @@ class DocumentController extends BaseController {
 
   static async create(req, res) {
     try {
-      const createdDocument = await super.create(req, 'Document');
-      if (!createdDocument) {
+      const createdQuestion = await super.create(req, 'Question');
+      if (!createdQuestion) {
         res.status(500).send('Somethings went wrong, please contact our support');
       } else {
-        res.status(200).send(createdDocument);
+        res.status(200).send(createdQuestion);
       }
     } catch (error) {
       console.log(error);
@@ -42,7 +42,7 @@ class DocumentController extends BaseController {
 
   static async updateById(req, res) {
     try {
-      const result = await super.updateById(req, 'Document', req.body);
+      const result = await super.updateById(req, 'Question', req.body);
       if (result) {
         res.status(200).send(result);
       } else {
@@ -56,7 +56,7 @@ class DocumentController extends BaseController {
 
   static async deleteById(req, res) {
     try {
-      const result = await super.deleteById(req, 'Document');
+      const result = await super.deleteById(req, 'Question');
       res.send(200, result);
     } catch (err) {
       res.send(400, err);
@@ -64,9 +64,9 @@ class DocumentController extends BaseController {
   }
 
   static async attachTags(req, res) {
-    const { Tag, Document } = req.app.get('db');
-    const document = await Document.findByPk(req.params.id);
-    if (!document) {
+    const { Tag, Question } = req.app.get('db');
+    const question = await Question.findByPk(req.params.id);
+    if (!question) {
       res.status(400).send('Not found');
       return;
     }
@@ -79,11 +79,11 @@ class DocumentController extends BaseController {
       });
 
       tags.forEach(tag => {
-        document.addTag(tag);
+        question.addTag(tag);
       });
     }
-    res.status(200).send(document);
+    res.status(200).send(question);
   }
 }
 
-module.exports = DocumentController;
+module.exports = QuestionController;
