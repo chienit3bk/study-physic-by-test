@@ -10,11 +10,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      idQuestion: {
+      QuestionId: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      idTag: {
+      TagId: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
