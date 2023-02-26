@@ -1,9 +1,20 @@
-const BaseController = require('../controllers/BaseController');
-class UsersController extends BaseController {
+const _ = require('lodash');
+const BaseController = require('./BaseController');
+class UserController extends BaseController {
   static async getUserById(req, res) {
     try {
       const result = await super.getById(req, 'User');
-      res.status(200).send(result);
+      res.status(200).send(_.pick(result, [
+        'id',
+        'name',
+        'email',
+        'phone',
+        'address',
+        'role',
+        'level',
+        'createdAt',
+        'updatedAt',
+      ]));
     } catch (error) {
       res.status(400).send(error);
     }
@@ -16,7 +27,7 @@ class UsersController extends BaseController {
     } catch (err) {
       res.send(400, err);
     }
-  }q
+  }
 
   // static async getProfile(req, res) {
   // 	try {
@@ -34,4 +45,4 @@ class UsersController extends BaseController {
   // }
 }
 
-module.exports = UsersController;
+module.exports = UserController;
