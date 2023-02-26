@@ -46,7 +46,7 @@ Page(
         IndexTableCell {{ question.tags }}
         IndexTableCell {{ question.level }}
         IndexTableCell {{ question.average_time }}
-        IndexTableCell {{ question.instruction }}
+        IndexTableCell {{ question.instructions }}
         IndexTableCell
           Stack()
             Button(
@@ -80,19 +80,79 @@ Modal(
   template(#title) {{ $t('list_question.title_modal_delete') }}
   template(#content)
     ModalSection {{  $t('list_question.content_modal_delete') }}
-EditQuestionModal(
-  :is-active="isActiveModalEdit",
-  :question="selectedQuestion",
-  @close="toggleModalEditQuestion",
-)
 
+Modal(
+  :open="isActiveModalEdit"
+  @close="toggleModalEditQuestion"
+)
+  template(#title)
+    h1 {{ $t('list_question.add_question') }}
+
+  template(#content)
+    ModalSection
+      Form
+        FormLayout
+          TextField(v-model="selectedQuestion.id")
+            template(#label) {{ $t('list_question.question_id') }}
+          TextField(:multiline="4" v-model="selectedQuestion.question")
+            template(#label) {{ $t('list_question.question_title') }}
+          TextStyle {{ $t('list_question.question_answers') }}
+          Stack(distribution="equalSpacing")
+            Stack
+              TextField(v-model="selectedQuestion.answers[0]")
+            Stack
+              TextField(v-model="selectedQuestion.answers[1]")
+            Stack
+              TextField(v-model="selectedQuestion.answers[2]")
+            Stack
+              TextField(v-model="selectedQuestion.answers[3]")
+          Select(
+            v-if="selectedQuestion.answers.length > 0",
+            v-model="selectedQuestion.true_answer",
+            :options="selectedQuestion.answers.map((answer: string) => { return {label: answer, value: answer } })",
+            :placeholder="$t('list_question.question_select_true_answer')",
+          )
+            template(#label) {{ $t('list_question.question_true_answer') }}
+          Select.pt-2(
+            :placeholder="$t('common.choose_level')",
+            v-model="selectedQuestion.level",
+            :options="LEVELS",
+          )
+              template(#label) {{ $t('select_exam.level_label')}}
+          Combobox(allow-multiple)
+            template(#activator)
+              ComboboxTextField(
+                autoComplete="off",
+                :labelHidden="true",
+                v-model="tagsSelected",
+                :placeholder="$t('list_question.question_add_tag')",
+              )
+                template(#prefix)
+                  Icon(:source="SearchMinor", color="inkLighter")
+
+            Listbox(@select="handleTagSelected")
+              ListboxOption(
+                v-for="tag, index in TAGS"
+                :key="index"
+                :value="tag"
+                :selected="isOptionSelected(tag)"
+              ) {{ tag }}
+          Stack
+            Tag(
+              v-for="tag, index in selectedQuestion.tags",
+              :key="index",
+              @remove="handleTagSelected(tag)",
+            ) {{ tag }}
+          Button(primary submit) Thêm
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { CreateQuestionModal, EditQuestionModal } from '@/components';
+import { CreateQuestionModal } from '@/components';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
+import { TAGS, LEVELS } from '@/configs';
+import SearchMinor from '@icons/SearchMinor.svg?component';
 import { questionsFake } from '../dataFake';
 
 const isActiveAddQuestion = ref<boolean>(false);
@@ -131,6 +191,21 @@ const appliedFilters = computed(() => {
     ]
     : null;
 });
+const tagsSelected = ref('');
+
+const handleTagSelected = (tag: string): void => {
+  const index = selectedQuestion.value.tags.indexOf(tag);
+
+  if (index === -1) {
+    selectedQuestion.value.tags?.push(tag);
+  } else {
+    selectedQuestion.value.tags = selectedQuestion.value.tags?.filter((item: string) => item !== tag);
+  }
+};
+
+const isOptionSelected = (tag: string) => {
+  return selectedQuestion.value.tags?.some((item: string) => item === tag);
+};
 
 function isEmpty(value: Record<string, string> | string | null) {
   if (Array.isArray(value)) {

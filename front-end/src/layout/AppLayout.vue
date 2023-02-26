@@ -38,13 +38,14 @@ import TimelineAttachmentMajor from '@icons/TimelineAttachmentMajor.svg?componen
 import InsertDynamicSourceMajor from '@icons/InsertDynamicSourceMajor.svg?component';
 import ProfileMajor from '@icons/ProfileMajor.svg?component';
 import ListMajor from '@icons/ListMajor.svg?component';
+import ProductsMajor from '@icons/ProductsMajor.svg?component';
 
 const router = useRouter();
 const route = useRoute();
 
 const user = authStore();
 
-const isAdmin = inject('isAdmin', true);
+const isAdmin = inject('isAdmin', user.isAdmin);
 const isCollapsed = ref<boolean>(false);
 const isUserMenuOpen = ref<boolean>(false);
 const actions = ref<Record<string, any>[]>([
@@ -59,35 +60,36 @@ const navItems = computed(() => {
       icon: HomeMajor,
       selected: (route.name === 'dashboard'),
       onClick: () => redirect('dashboard'),
-      isAdmin: false,
     },
     {
-      label: 'Câu hỏi từ dùng',
+      label: 'Câu hỏi từ người dùng',
       icon: ListMajor,
       selected: (route.name === 'list-question-from-user'),
       onClick: () => redirect('list-question-from-user'),
-      isAdmin: false,
     },
     {
       label: 'Ngân hàng câu hỏi',
       icon: QuestionMarkMajor,
       selected: (route.name === 'list-question'),
       onClick: () => redirect('list-question'),
-      isAdmin: true,
     },
     {
       label: 'Danh sách người dùng',
       icon: CustomersMajor,
       selected: (route.name === 'list-user'),
       onClick: () => redirect('list-user'),
-      isAdmin: true,
+    },
+    {
+      label: 'Nhãn và tài liệu',
+      icon: ProductsMajor,
+      selected: (route.name === 'tag-and-document'),
+      onClick: () => redirect('tag-and-document'),
     },
     {
       label: 'Thông tin cá nhân',
       icon: ProfileMajor,
       selected: (route.name === 'user-profile'),
       onClick: () => redirect('user-profile'),
-      isAdmin: false,
     },
   ];
 
@@ -97,35 +99,30 @@ const navItems = computed(() => {
       icon: HomeMajor,
       selected: (route.name === 'dashboard'),
       onClick: () => redirect('dashboard'),
-      isAdmin: false,
     },
     {
       label: 'Kiểm tra',
       icon: NoteMajor,
       selected: (route.name === 'online-exam'),
       onClick: () => redirect('online-exam'),
-      isAdmin: false,
     },
     {
       label: 'Lịch sử  làm bài',
       icon: TimelineAttachmentMajor,
       selected: (route.name === 'user-test-history'),
       onClick: () => redirect('user-test-history'),
-      isAdmin: false,
     },
     {
       label: 'Đóng góp câu hỏi',
       icon: InsertDynamicSourceMajor,
       selected: (route.name === 'user-question-addd'),
       onClick: () => redirect('user-question-addd'),
-      isAdmin: false,
     },
     {
       label: 'Thông tin người dùng',
       icon: ProfileMajor,
       selected: (route.name === 'user-profile'),
       onClick: () => redirect('user-profile'),
-      isAdmin: false,
     },
   ]
 

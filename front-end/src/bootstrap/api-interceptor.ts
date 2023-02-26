@@ -2,6 +2,10 @@ import axios from 'axios';
 
 const instance = axios.create();
 
+export const setAuthorirationToken = (token: string) => {
+  instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
+
 instance.defaults.baseURL = String(import.meta.env.VITE_API_URL);
 instance.interceptors.response.use(
   (response) => response.data,

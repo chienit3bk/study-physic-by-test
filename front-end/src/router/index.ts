@@ -13,6 +13,7 @@ import {
   QuestionFromUser,
   ListQuestionFromUser,
   UserTestHistory,
+  TagAndDocument,
 } from '@/views';
 import { AppLayout } from '@/layout';
 
@@ -77,6 +78,11 @@ const routes = [
             name: 'list-question-from-user',
             component: ListQuestionFromUser,
           },
+          {
+            path: 'tag-and-document',
+            name: 'tag-and-document',
+            component: TagAndDocument,
+          }
         ],
       },
       {
