@@ -29,7 +29,7 @@ Frame(
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { authStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 import HomeMajor from '@icons/HomeMajor.svg?component';
 import NoteMajor from '@icons/NoteMajor.svg?component';
 import CustomersMajor from '@icons/CustomersMajor.svg?component';
@@ -43,7 +43,7 @@ import ProductsMajor from '@icons/ProductsMajor.svg?component';
 const router = useRouter();
 const route = useRoute();
 
-const user = authStore();
+const user = useAuthStore();
 
 const isAdmin = inject('isAdmin', user.isAdmin);
 const isCollapsed = ref<boolean>(false);

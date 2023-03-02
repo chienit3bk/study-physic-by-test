@@ -10,24 +10,28 @@ Modal(
     ModalSection
       Form
         FormLayout
-          TextField(v-model="questionCreate.id")
-            template(#label) {{ $t('list_question.question_id') }}
-          TextField(:multiline="4" v-model="questionCreate.question")
+          TextField(:multiline="4" v-model="questionCreate.description")
             template(#label) {{ $t('list_question.question_title') }}
+          Select(
+            placeholder="Chọn nhãn chính",
+            v-model="questionCreate.trueAnswer",
+            :options="tagsStore.tagOptionsLabel",
+          )
+            template(#label) Nhãn chính
           TextStyle {{ $t('list_question.question_answers') }}
           Stack(distribution="equalSpacing")
             Stack
-              TextField(v-model="questionCreate.answers[0]")
+              TextField(v-model="questionCreate.answer[0]")
             Stack
-              TextField(v-model="questionCreate.answers[1]")
+              TextField(v-model="questionCreate.answer[1]")
             Stack
-              TextField(v-model="questionCreate.answers[2]")
+              TextField(v-model="questionCreate.answer[2]")
             Stack
-              TextField(v-model="questionCreate.answers[3]")
+              TextField(v-model="questionCreate.answer[3]")
           Select(
-            v-if="questionCreate.answers.length > 0",
+            v-if="questionCreate.answer.length > 0",
             v-model="questionCreate.true_answer",
-            :options="questionCreate.answers.map((answer: string) => { return {label: answer, value: answer } })",
+            :options="questionCreate.answer.map((answer: string) => { return {label: answer, value: answer } })",
             :placeholder="$t('list_question.question_select_true_answer')",
           )
             template(#label) {{ $t('list_question.question_true_answer') }}
@@ -50,36 +54,40 @@ Modal(
 
             Listbox(@select="handleTagSelected")
               ListboxOption(
-                v-for="tag, index in TAGS"
+                v-for="tag, index in tagsStore.tagOptions"
                 :key="index"
-                :value="tag"
-                :selected="isOptionSelected(tag)"
-              ) {{ tag }}
-          Stack
-            Tag(
-              v-for="tag, index in questionCreate.tags",
-              :key="index",
-              @remove="handleTagSelected(tag)",
-            ) {{ tag }}
-          Button(primary submit) Thêm
+                :value="tag.value"
+                :selected="isOptionSelected(tag.value)"
+              ) {{ tag.label }}
+          //- Stack
+          //-   Tag(
+          //-     v-for="tag, index in questionCreate.Tags",
+          //-     :key="index",
+          //-     @remove="handleTagSelected(tag)",
+          //-   ) {{ tag }}
+          Button(primary submit @click="addQuestion") Thêm
 </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
-import { TAGS, LEVELS } from '@/configs';
+import { ref, reactive, inject } from 'vue';
+import { useTagStore, useAuthStore } from '@/stores';
+import { LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
 
+const tagsStore = useTagStore();
+const authStore = useAuthStore();
+
+const axios: any = inject('axios');
 const questionCreate = reactive<Record<string, any>>({
-  id: '0',
-  number: '0',
-  tags: [],
-  question: '',
-  answers: ['A.', 'B.', 'C.', 'D.'],
-  true_answer: '',
-  level: '0',
-  average_time: 0,
+  Tags: [],
+  description: '',
+  answer: ['A.', 'B.', 'C.', 'D.'],
+  trueAnswer: '',
+  level: 1,
+  mainTag: '',
   instructions: '',
-  have_answer: false,
+  verify: authStore.isAdminUser,
 });
+
 
 const tagsSelected = ref('');
 
@@ -90,27 +98,40 @@ interface Props {
 defineProps<Props>();
 
 const emits = defineEmits<{
-  (event: 'close'): void
+  (event: 'close'): void,
 }>();
 
 const handleClose = (): void => {
   emits('close');
 };
 
-const handleTagSelected = (tag: string): void => {
-  const index = questionCreate.tags.indexOf(tag);
+const handleTagSelected = (id: number): void => {
+  const index = questionCreate.Tags?.indexOf(id);
 
   if (index === -1) {
-    questionCreate.tags.push(tag);
+    questionCreate.Tags?.push(id);
   } else {
-    questionCreate.tags = questionCreate.tags.filter((item: string) => item !== tag);
+    questionCreate.Tags = questionCreate.Tags?.filter((item: number) => item !== id);
   }
 };
 
-const isOptionSelected = (tag: string) => {
-  return questionCreate.tags?.some((item: string) => item === tag);
+
+const isOptionSelected = (id: number) => {
+  console.log(id, questionCreate.Tags);
+  return questionCreate.Tags?.some((item: number) => item === id);
 };
 
+
+const addQuestion = () => {
+  const { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify } = questionCreate;
+
+  axios.post('/api/questions', { tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify })
+    .then(() => {
+      setTimeout(() => alert('Thêm câu hỏi thành công'));
+      handleClose();
+    })
+    .catch(() => alert('Thêm câu hỏi thất bại'));
+}
 </script>
 <style lang="scss">
 .list-question__create-question__tag {

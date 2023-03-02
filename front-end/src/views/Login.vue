@@ -44,12 +44,12 @@
 
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue';
-import { authStore } from '@/stores';
+import { useAuthStore } from '@/stores';
 import ViewMajor from '@icons/ViewMajor.svg?component';
 import router from '@/router';
 const axios: any = inject('axios');
 
-const { setAuthStore } = authStore();
+const { setuseAuthStore } = useAuthStore();
 const userInput = ref({
   email: '',
   password: '',
@@ -73,9 +73,8 @@ const handleLogin = () => {
     password: userInput.value.password,
   })
     .then((res: any) => {
-      axios.defaults.headers.common.Authorization = `Bearer ${res.token}`;
       localStorage.setItem('session_token', res.token);
-      setAuthStore(res.token);
+      setuseAuthStore(res.token);
       router.push({ name: 'dashboard'});
     })
     .catch(() => {

@@ -10,8 +10,6 @@ Modal(
     ModalSection
       Form
         FormLayout
-          TextField(v-model="questionEdit.id")
-            template(#label) {{ $t('list_question.question_id') }}
           TextField(:multiline="4" v-model="questionEdit.question")
             template(#label) {{ $t('list_question.question_title') }}
           TextStyle {{ $t('list_question.question_answers') }}

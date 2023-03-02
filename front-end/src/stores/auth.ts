@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-
-interface IAuthStore {
+interface IuseAuthStore {
   email: string,
   name: string,
   isAdmin: boolean,
@@ -8,7 +7,7 @@ interface IAuthStore {
   refeshToken: string,
 }
 
-const defaultState: IAuthStore = {
+const defaultState: IuseAuthStore = {
   email: '',
   name: '',
   isAdmin: false,
@@ -16,27 +15,13 @@ const defaultState: IAuthStore = {
   refeshToken: '',
 }
 
-export const authStore = defineStore({
+export const useAuthStore = defineStore({
   id: 'auth',
 
   state: () => (defaultState),
 
   actions: {
-    setDefaultToken() {
-      const storateToken = localStorage.getItem('session_token') || '';
-      if (storateToken) {
-        const data = parseJwt(storateToken);
-        const { email, name, role } = data.payload;
-
-        this.email = email;
-        this.name = name;
-        this.isAdmin = role === 'admin';
-        this.token = storateToken;
-      }
-
-      return;
-    },
-    setAuthStore(token: string) {
+    setuseAuthStore(token: string) {
       const data = parseJwt(token);
       const { email, name, role } = data.payload;
 
@@ -48,6 +33,9 @@ export const authStore = defineStore({
   },
 
   getters: {
+    isAdminUser(): boolean {
+      return this.isAdmin;
+    }
   },
 });
 

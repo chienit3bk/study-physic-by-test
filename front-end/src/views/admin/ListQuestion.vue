@@ -8,7 +8,7 @@ Page(
 )
   CreateQuestionModal(
     :isActive="isActiveAddQuestion",
-    @close="toggleCreateQuestionModal"
+    @close="toggleCreateQuestionModal",
   )
   Card(sectioned)
     Filters.pb-2(
@@ -27,26 +27,26 @@ Page(
         )
 
     IndexTable(
-      :item-count="questions.length",
+      :item-count="questionsStore.questions?.length",
       :headings="tableHeadings",
       :selectable="false",
       lastColumnSticky,
     )
       IndexTableRow(
-        v-for="question, index in questions",
+        v-for="question, index in questionsStore.questions",
         :key="question.id"
         :id="question.id"
         :position="index"
         :selectable="false"
       )
         IndexTableCell {{ question.id }}
-        IndexTableCell.w-50 {{ question.question }}
-        IndexTableCell {{ question.answers }}
-        IndexTableCell {{ question.true_answer }}
-        IndexTableCell {{ question.tags }}
+        IndexTableCell.w-50 {{ question.description }}
+        IndexTableCell {{ question.answer }}
+        IndexTableCell {{ question.trueAnswer }}
+        IndexTableCell {{ question.mainTag || "-" }}
         IndexTableCell {{ question.level }}
-        IndexTableCell {{ question.average_time }}
-        IndexTableCell {{ question.instructions }}
+        IndexTableCell {{ question.averageTime || "-" }}
+        IndexTableCell {{ question.instruction || "-" }}
         IndexTableCell
           Stack()
             Button(
@@ -92,24 +92,22 @@ Modal(
     ModalSection
       Form
         FormLayout
-          TextField(v-model="selectedQuestion.id")
-            template(#label) {{ $t('list_question.question_id') }}
           TextField(:multiline="4" v-model="selectedQuestion.question")
             template(#label) {{ $t('list_question.question_title') }}
           TextStyle {{ $t('list_question.question_answers') }}
           Stack(distribution="equalSpacing")
             Stack
-              TextField(v-model="selectedQuestion.answers[0]")
+              TextField(v-model="selectedQuestion.answer[0]")
             Stack
-              TextField(v-model="selectedQuestion.answers[1]")
+              TextField(v-model="selectedQuestion.answer[1]")
             Stack
-              TextField(v-model="selectedQuestion.answers[2]")
+              TextField(v-model="selectedQuestion.answer[2]")
             Stack
-              TextField(v-model="selectedQuestion.answers[3]")
+              TextField(v-model="selectedQuestion.answer[3]")
           Select(
-            v-if="selectedQuestion.answers.length > 0",
+            v-if="selectedQuestion.answer.length > 0",
             v-model="selectedQuestion.true_answer",
-            :options="selectedQuestion.answers.map((answer: string) => { return {label: answer, value: answer } })",
+            :options="selectedQuestion.answer.map((answer: string) => { return {label: answer, value: answer } })",
             :placeholder="$t('list_question.question_select_true_answer')",
           )
             template(#label) {{ $t('list_question.question_true_answer') }}
@@ -147,7 +145,8 @@ Modal(
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, inject } from 'vue';
+import { useQuestionStore } from '@/stores';
 import { CreateQuestionModal } from '@/components';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
@@ -155,6 +154,7 @@ import { TAGS, LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
 import { questionsFake } from '../dataFake';
 
+const axios: any = inject('axios');
 const isActiveAddQuestion = ref<boolean>(false);
 const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalEdit = ref<boolean>(false);
@@ -162,17 +162,33 @@ const taggedWith = ref<string | undefined>('Chương 1');
 const queryValue = ref<string | undefined>(undefined);
 const selectedQuestion = ref<Record<string, any>>({});
 
+const questionsStore = useQuestionStore();
+
+const questionSelected = ref<Record<string, any>>({
+  description: '',
+  trueAnswer: '',
+  averageTime: 0,
+  mainTag: '',
+  instruction: '',
+  iamge: '',
+  verify: true,
+  level: 1,
+  answer: [],
+})
+
 const tableHeadings = [
   { title: 'Mã' },
   { title: 'Câu hỏi' },
   { title: 'Các đáp án' },
   { title: 'Đáp án đúng' },
-  { title: 'Tags' },
+  { title: 'Nhãn' },
   { title: 'Đô khó' },
   { title: 'Thời gian' },
   { title: 'Hướng dẫn' },
   { title: 'Hành động' },
 ];
+
+const isLoading = ref<boolean>(false);
 
 const filters = [
   {
@@ -261,5 +277,32 @@ const toggleCreateQuestionModal = (): void => {
   isActiveAddQuestion.value = !isActiveAddQuestion.value;
 };
 
-const questions = questionsFake;
+const confirmDeleteTag = () => {
+  axios
+    .delete(`/api/documents/${questionSelected.value.id}`)
+    .then(() => {
+      setTimeout(() => alert('Xóa tài liệu thành công'));
+      isActiveModalDelete.value = false;
+    })
+    .catch(() => alert('Xóa tài liệu thất bại'));
+};
+
+const updateDocument = () => {
+  const { title, content, Tags: tagIds } = questionSelected.value;
+
+  axios
+    .put(`/api/documents/${questionSelected.value.id}`, { title, content, tagIds })
+    .then(() => {
+      setTimeout(() => alert('Cập nhật tài liệu thành công'));
+      isActiveModalEdit.value = false;
+    })
+    .catch(() => alert('Cập nhật tài liệu thất bại'));
+};
+
+onMounted(async () => {
+  isLoading.value = true;
+  await questionsStore.getquestions();
+  isLoading.value = false;
+
+})
 </script>
