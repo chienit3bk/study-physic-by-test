@@ -27,12 +27,18 @@ export const useQuestionStore = defineStore({
   },
 
   getters: {
-    tagOptions(): Record<string, any>[] {
-      return this.questions.map((tag: Record<string, any>) => {
-        return {
-          label: tag.content,
-          value: tag.id,
-        }
+    questionToManage(): Record<string, any>[] {
+      return this.questions.map((question: Record<string, any>) => {
+        question.Tags = question.Tags.map((tag: any) => tag.id);
+        return question;
+      }).filter((question: Record<string, any>) => {
+        return question.verify;
+      })
+    },
+
+    questionFromUser(): Record<string, any>[] {
+      return this.questionToManage.filter((question: Record<string, any>) => {
+        return !question.verify;
       })
     }
   },

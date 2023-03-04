@@ -29,11 +29,15 @@
             CardSubsection {{ user.average_score || '-' }}
 
     .mt-3
-      UserHistory(:userExam="userExam")
+      UserHistory(v-if="!isAdmin" :userExam="userExam")
 </template>
 
 <script setup lang="ts">
+import { inject } from 'vue';
+import { useAuthStore } from '@/stores';
 import { UserHistory } from '@/components';
+
+const isAdmin = inject('isAdmin', false);
 const user = {
   name: 'chien',
   gmail: 'chien@gmail.com',

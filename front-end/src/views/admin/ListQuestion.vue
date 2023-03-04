@@ -13,27 +13,28 @@ Page(
   Card(sectioned)
     Filters.pb-2(
       :queryValue="queryValue",
-      :filters="filters",
+      :filters="[]",
       v-model="queryValue",
+      queryPlaceholder="Tìm kiếm câu hỏi"
       @query-clear="handleQueryValueRemove",
       @clear-all="handleClearAll",
     )
-      template(#filter-taggedWith)
-        TextField(
-          label="Tagged with"
-          v-model="taggedWith"
-          autoComplete="off"
-          labelHidden
-        )
+      //- template(#filter-taggedWith)
+      //-   TextField(
+      //-     label="Tagged with"
+      //-     v-model="taggedWith"
+      //-     autoComplete="off"
+      //-     labelHidden
+      //-   )
 
     IndexTable(
-      :item-count="questionsStore.questions?.length",
+      :item-count="questionsStore.questionToManage?.length",
       :headings="tableHeadings",
       :selectable="false",
       lastColumnSticky,
     )
       IndexTableRow(
-        v-for="question, index in questionsStore.questions",
+        v-for="question, index in questionsStore.questionToManage",
         :key="question.id"
         :id="question.id"
         :position="index"
@@ -86,13 +87,13 @@ Modal(
   @close="toggleModalEditQuestion"
 )
   template(#title)
-    h1 {{ $t('list_question.add_question') }}
+    h1 Chỉnh sửa thông tin câu hỏi
 
   template(#content)
     ModalSection
       Form
         FormLayout
-          TextField(:multiline="4" v-model="selectedQuestion.question")
+          TextField(:multiline="4" v-model="selectedQuestion.description")
             template(#label) {{ $t('list_question.question_title') }}
           TextStyle {{ $t('list_question.question_answers') }}
           Stack(distribution="equalSpacing")
@@ -106,11 +107,17 @@ Modal(
               TextField(v-model="selectedQuestion.answer[3]")
           Select(
             v-if="selectedQuestion.answer.length > 0",
-            v-model="selectedQuestion.true_answer",
+            v-model="selectedQuestion.trueAnswer",
             :options="selectedQuestion.answer.map((answer: string) => { return {label: answer, value: answer } })",
             :placeholder="$t('list_question.question_select_true_answer')",
           )
             template(#label) {{ $t('list_question.question_true_answer') }}
+          Select(
+            placeholder="Chọn nhãn chính",
+            v-model="selectedQuestion.mainTag",
+            :options="tagsStore.tagOptionsLabel",
+          )
+            template(#label) Nhãn chính
           Select.pt-2(
             :placeholder="$t('common.choose_level')",
             v-model="selectedQuestion.level",
@@ -122,7 +129,6 @@ Modal(
               ComboboxTextField(
                 autoComplete="off",
                 :labelHidden="true",
-                v-model="tagsSelected",
                 :placeholder="$t('list_question.question_add_tag')",
               )
                 template(#prefix)
@@ -130,51 +136,41 @@ Modal(
 
             Listbox(@select="handleTagSelected")
               ListboxOption(
-                v-for="tag, index in TAGS"
+                v-for="tag, index in tagsStore.tagOptions"
                 :key="index"
-                :value="tag"
-                :selected="isOptionSelected(tag)"
-              ) {{ tag }}
+                :value="tag.value"
+                :selected="isOptionSelected(tag.value)"
+              ) {{ tag.label }}
           Stack
             Tag(
-              v-for="tag, index in selectedQuestion.tags",
+              v-for="tag, index in selectedQuestion.Tags",
               :key="index",
               @remove="handleTagSelected(tag)",
-            ) {{ tag }}
-          Button(primary submit) Thêm
+            ) {{ tagLabel(tag) }}
+          Button(primary submit @click="updateQuestion") Lưu
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, inject } from 'vue';
-import { useQuestionStore } from '@/stores';
+import { useQuestionStore, useTagStore } from '@/stores';
 import { CreateQuestionModal } from '@/components';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
-import { TAGS, LEVELS } from '@/configs';
+import { LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
-import { questionsFake } from '../dataFake';
 
 const axios: any = inject('axios');
+
+const questionsStore = useQuestionStore();
+const tagsStore = useTagStore();
+
 const isActiveAddQuestion = ref<boolean>(false);
 const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalEdit = ref<boolean>(false);
 const taggedWith = ref<string | undefined>('Chương 1');
 const queryValue = ref<string | undefined>(undefined);
 const selectedQuestion = ref<Record<string, any>>({});
-
-const questionsStore = useQuestionStore();
-
-const questionSelected = ref<Record<string, any>>({
-  description: '',
-  trueAnswer: '',
-  averageTime: 0,
-  mainTag: '',
-  instruction: '',
-  iamge: '',
-  verify: true,
-  level: 1,
-  answer: [],
-})
+// const tagsSelected = ref([]);
 
 const tableHeadings = [
   { title: 'Mã' },
@@ -198,30 +194,34 @@ const filters = [
   },
 ];
 
-const appliedFilters = computed(() => {
-  return !isEmpty(taggedWith.value)
-    ? [
-      {
-        key: "taggedWith",
-      },
-    ]
-    : null;
-});
-const tagsSelected = ref('');
+// const appliedFilters = computed(() => {
+//   return !isEmpty(taggedWith.value)
+//     ? [
+//       {
+//         key: "taggedWith",
+//       },
+//     ]
+//     : null;
+// });
 
 const handleTagSelected = (tag: string): void => {
-  const index = selectedQuestion.value.tags.indexOf(tag);
+  const index = selectedQuestion.value.Tags.indexOf(tag);
 
   if (index === -1) {
-    selectedQuestion.value.tags?.push(tag);
+    selectedQuestion.value.Tags?.push(tag);
   } else {
-    selectedQuestion.value.tags = selectedQuestion.value.tags?.filter((item: string) => item !== tag);
+    selectedQuestion.value.Tags = selectedQuestion.value.Tags?.filter((item: string) => item !== tag);
   }
 };
 
 const isOptionSelected = (tag: string) => {
-  return selectedQuestion.value.tags?.some((item: string) => item === tag);
+  return selectedQuestion.value.Tags?.some((item: string) => item === tag);
 };
+
+const tagLabel = (id: number) => {
+  const tag = tagsStore.tagOptions.find((tag: Record<string, any>) => tag.value === id);
+  return tag?.label;
+}
 
 function isEmpty(value: Record<string, string> | string | null) {
   if (Array.isArray(value)) {
@@ -244,22 +244,17 @@ const requestDeleteQuestion = (question: Record<string, any>) => {
   selectedQuestion.value = question;
 };
 
-const confirmDeleteQuestion = () => {
-
-}
 
 const requestEditQuestion = (question: Record<string, any>) => {
   toggleModalEditQuestion();
+
   selectedQuestion.value = question;
 }
 
-const confirmEditQuestion = () => {
-
-}
-
-const handleTaggedWithChange = (value: string) => { taggedWith.value = value; };
+// const handleTaggedWithChange = (value: string) => { taggedWith.value = value; };
 const handleTaggedWithRemove = () => { taggedWith.value = undefined; };
 const handleQueryValueRemove = () => { queryValue.value = undefined; };
+
 const handleClearAll = () => {
   handleTaggedWithRemove();
   handleQueryValueRemove();
@@ -275,28 +270,30 @@ const showNextQuestions = () => {
 
 const toggleCreateQuestionModal = (): void => {
   isActiveAddQuestion.value = !isActiveAddQuestion.value;
+  questionsStore.getquestions();
 };
 
-const confirmDeleteTag = () => {
+const confirmDeleteQuestion = () => {
   axios
-    .delete(`/api/documents/${questionSelected.value.id}`)
+    .delete(`/api/questions/${selectedQuestion.value.id}`)
     .then(() => {
-      setTimeout(() => alert('Xóa tài liệu thành công'));
+      setTimeout(() => alert('Xóa câu hỏi thành công'));
       isActiveModalDelete.value = false;
     })
     .catch(() => alert('Xóa tài liệu thất bại'));
 };
 
-const updateDocument = () => {
-  const { title, content, Tags: tagIds } = questionSelected.value;
+function updateQuestion() {
+  const { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify } = selectedQuestion.value;
 
   axios
-    .put(`/api/documents/${questionSelected.value.id}`, { title, content, tagIds })
+    .put(`/api/questions/${selectedQuestion.value.id}`, { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify})
     .then(() => {
-      setTimeout(() => alert('Cập nhật tài liệu thành công'));
+      setTimeout(() => alert('Cập nhật câu hỏi thành công'));
       isActiveModalEdit.value = false;
+      questionsStore.getquestions();
     })
-    .catch(() => alert('Cập nhật tài liệu thất bại'));
+    .catch(() => alert('Cập nhật câu hỏi liệu thất bại'));
 };
 
 onMounted(async () => {

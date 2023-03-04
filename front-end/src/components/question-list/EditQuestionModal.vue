@@ -14,7 +14,7 @@ Modal(
             template(#label) {{ $t('list_question.question_title') }}
           Select(
             placeholder="Chọn nhãn chính",
-            v-model="questionCreate.mainTag",
+            v-model="questionCreate.trueAnswer",
             :options="tagsStore.tagOptionsLabel",
           )
             template(#label) Nhãn chính
@@ -30,7 +30,7 @@ Modal(
               TextField(v-model="questionCreate.answer[3]")
           Select(
             v-if="questionCreate.answer.length > 0",
-            v-model="questionCreate.trueAnswer",
+            v-model="questionCreate.true_answer",
             :options="questionCreate.answer.map((answer: string) => { return {label: answer, value: answer } })",
             :placeholder="$t('list_question.question_select_true_answer')",
           )
@@ -59,12 +59,12 @@ Modal(
                 :value="tag.value"
                 :selected="isOptionSelected(tag.value)"
               ) {{ tag.label }}
-          Stack
-            Tag(
-              v-for="tag, index in questionCreate.Tags",
-              :key="index",
-              @remove="handleTagSelected(tag)",
-            ) {{ tagLabel(tag) }}
+          //- Stack
+          //-   Tag(
+          //-     v-for="tag, index in questionCreate.Tags",
+          //-     :key="index",
+          //-     @remove="handleTagSelected(tag)",
+          //-   ) {{ tag }}
           Button(primary submit @click="addQuestion") Thêm
 </template>
 <script setup lang="ts">
@@ -120,11 +120,6 @@ const isOptionSelected = (id: number) => {
   return questionCreate.Tags?.some((item: number) => item === id);
 };
 
-const tagLabel = (id: number) => {
-  console.log(tagsStore.tagOptions);
-  const tag = tagsStore.tagOptions.find((tag: Record<string, any>) => tag.value === id);
-  return tag?.label;
-}
 
 const addQuestion = () => {
   const { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify } = questionCreate;

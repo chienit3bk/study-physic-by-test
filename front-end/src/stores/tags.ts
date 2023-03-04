@@ -15,10 +15,14 @@ export const useTagStore = defineStore({
       this.tags = [...tags];
     },
 
-    async getTags() {
+    async getTags(filterValue?: string) {
       await axios.get('/api/tags')
         .then((res: any) => {
-          this.setTagStore(res);
+          let tags = res;
+          if (filterValue) {
+            tags = res.filter((tag: Record<string, any>) => tag.content.toLowerCase().includes(filterValue.toLowerCase()));
+          }
+          this.setTagStore(tags);
         })
         .catch((error: Error) => {
           alert('Lấy dữ liệu thất bại');

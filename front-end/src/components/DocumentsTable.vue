@@ -155,7 +155,6 @@ const handleTagSelected = (id: number): void => {
 
 
 const isOptionSelected = (id: number) => {
-  console.log(id, documentSelected.value.Tags);
   return documentSelected.value.Tags?.some((item: number) => item === id);
 };
 
@@ -199,7 +198,7 @@ const confirmDeleteTag = () => {
   axios
     .delete(`/api/documents/${documentSelected.value.id}`)
     .then(() => {
-      setTimeout(() => alert('Xóa tài liệu thành công'));
+      alert('Xóa tài liệu thành công');
       documentStore.getDocuments();
       isActiveModalDelete.value = false;
     })

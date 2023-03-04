@@ -4,7 +4,7 @@
     Stack.mb-2(distribution="trailing")
       Button(primary @click="isActiveModalAdd = true") Thêm nhãn
     Filters(
-      v-model="paramsRequestGetSubs.inputFilterValue",
+      v-model="paramsRequestGetTags.inputFilterValue",
       :filters="[]",
       query-placeholder="Tìm nhãn"
       @query-clear="handleClearQuery",
@@ -103,7 +103,7 @@ const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalAdd = ref<boolean>(false);
 
 const metaData = ref<Record<string, any>>({});
-const paramsRequestGetSubs = ref<Record<string, any>>({ page: 1, per_page: 7 });
+const paramsRequestGetTags = ref<Record<string, any>>({ page: 1, per_page: 7 });
 
 const hasNextPage = computed<boolean>(() => metaData.value.current_page < metaData.value.last_page && !isLoading.value);
 const hasPreviousPage = computed<boolean>(() => metaData.value.current_page > 1 && !isLoading.value);
@@ -116,10 +116,10 @@ const headings = [
 ]
 
 const handleClearQuery = () => {
-  paramsRequestGetSubs.value.inputFilterValue = null;
+  paramsRequestGetTags.value.inputFilterValue = null;
 };
 
-const handleChangeQuery = debounce(() => {}, 500);
+const handleChangeQuery = debounce(() => {tagStore.getTags(paramsRequestGetTags.value.inputFilterValue)}, 500);
 
 const requestEditTag = (tag: Record<string, any>) => {
   tagSelected.value = tag;
@@ -173,7 +173,7 @@ const toggleModalDeleteTag = () => {
 
 
 const handlePressPagination = (page: number) => {
-  paramsRequestGetSubs.value.page = page;
+  paramsRequestGetTags.value.page = page;
 };
 
 onMounted(async () => {

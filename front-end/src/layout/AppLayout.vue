@@ -27,7 +27,7 @@ Frame(
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject } from 'vue';
+import { ref, computed, provide } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores'
 import HomeMajor from '@icons/HomeMajor.svg?component';
@@ -45,7 +45,7 @@ const route = useRoute();
 
 const user = useAuthStore();
 
-const isAdmin = inject('isAdmin', user.isAdmin);
+const isAdmin = provide('isAdmin', user.isAdminUser);
 const isCollapsed = ref<boolean>(false);
 const isUserMenuOpen = ref<boolean>(false);
 const actions = ref<Record<string, any>[]>([
@@ -126,7 +126,7 @@ const navItems = computed(() => {
     },
   ]
 
-  return isAdmin ? adminLayout : userLayouts;
+  return user.isAdminUser ? adminLayout : userLayouts;
 });
 
 
