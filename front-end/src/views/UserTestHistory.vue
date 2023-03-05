@@ -40,30 +40,30 @@ Page(
   {
     id: 1,
     time: 50,
-    total_question: 50,
-    total_true_answer: 39,
-    average_point: 7.8,
+    total_question: 40,
+    total_true_answer: 30,
+    average_point: 7.5,
+  },
+  {
+    id: 1,
+    time: 40,
+    total_question: 28,
+    total_true_answer: 25,
+    average_point: 9,
+  },
+  {
+    id: 1,
+    time: 20,
+    total_question: 15,
+    total_true_answer: 9,
+    average_point: 6,
   },
   {
     id: 1,
     time: 50,
     total_question: 50,
-    total_true_answer: 39,
-    average_point: 7.8,
-  },
-  {
-    id: 1,
-    time: 50,
-    total_question: 50,
-    total_true_answer: 39,
-    average_point: 7.8,
-  },
-  {
-    id: 1,
-    time: 50,
-    total_question: 50,
-    total_true_answer: 39,
-    average_point: 7.8,
+    total_true_answer: 40,
+    average_point: 8,
   }
 ]
 

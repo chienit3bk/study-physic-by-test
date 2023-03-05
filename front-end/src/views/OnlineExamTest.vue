@@ -38,8 +38,8 @@
               :key="currentQuestion.id",
               :id="currentQuestion.id",
               :number="currentQuestion.number",
-              :question="currentQuestion.question",
-              :answers="currentQuestion.answers",
+              :question="currentQuestion.description",
+              :answers="currentQuestion.answer",
               :instructions="currentQuestion.instructions",
               :level="currentQuestion.level",
               :tags="currentQuestion.tags",
@@ -72,15 +72,15 @@
           template(#title)
             Text(as="h3" variant="heading2xl" alignment="center") {{ $t('online_exam.exam_title') }}
           CardSection(
-            v-for="question, index in data.questions",
+            v-for="question, index in questionStore.questionToManage",
             :key="index",
           )
             Question(
-              :key="currentQuestion.id",
+              :key="String(currentQuestion.id)",
               :id="question.id",
               :number="`Câu ${index + 1}`",
-              :question="question.question",
-              :answers="question.answers",
+              :question="question.description",
+              :answers="question.answer",
               :instructions="question.instructions",
               :level="question.level",
               :tags="question.tags",
@@ -107,11 +107,15 @@ Modal(
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useQuestionStore } from '@/stores';
 import { Question, CountDownBox } from '@/components/online-exam';
 import type { QuestionType } from '@/types';
 import { questionsFake } from './dataFake';
 
 const route = useRoute();
+
+const questionStore = useQuestionStore();
+
 const isShowSubmitAnswerModal = ref<boolean>(false);
 const isShowNotFillAllQuestion = ref<boolean>(false);
 const isSubmited = ref<boolean>(false);
@@ -119,7 +123,7 @@ const currentQuestionIndex = ref<number>(0);
 const currentQuestion = ref<Record<string, any>>({});
 
 const exam = reactive({ id: '', time: 0 });
-const data = reactive<Record<string, QuestionType[]>>({questions: []});
+const data = reactive<Record<string, Record<string, any>[]>>({questions: []});
 
 const disabledPaginationButton = computed(() => {
   return {
@@ -142,11 +146,13 @@ const showNextQuestion = () => {
 };
 
 
-onMounted(() => {
+onMounted(async () => {
   if (route.params?.id) {
     exam.id = route.params.id as string;
     exam.time = parseInt(route.params.time as string);
-    data.questions = questionsFake;
+    await questionStore.getquestions();
+    data.questions = questionStore.questionToManage;
+    console.log(questionStore.questionToManage);
     currentQuestion.value = data.questions[0];
   }
 });

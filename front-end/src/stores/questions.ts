@@ -16,7 +16,11 @@ export const useQuestionStore = defineStore({
     },
 
     async getquestions() {
-      await axios.get('/api/questions')
+      await axios.get('/api/questions', {
+        params: {
+          page: 1,
+        }
+      })
         .then((res: any) => {
           this.setquestionstore(res);
         })
@@ -37,7 +41,10 @@ export const useQuestionStore = defineStore({
     },
 
     questionFromUser(): Record<string, any>[] {
-      return this.questionToManage.filter((question: Record<string, any>) => {
+      return this.questions.map((question: Record<string, any>) => {
+        question.Tags = question.Tags.map((tag: any) => tag.id);
+        return question;
+      }).filter((question: Record<string, any>) => {
         return !question.verify;
       })
     }

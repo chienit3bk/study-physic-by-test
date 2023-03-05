@@ -15,8 +15,12 @@ export const useTagStore = defineStore({
       this.tags = [...tags];
     },
 
-    async getTags(filterValue?: string) {
-      await axios.get('/api/tags')
+    async getTags(filterValue?: string, page?: number) {
+      await axios.get(`/api/tags`, {
+        // params: {
+        //   page: 1,
+        // }
+      })
         .then((res: any) => {
           let tags = res;
           if (filterValue) {

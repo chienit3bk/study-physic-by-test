@@ -5,7 +5,7 @@ AppProvider
 
 <script setup lang="ts">
 import { inject } from 'vue';
-import { useAuthStore, useTagStore, useDocumentStore } from '@/stores';
+import { useAuthStore, useTagStore, useDocumentStore, useQuestionStore } from '@/stores';
 import { useRouter } from 'vue-router';
 
 const axios: any = inject('axios');
@@ -14,6 +14,7 @@ const router = useRouter();
 const auth = useAuthStore();
 const { getTags } = useTagStore();
 const { getDocuments } = useDocumentStore();
+const { getquestions } = useQuestionStore();
 
 const storageToken = localStorage.getItem('session_token');
 
@@ -25,6 +26,7 @@ if (storageToken) {
 }
 getTags();
 getDocuments();
+getquestions();
 </script>
 
 <style lang="scss">

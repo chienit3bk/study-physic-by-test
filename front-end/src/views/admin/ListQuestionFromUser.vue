@@ -157,10 +157,11 @@ import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
 import { LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
-
 const axios: any = inject('axios');
 
 const questionsStore = useQuestionStore();
+console.log(questionsStore.questionFromUser);
+
 const tagsStore = useTagStore();
 
 const isActiveAddQuestion = ref<boolean>(false);

@@ -35,6 +35,8 @@ Modal(
             :placeholder="$t('list_question.question_select_true_answer')",
           )
             template(#label) {{ $t('list_question.question_true_answer') }}
+          TextField(:multiline="4" v-model="questionCreate.instruction")
+            template(#label) Hướng dẫn
           Select.pt-2(
             :placeholder="$t('common.choose_level')",
             v-model="questionCreate.level",
@@ -84,7 +86,7 @@ const questionCreate = reactive<Record<string, any>>({
   trueAnswer: '',
   level: 1,
   mainTag: '',
-  instructions: '',
+  instruction: '',
   verify: authStore.isAdminUser,
 });
 

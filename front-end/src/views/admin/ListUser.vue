@@ -26,16 +26,16 @@
           :position="index",
         )
           IndexTableCell {{ user.name }}
-          IndexTableCell {{ user.username }}
-          IndexTableCell {{ user.average_point }}
-          IndexTableCell {{ user.total_time }}
+          IndexTableCell {{ user.email }}
+          IndexTableCell {{ user.phone }}
+          IndexTableCell {{ user.address }}
           IndexTableCell
             Stack
-              Button(
-                plain,
-                :icon="ViewMinor",
-                @click="redirectToUserInfor(user.id)"
-              )
+              //- Button(
+              //-   plain,
+              //-   :icon="ViewMinor",
+              //-   @click="redirectToUserInfor(user.id)"
+              //- )
               Button(
                 plain,
                 :icon="DeleteMinor",
@@ -84,13 +84,17 @@ const hasPreviousPage = computed<boolean>(() => metaData.value.current_page > 1 
 
 const headings = [
   { title: 'Tên' },
-  { title: 'Gmail(Tên đăng nhập)' },
-  { title: 'Điểm trung bình' },
-  { title: 'Tổng thời gian' },
+  { title: 'Email(Tên đăng nhập)' },
+  { title: 'Số điện thoại' },
+  { title: 'Địa chỉ' },
   { title: 'Hành động' },
 ]
 
 const getListUsers = () => {
+  axios.get('/api/users')
+    .then((res: Record<string, any>) => {
+      users.value = res.filter((user: Record<string, any>) => user.role === 'user')
+    })
   return;
 }
 

@@ -59,6 +59,7 @@ class BaseController {
 				savedResource => Promise.resolve(savedResource),
 			);
 		} catch (err) {
+			console.log(err);
 			return Promise.reject(err);
 		}
 		return result;
@@ -102,7 +103,6 @@ class BaseController {
 
 	static async getList(req, modelName, options) {
 		const page = req.query.page;
-
 		let results;
 		try {
 			if (_.isUndefined(options)) {
@@ -114,8 +114,8 @@ class BaseController {
 					options = _.extend({}, options, {});
 				} else {
 					options = _.extend({}, options, {
-						offset: this.limit * (page - 1),
-						limit: this.limit,
+						offset: 12 * (page - 1),
+						limit: 12,
 					});
 				}
 			} else {
@@ -126,6 +126,7 @@ class BaseController {
 				.findAll(options)
 				.then(result => Promise.resolve(result));
 		} catch (err) {
+			console.log(err)
 			return Promise.reject(err);
 		}
 		return results;

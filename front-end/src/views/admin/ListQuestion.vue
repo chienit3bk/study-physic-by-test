@@ -151,7 +151,7 @@ Modal(
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, inject } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useQuestionStore, useTagStore } from '@/stores';
 import { CreateQuestionModal } from '@/components';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';

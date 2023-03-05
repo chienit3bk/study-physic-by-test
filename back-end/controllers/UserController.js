@@ -18,7 +18,7 @@ class UserController extends BaseController {
     } catch (error) {
       res.status(400).send(error);
     }
-  }
+  };
 
   static async deleteById(req, res) {
     try {
@@ -27,7 +27,17 @@ class UserController extends BaseController {
     } catch (err) {
       res.send(400, err);
     }
-  }
+  };
+
+  static async getList(req, res) {
+    try {
+      const result = await super.getList(req, 'User');
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
+
 
   // static async getProfile(req, res) {
   // 	try {
