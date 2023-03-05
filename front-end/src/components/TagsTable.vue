@@ -12,13 +12,13 @@
     )
     IndexTable(
       :loading="isLoading",
-      :item-count="tagStore.tags.length",
+      :item-count="tags.length",
       :headings="headings",
       :selectable="false",
       lastColumnSticky,
     )
       IndexTableRow(
-        v-for="(tag, index) in tagStore.tags",
+        v-for="(tag, index) in tags",
         :key="tag.id",
         :id="tag.id",
         :position="index",
@@ -42,8 +42,8 @@
       Stack(distribution="center", alignment="center")
         Pagination(
           :key="String(isLoading)",
-          :has-previous="hasPreviousPage",
-          :has-next="hasNextPage",
+          :has-previous="currentPage !== 1",
+          :has-next="currentPage !== parseInt(`${tags.length / 20}`) + 1",
           @previous="handlePressPagination(metaData.current_page - 1)",
           @next="handlePressPagination(metaData.current_page + 1)",
         )
@@ -83,14 +83,14 @@ Modal(
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue';
-import { useTagStore } from '@/stores';
+import { ref, inject, onMounted } from 'vue';
 import { debounce } from 'lodash';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
 
 const axios: any = inject('axios');
-const tagStore = useTagStore();
+
+const tags = ref<Record<string, any>[]>([]);
 
 const tagSelected = ref<Record<string, any>>({
   id: 0,
@@ -103,10 +103,9 @@ const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalAdd = ref<boolean>(false);
 
 const metaData = ref<Record<string, any>>({});
+const currentPage = ref<number>(1);
 const paramsRequestGetTags = ref<Record<string, any>>({ page: 1, per_page: 7 });
 
-const hasNextPage = computed<boolean>(() => metaData.value.current_page < metaData.value.last_page && !isLoading.value);
-const hasPreviousPage = computed<boolean>(() => metaData.value.current_page > 1 && !isLoading.value);
 
 const headings = [
   { title: 'ID' },
@@ -119,7 +118,7 @@ const handleClearQuery = () => {
   paramsRequestGetTags.value.inputFilterValue = null;
 };
 
-const handleChangeQuery = debounce(() => {tagStore.getTags(paramsRequestGetTags.value.inputFilterValue)}, 500);
+const handleChangeQuery = debounce(() => {getTags(paramsRequestGetTags.value.inputFilterValue)}, 500);
 
 const requestEditTag = (tag: Record<string, any>) => {
   tagSelected.value = tag;
@@ -137,7 +136,7 @@ const confirmDeleteTag = () => {
     .delete(`/api/tags/${(tagSelected.value.id)}`)
     .then(() => {
       setTimeout(() => alert('Xóa nhãn thành công'));
-      tagStore.getTags();
+      getTags();
       isActiveModalDelete.value = false;
     })
     .catch(() => alert('Xóa nhãn thất bại'));
@@ -150,7 +149,7 @@ const updateTag = () => {
     })
     .then(() => {
       setTimeout(() => alert('Cập nhật nhãn thành công'));
-      tagStore.getTags();
+      getTags();
       isActiveModalEdit.value = false;
     })
     .catch(() => alert('Cập nhật nhãn thất bại'));
@@ -162,7 +161,7 @@ const addTag = () => {
   axios.post('/api/tags', { content })
     .then(() => {
       setTimeout(() => alert('Thêm thành tag công'));
-      tagStore.getTags();
+      getTags();
       isActiveModalAdd.value = false;
     })
     .catch(() => alert('Thêm thất tag bại'));
@@ -176,10 +175,35 @@ const handlePressPagination = (page: number) => {
   paramsRequestGetTags.value.page = page;
 };
 
-onMounted(async () => {
+async function getTags(filterValue?: string, page?: number) {
   isLoading.value = true;
-  await tagStore.getTags();
+
+  await axios.get(`/api/tags`, {
+    // params: {
+    //   page: 1,
+    // }
+  })
+    .then((res: any) => {
+      let data = res;
+      if (filterValue) {
+        data = res.filter((tag: Record<string, any>) => tag.content.toLowerCase().includes(filterValue.toLowerCase()));
+      }
+
+      tags.value = data;
+    })
+    .catch((error: Error) => {
+      alert('Lấy dữ liệu thất bại');
+    });
+
   isLoading.value = false;
+}
+
+onMounted(async () => {
+  const storageToken = await localStorage.getItem('session_token');
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+  getTags();
 });
 
 </script>

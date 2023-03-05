@@ -12,13 +12,13 @@
     )
     IndexTable(
       :loading="isLoading",
-      :item-count="documentStore.documents.length",
+      :item-count="documents.length",
       :headings="headings",
       :selectable="false",
       lastColumnSticky,
     )
       IndexTableRow(
-        v-for="(document, index) in documentStore.documents",
+        v-for="(document, index) in documents",
         :key="document.id",
         :id="document.id",
         :position="index",
@@ -125,15 +125,14 @@ Modal(
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, inject, onMounted } from 'vue';
-import { useDocumentStore, useTagStore } from '@/stores';
+import { ref, computed, inject, onMounted } from 'vue';
+import { useTagStore } from '@/stores';
 import { debounce } from 'lodash';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
 import SearchMinor from '@icons/SearchMinor.svg?component';
 
 const axios: any = inject('axios');
-const documentStore = useDocumentStore();
 const tagStore = useTagStore();
 
 const documentSelected = ref<Record<string, any>>({
@@ -157,7 +156,7 @@ const handleTagSelected = (id: number): void => {
 const isOptionSelected = (id: number) => {
   return documentSelected.value.Tags?.some((item: number) => item === id);
 };
-
+const documents = ref<Record<string, any>[]>([]);
 const isLoading = ref<boolean>(false);
 const isActiveModalEdit = ref<boolean>(false);
 const isActiveModalDelete = ref<boolean>(false);
@@ -181,7 +180,7 @@ const handleClearQuery = () => {
   paramsRequestGetSubs.value.inputFilterValue = null;
 };
 
-const handleChangeQuery = debounce(() => {}, 500);
+const handleChangeQuery = debounce(() => {getDocuments(paramsRequestGetSubs.value.inputFilterValue)}, 500);
 
 const requestEditDocument = (document: Record<string, any>) => {
   documentSelected.value = document;
@@ -199,7 +198,7 @@ const confirmDeleteTag = () => {
     .delete(`/api/documents/${documentSelected.value.id}`)
     .then(() => {
       alert('Xóa tài liệu thành công');
-      documentStore.getDocuments();
+      getDocuments();
       isActiveModalDelete.value = false;
     })
     .catch(() => alert('Xóa tài liệu thất bại'));
@@ -212,7 +211,7 @@ const updateDocument = () => {
     .put(`/api/documents/${documentSelected.value.id}`, { title, content, tagIds })
     .then(() => {
       setTimeout(() => alert('Cập nhật tài liệu thành công'));
-      documentStore.getDocuments();
+      getDocuments();
       isActiveModalEdit.value = false;
     })
     .catch(() => alert('Cập nhật tài liệu thất bại'));
@@ -224,7 +223,7 @@ const addDocument = () => {
   axios.post('/api/documents', { title, content, tagIds })
     .then(() => {
       setTimeout(() => alert('Thêm tài liệu thành công'));
-      documentStore.getDocuments();
+      getDocuments();
       isActiveModalAdd.value = false;
     })
     .catch(() => alert('Thêm tài liệu thất bại'));
@@ -238,10 +237,35 @@ const handlePressPagination = (page: number) => {
   paramsRequestGetSubs.value.page = page;
 };
 
-onMounted(async () => {
+async function getDocuments(filterValue?: string, page?: number) {
   isLoading.value = true;
-  await documentStore.getDocuments();
+
+  await axios.get(`/api/documents`, {
+    // params: {
+    //   page: 1,
+    // }
+  })
+    .then((res: any) => {
+      let data = res;
+      if (filterValue) {
+        data = res.filter((document: Record<string, any>) => document.title.toLowerCase().includes(filterValue.toLowerCase()));
+      }
+
+      documents.value = data;
+    })
+    .catch((error: Error) => {
+      alert('Lấy dữ liệu thất bại');
+    });
+
   isLoading.value = false;
+}
+
+onMounted(async () => {
+  const storageToken = await localStorage.getItem('session_token');
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+  getDocuments();
 });
 
 </script>

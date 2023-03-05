@@ -117,6 +117,8 @@ Modal(
             :placeholder="$t('list_question.question_select_true_answer')",
           )
             template(#label) {{ $t('list_question.question_true_answer') }}
+          TextField(:multiline="4" v-model="selectedQuestion.instruction")
+            template(#label) Hướng dẫn
           Select.pt-2(
             :placeholder="$t('common.choose_level')",
             v-model="selectedQuestion.level",
@@ -146,11 +148,14 @@ Modal(
               :key="index",
               @remove="handleTagSelected(tag)",
             ) {{ tagLabel(tag) }}
-          Button(primary submit) Lưu
+          Stack(distribution="leading", spacing="baseTight")
+            Button(destructive @click="confirmDeleteQuestion") Xóa
+            Button(primary @click="updateQuestion") Thêm
+
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, inject } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import { useQuestionStore, useTagStore } from '@/stores';
 import { CreateQuestionModal } from '@/components';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
@@ -198,24 +203,6 @@ const tableHeadings = [
 
 const isLoading = ref<boolean>(false);
 
-const filters = [
-  {
-    key: "taggedWith",
-    label: "Theo dạng",
-    shortcut: true,
-  },
-];
-
-// const appliedFilters = computed(() => {
-//   return !isEmpty(taggedWith.value)
-//     ? [
-//       {
-//         key: "taggedWith",
-//       },
-//     ]
-//     : null;
-// });
-
 const handleTagSelected = (tag: string): void => {
   const index = selectedQuestion.value.Tags.indexOf(tag);
 
@@ -234,14 +221,6 @@ const tagLabel = (id: number) => {
   const tag = tagsStore.tagOptions.find((tag: Record<string, any>) => tag.value === id);
   return tag?.label;
 }
-
-function isEmpty(value: Record<string, string> | string | null) {
-  if (Array.isArray(value)) {
-    return value.length === 0;
-  } else {
-    return value === "" || value == null;
-  }
-};
 
 const toggleModalDeleteQuestion = () => {
   isActiveModalDelete.value = !isActiveModalDelete.value;
@@ -262,7 +241,6 @@ const requestEditQuestion = (question: Record<string, any>) => {
   selectedQuestion.value = question;
 }
 
-const handleTaggedWithChange = (value: string) => { taggedWith.value = value; };
 const handleTaggedWithRemove = () => { taggedWith.value = undefined; };
 const handleQueryValueRemove = () => { queryValue.value = undefined; };
 const handleClearAll = () => {
@@ -292,16 +270,17 @@ const confirmDeleteQuestion = () => {
     .catch(() => alert('Xóa tài liệu thất bại'));
 };
 
-function updateDocument() {
-  const { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify } = questionSelected.value;
+function updateQuestion() {
+  const { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify } = selectedQuestion.value;
 
   axios
-    .put(`/api/questions/${questionSelected.value.id}`, { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify})
+    .put(`/api/questions/${selectedQuestion.value.id}`, { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify})
     .then(() => {
-      setTimeout(() => alert('Cập nhật tài liệu thành công'));
+      setTimeout(() => alert('Cập nhật câu hỏi thành công'));
       isActiveModalEdit.value = false;
+      questionsStore.getquestions();
     })
-    .catch(() => alert('Cập nhật tài liệu thất bại'));
+    .catch(() => alert('Cập nhật câu hỏi liệu thất bại'));
 };
 
 onMounted(async () => {

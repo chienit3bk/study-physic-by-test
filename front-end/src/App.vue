@@ -16,17 +16,23 @@ const { getTags } = useTagStore();
 const { getDocuments } = useDocumentStore();
 const { getquestions } = useQuestionStore();
 
-const storageToken = localStorage.getItem('session_token');
+const init = async() => {
+  const storageToken = await localStorage.getItem('session_token');
 
-if (storageToken) {
-  auth.setuseAuthStore(storageToken);
-  axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
-} else {
-  router.push({ name: 'login'});
+  if (storageToken) {
+    auth.setuseAuthStore(storageToken);
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  } else {
+    router.push({ name: 'login'});
+  }
+
+  getTags();
+  getDocuments();
+  getquestions();
 }
-getTags();
-getDocuments();
-getquestions();
+
+init();
+
 </script>
 
 <style lang="scss">

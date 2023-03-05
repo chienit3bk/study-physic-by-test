@@ -72,9 +72,10 @@ const handleLogin = () => {
     email: userInput.value.email,
     password: userInput.value.password,
   })
-    .then((res: any) => {
-      localStorage.setItem('session_token', res.token);
+    .then(async (res: any) => {
+      await localStorage.setItem('session_token', res.token);
       setuseAuthStore(res.token);
+      axios.defaults.headers.common.Authorization = `Bearer ${res.token}`;
       router.push({ name: 'dashboard'});
     })
     .catch(() => {
