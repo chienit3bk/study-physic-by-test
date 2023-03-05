@@ -21,9 +21,9 @@ export const useDocumentStore = defineStore({
         .then((res: any) => {
           this.setDocumentStore(res);
         })
-        .catch((error: Error) => {
-          alert('Lấy dữ liệu thất bại');
-        })
+        // .catch((error: Error) => {
+        //   alert('Lấy dữ liệu thất bại');
+        // })
     }
   },
 

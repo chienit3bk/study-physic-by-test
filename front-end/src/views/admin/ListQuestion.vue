@@ -124,6 +124,8 @@ Modal(
             :options="LEVELS",
           )
               template(#label) {{ $t('select_exam.level_label')}}
+          TextField(:multiline="4" v-model="selectedQuestion.instruction")
+            template(#label) Hướng dẫn
           Combobox(allow-multiple)
             template(#activator)
               ComboboxTextField(

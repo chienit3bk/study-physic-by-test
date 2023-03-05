@@ -17,16 +17,16 @@ export const useQuestionStore = defineStore({
 
     async getquestions() {
       await axios.get('/api/questions', {
-        params: {
-          page: 1,
-        }
+        // params: {
+        //   page: 1,
+        // }
       })
         .then((res: any) => {
           this.setquestionstore(res);
         })
-        .catch((error: Error) => {
-          alert('Lấy dữ liệu thất bại');
-        })
+        // .catch((error: Error) => {
+        //   alert('Lấy dữ liệu thất bại');
+        // })
     }
   },
 

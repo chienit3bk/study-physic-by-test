@@ -28,9 +28,9 @@ export const useTagStore = defineStore({
           }
           this.setTagStore(tags);
         })
-        .catch((error: Error) => {
-          alert('Lấy dữ liệu thất bại');
-        })
+        // .catch((error: Error) => {
+        //   alert('Lấy dữ liệu thất bại');
+        // })
     }
   },
 

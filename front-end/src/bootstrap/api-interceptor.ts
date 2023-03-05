@@ -4,7 +4,7 @@ const instance = axios.create();
 
 export const setAuthorirationToken = (token: string) => {
   instance.defaults.headers.common.Authorization = `Bearer ${token}`;
-};
+};axios.defaults.headers.common.Authorization
 
 instance.defaults.baseURL = String(import.meta.env.VITE_API_URL);
 instance.interceptors.response.use(
