@@ -114,8 +114,8 @@ class BaseController {
 					options = _.extend({}, options, {});
 				} else {
 					options = _.extend({}, options, {
-						offset: this.limit * (page - 1),
-						limit: this.limit,
+						offset: 12 * (page - 1),
+						limit: 12,
 					});
 				}
 			} else {

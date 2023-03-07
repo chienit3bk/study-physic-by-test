@@ -24,12 +24,19 @@ Frame(
           @toggle="isUserMenuOpen = !isUserMenuOpen"
         )
   router-view
+  Toast(
+    v-if="toastData.active",
+    :duration="3000",
+    :error="toastData.error",
+    :content="toastData.content",
+    @dismiss="toggleToast",
+  )
 </template>
 
 <script setup lang="ts">
-import { ref, computed, provide } from 'vue';
+import { ref, reactive, computed, provide, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores'
+import { useAuthStore, useQuestionStore, useTagStore, useDocumentStore } from '@/stores'
 import HomeMajor from '@icons/HomeMajor.svg?component';
 import NoteMajor from '@icons/NoteMajor.svg?component';
 import CustomersMajor from '@icons/CustomersMajor.svg?component';
@@ -44,8 +51,43 @@ const router = useRouter();
 const route = useRoute();
 
 const user = useAuthStore();
+const axios: any = inject('axios');
 
-const isAdmin = provide('isAdmin', user.isAdminUser);
+const auth = useAuthStore();
+const { getTags } = useTagStore();
+const { getDocuments } = useDocumentStore();
+const { getQuestions } = useQuestionStore();
+
+const init = async() => {
+  const storageToken = await localStorage.getItem('session_token');
+
+  if (storageToken) {
+    auth.setuseAuthStore(storageToken);
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  } else {
+    router.push({ name: 'login'});
+  }
+
+  getTags();
+  getDocuments();
+  getQuestions();
+}
+
+init();
+
+const toastData = reactive<Record<string, any>>({
+  active: false,
+  error: false,
+  content: '',
+})
+
+const toggleToast = () => {
+  toastData.active = !toastData.active;
+};
+
+provide('toastData', toastData);
+provide('isAdmin', user.isAdminUser);
+
 const isCollapsed = ref<boolean>(false);
 const isUserMenuOpen = ref<boolean>(false);
 const actions = ref<Record<string, any>[]>([
@@ -128,6 +170,8 @@ const navItems = computed(() => {
 
   return user.isAdminUser ? adminLayout : userLayouts;
 });
+
+
 
 
 const redirect = (routeName: string): void => {

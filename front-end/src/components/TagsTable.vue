@@ -43,9 +43,9 @@
         Pagination(
           :key="String(isLoading)",
           :has-previous="currentPage !== 1",
-          :has-next="currentPage !== parseInt(`${tags.length / 20}`) + 1",
-          @previous="handlePressPagination(metaData.current_page - 1)",
-          @next="handlePressPagination(metaData.current_page + 1)",
+          :has-next="currentPage !== parseInt(`${tagsStore.tags.length / 12}`) + 1",
+          @previous="handlePressPagination('prev')",
+          @next="handlePressPagination('next')",
         )
 Modal(
   :open="isActiveModalDelete",
@@ -84,12 +84,30 @@ Modal(
 
 <script setup lang="ts">
 import { ref, inject, onMounted } from 'vue';
+import { useTagStore } from '@/stores';
 import { debounce } from 'lodash';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
 
 const axios: any = inject('axios');
+const init = async () => {
+  const storageToken = await localStorage.getItem('session_token');
 
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+}
+
+init();
+
+const toastData: Record<string, any> = inject('toastData', {
+  active: false,
+  error: false,
+  content: '',
+});
+
+
+const tagsStore = useTagStore();
 const tags = ref<Record<string, any>[]>([]);
 
 const tagSelected = ref<Record<string, any>>({
@@ -102,10 +120,8 @@ const isActiveModalEdit = ref<boolean>(false);
 const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalAdd = ref<boolean>(false);
 
-const metaData = ref<Record<string, any>>({});
 const currentPage = ref<number>(1);
-const paramsRequestGetTags = ref<Record<string, any>>({ page: 1, per_page: 7 });
-
+const paramsRequestGetTags = ref<Record<string, any>>({});
 
 const headings = [
   { title: 'ID' },
@@ -135,11 +151,17 @@ const confirmDeleteTag = () => {
   axios
     .delete(`/api/tags/${(tagSelected.value.id)}`)
     .then(() => {
-      setTimeout(() => alert('Xóa nhãn thành công'));
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Xóa nhãn thành công';
       getTags();
       isActiveModalDelete.value = false;
     })
-    .catch(() => alert('Xóa nhãn thất bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Xóa nhãn thất bại';
+    });
 };
 
 const updateTag = () => {
@@ -148,11 +170,17 @@ const updateTag = () => {
       content: tagSelected.value.content,
     })
     .then(() => {
-      setTimeout(() => alert('Cập nhật nhãn thành công'));
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Cập nhật nhãn thành công';
       getTags();
       isActiveModalEdit.value = false;
     })
-    .catch(() => alert('Cập nhật nhãn thất bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Cập nhật nhãn thất bại';
+    });
 };
 
 const addTag = () => {
@@ -160,28 +188,46 @@ const addTag = () => {
 
   axios.post('/api/tags', { content })
     .then(() => {
-      setTimeout(() => alert('Thêm thành tag công'));
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Thêm nhãn thành công';
       getTags();
       isActiveModalAdd.value = false;
     })
-    .catch(() => alert('Thêm thất tag bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Thêm nhãn thất bại';
+      isActiveModalAdd.value = false;
+    });
 }
 const toggleModalDeleteTag = () => {
   isActiveModalDelete.value = !isActiveModalDelete.value;
 };
 
 
-const handlePressPagination = (page: number) => {
-  paramsRequestGetTags.value.page = page;
+const handlePressPagination = (type: string) => {
+  if (type === 'prev') {
+    currentPage.value -= 1;
+  } else {
+    currentPage.value += 1;
+  }
+
+  getTags();
 };
 
-async function getTags(filterValue?: string, page?: number) {
+async function getTags(filterValue?: string) {
   isLoading.value = true;
+  const storageToken = await localStorage.getItem('session_token');
 
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
   await axios.get(`/api/tags`, {
-    // params: {
-    //   page: 1,
-    // }
+    params: {
+      page: currentPage.value,
+      limit: 12,
+    }
   })
     .then((res: any) => {
       let data = res;
@@ -192,7 +238,9 @@ async function getTags(filterValue?: string, page?: number) {
       tags.value = data;
     })
     .catch((error: Error) => {
-      alert('Lấy dữ liệu thất bại');
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Lấy dữ liệu các nhãn thất bại';
     });
 
   isLoading.value = false;

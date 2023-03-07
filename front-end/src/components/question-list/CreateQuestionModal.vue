@@ -79,6 +79,12 @@ const tagsStore = useTagStore();
 const authStore = useAuthStore();
 
 const axios: any = inject('axios');
+const toastData: Record<string, any> = inject('toastData', {
+  active: false,
+  error: false,
+  content: '',
+});
+
 const questionCreate = reactive<Record<string, any>>({
   Tags: [],
   description: '',
@@ -133,10 +139,16 @@ const addQuestion = () => {
 
   axios.post('/api/questions', { tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify })
     .then(() => {
-      setTimeout(() => alert('Thêm câu hỏi thành công'));
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Tạo câu hỏi thành công';
       handleClose();
     })
-    .catch(() => alert('Thêm câu hỏi thất bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Tạo câu hỏi thất bại';
+    });
 }
 </script>
 <style lang="scss">

@@ -15,7 +15,7 @@ export const useQuestionStore = defineStore({
       this.questions = [...questions];
     },
 
-    async getquestions() {
+    async getQuestions() {
       await axios.get('/api/questions', {
         // params: {
         //   page: 1,
@@ -24,9 +24,9 @@ export const useQuestionStore = defineStore({
         .then((res: any) => {
           this.setquestionstore(res);
         })
-        // .catch((error: Error) => {
-        //   alert('Lấy dữ liệu thất bại');
-        // })
+        .catch((error: Error) => {
+          alert('Lấy dữ liệu thất bại');
+        })
     }
   },
 

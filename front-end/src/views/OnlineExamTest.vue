@@ -20,9 +20,10 @@
             Stack
               Button(
                 v-for="(question, index) in data.questions",
+                :key="index",
                 :primary="!!question.current_answer",
                 @click="handleButtonChangeQuestion(question, index)",
-              ) {{index + 1}}
+              ) {{ index > 8 ? index + 1 : `0${index + 1}` }}
           CardSection
             CountDownBox(
               :time="1000*60*exam.time",
@@ -36,12 +37,12 @@
           CardSection
             Question(
               :key="currentQuestion.id",
-              :id="currentQuestion.id",
-              :number="currentQuestion.number",
+              :id="String(currentQuestion.id)",
+              :number="`Câu ${currentQuestionIndex + 1}`",
               :question="currentQuestion.description",
               :answers="currentQuestion.answer",
-              :instructions="currentQuestion.instructions",
-              :level="currentQuestion.level",
+              :instructions="currentQuestion.instruction",
+              :level="String(currentQuestion.level)",
               :tags="currentQuestion.tags",
               :current-answer="currentQuestion.current_answer || null",
               :is-view-only="false",
@@ -66,7 +67,9 @@
                 TextStyle(variation="strong") Số câu đúng: {{ numberTrueAnswer() }}
                 TextStyle(variation="strong") Thời gian làm bài:
                 TextStyle(variation="negative") Điểm số: {{  numberTrueAnswer() / data.questions.length * 10 }}
-
+            CardSection
+              template(#title) Tài liệu tham khảo
+              Stack
       LayoutSection
         Card
           template(#title)
@@ -77,16 +80,16 @@
           )
             Question(
               :key="String(currentQuestion.id)",
-              :id="question.id",
+              :id="String(question.id)",
               :number="`Câu ${index + 1}`",
               :question="question.description",
               :answers="question.answer",
-              :instructions="question.instructions",
-              :level="question.level",
+              :instructions="question.instruction",
+              :level="String(question.level)",
               :tags="question.tags",
               :current-answer="question.current_answer || null"
               :is-view-only="true",
-              :true-answer="currentQuestion.true_answer",
+              :true-answer="currentQuestion.trueAnswer",
               :is-submited="isSubmited",
             )
 
@@ -107,10 +110,8 @@ Modal(
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useQuestionStore } from '@/stores';
+import { useQuestionStore, useDocumentStore } from '@/stores';
 import { Question, CountDownBox } from '@/components/online-exam';
-import type { QuestionType } from '@/types';
-import { questionsFake } from './dataFake';
 
 const route = useRoute();
 
@@ -145,14 +146,12 @@ const showNextQuestion = () => {
   }
 };
 
-
 onMounted(async () => {
   if (route.params?.id) {
     exam.id = route.params.id as string;
     exam.time = parseInt(route.params.time as string);
     await questionStore.getquestions();
     data.questions = questionStore.questionToManage;
-    console.log(questionStore.questionToManage);
     currentQuestion.value = data.questions[0];
   }
 });
@@ -189,7 +188,7 @@ const requestSubmitAnswer = () => {
 
 const numberTrueAnswer = () => {
   return data.questions.reduce((sum, question) => {
-    if (question.current_answer === question.true_answer) {
+    if (question.current_answer === question.trueAnswer) {
       return sum + 1;
     }
 
@@ -197,6 +196,10 @@ const numberTrueAnswer = () => {
   }, 0)
 
 }
+
+// const getDocuments = () => {
+//   const document = data.questions.map(question => question. )
+// };
 
 const handleSubmitAnser = () => {
   isSubmited.value = true;

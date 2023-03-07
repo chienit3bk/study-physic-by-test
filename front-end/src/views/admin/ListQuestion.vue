@@ -16,28 +16,21 @@ Page(
       :filters="[]",
       v-model="queryValue",
       queryPlaceholder="Tìm kiếm câu hỏi"
-      @query-clear="handleQueryValueRemove",
-      @clear-all="handleClearAll",
+      @query-clear="handleClearQuery",
+      @query-change="handleChangeQuery",
     )
-      //- template(#filter-taggedWith)
-      //-   TextField(
-      //-     label="Tagged with"
-      //-     v-model="taggedWith"
-      //-     autoComplete="off"
-      //-     labelHidden
-      //-   )
 
     IndexTable(
-      :item-count="questionsStore.questionToManage?.length",
+      :item-count="questions.length",
       :headings="tableHeadings",
       :selectable="false",
       lastColumnSticky,
     )
       IndexTableRow(
-        v-for="question, index in questionsStore.questionToManage",
+        v-for="question, index in questions",
         :key="question.id"
         :id="question.id"
-        :position="index"
+        :position="parseInt(index)"
         :selectable="false"
       )
         IndexTableCell {{ question.id }}
@@ -63,14 +56,15 @@ Page(
 
     Stack(distribution="center")
       Pagination(
-        has-previous,
-        has-next,
-        :nextKeys="['']",
+        :key="String(isloading)",
+        :has-previous="currentPage !== 1",
+        :has-next="currentPage !== parseInt(`${questionsStore.questionToManage}`) / 12 + 1",
+        :nextKeys="['k']",
         :previousKeys="['j']",
         :nextTooltip="$t('online_exam.next_question')",
         :previousTooltip="$t('online_exam.prev_question')",
-        @previous="showPrevQuestions",
-        @next="showNextQuestions",
+        @previous="handlePressPagination('prev')",
+        @next="handlePressPagination('next')",
       )
 Modal(
   :open="isActiveModalDelete",
@@ -160,17 +154,26 @@ import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
 import { LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
+import { debounce } from 'lodash';
 
 const axios: any = inject('axios');
+
+const toastData: Record<string, any> = inject('toastData', {
+  active: false,
+  error: false,
+  content: '',
+});
 
 const questionsStore = useQuestionStore();
 const tagsStore = useTagStore();
 
+const isloading = ref<boolean>(false);
+const questions = ref<Record<string, any>>([]);
 const isActiveAddQuestion = ref<boolean>(false);
 const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalEdit = ref<boolean>(false);
-const taggedWith = ref<string | undefined>('Chương 1');
-const queryValue = ref<string | undefined>(undefined);
+const queryValue = ref<string>('');
+const currentPage = ref<number>(1);
 const selectedQuestion = ref<Record<string, any>>({});
 // const tagsSelected = ref([]);
 
@@ -187,24 +190,6 @@ const tableHeadings = [
 ];
 
 const isLoading = ref<boolean>(false);
-
-const filters = [
-  {
-    key: "taggedWith",
-    label: "Theo dạng",
-    shortcut: true,
-  },
-];
-
-// const appliedFilters = computed(() => {
-//   return !isEmpty(taggedWith.value)
-//     ? [
-//       {
-//         key: "taggedWith",
-//       },
-//     ]
-//     : null;
-// });
 
 const handleTagSelected = (tag: string): void => {
   const index = selectedQuestion.value.Tags.indexOf(tag);
@@ -225,13 +210,13 @@ const tagLabel = (id: number) => {
   return tag?.label;
 }
 
-function isEmpty(value: Record<string, string> | string | null) {
-  if (Array.isArray(value)) {
-    return value.length === 0;
-  } else {
-    return value === "" || value == null;
-  }
-};
+// function isEmpty(value: Record<string, string> | string | null) {
+//   if (Array.isArray(value)) {
+//     return value.length === 0;
+//   } else {
+//     return value === "" || value == null;
+//   }
+// };
 
 const toggleModalDeleteQuestion = () => {
   isActiveModalDelete.value = !isActiveModalDelete.value;
@@ -253,36 +238,41 @@ const requestEditQuestion = (question: Record<string, any>) => {
   selectedQuestion.value = question;
 }
 
-// const handleTaggedWithChange = (value: string) => { taggedWith.value = value; };
-const handleTaggedWithRemove = () => { taggedWith.value = undefined; };
-const handleQueryValueRemove = () => { queryValue.value = undefined; };
-
-const handleClearAll = () => {
-  handleTaggedWithRemove();
-  handleQueryValueRemove();
+const handleClearQuery = () => {
+  queryValue.value = '';
 };
 
-const showPrevQuestions = () => {
-  return;
-};
+const handleChangeQuery = debounce(() => getQuestions(), 500);
 
-const showNextQuestions = () => {
-  return;
-};
+const handlePressPagination = (type: string) => {
+  if (type === 'prev') {
+    currentPage.value -= 1;
+  } else {
+    currentPage.value += 1;
+  }
 
+  getQuestions();
+};
 const toggleCreateQuestionModal = (): void => {
   isActiveAddQuestion.value = !isActiveAddQuestion.value;
-  questionsStore.getquestions();
+  getQuestions();
 };
 
 const confirmDeleteQuestion = () => {
   axios
     .delete(`/api/questions/${selectedQuestion.value.id}`)
     .then(() => {
-      setTimeout(() => alert('Xóa câu hỏi thành công'));
-      isActiveModalDelete.value = false;
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Cập nhật câu hỏi thành công';
+      getQuestions();
     })
-    .catch(() => alert('Xóa tài liệu thất bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Xóa câu hỏi thất bại';
+    });
+  isActiveModalDelete.value = false;
 };
 
 function updateQuestion() {
@@ -291,17 +281,54 @@ function updateQuestion() {
   axios
     .put(`/api/questions/${selectedQuestion.value.id}`, { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify})
     .then(() => {
-      setTimeout(() => alert('Cập nhật câu hỏi thành công'));
-      isActiveModalEdit.value = false;
-      questionsStore.getquestions();
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Cập nhật câu hỏi thành công';
+      getQuestions();
     })
-    .catch(() => alert('Cập nhật câu hỏi liệu thất bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Cập nhật câu hỏi thất bại';
+    });
+  isActiveModalEdit.value = false;
+};
+
+async function getQuestions() {
+  isLoading.value = true;
+  const storageToken = await localStorage.getItem('session_token');
+
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+  await axios.get('/api/questions', {
+    params: {
+      page: currentPage.value,
+    }
+  })
+    .then((res: any) => {
+      let data = res;
+      if (queryValue.value) {
+        data = res.filter((question: Record<string, any>) => question.description.toLowerCase().includes(queryValue.value.toLowerCase()));
+      }
+      data = data.map((question: Record<string, any>) => {
+        question.Tags = question.Tags.map((tag: any) => tag.id);
+        return question;
+      }).filter((question: Record<string, any>) => {
+        return question.verify;
+      })
+      questions.value = data;
+    })
+    .catch((error: Error) => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Lấy dữ liệu các câu hỏi thất bại';
+    });
+
+  isLoading.value = false;
 };
 
 onMounted(async () => {
-  isLoading.value = true;
-  await questionsStore.getquestions();
-  isLoading.value = false;
-
+  getQuestions();
 })
 </script>

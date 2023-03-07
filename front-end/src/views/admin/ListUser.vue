@@ -70,6 +70,15 @@ import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import ViewMinor from '@icons/ViewMinor.svg?component';
 
 const axios: any = inject('axios');
+const init = async () => {
+  const storageToken = await localStorage.getItem('session_token');
+
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+}
+
+init();
 const router = useRouter();
 
 const users = ref<Record<string, any>[]>([]);
@@ -90,7 +99,12 @@ const headings = [
   { title: 'Hành động' },
 ]
 
-const getListUsers = () => {
+const getListUsers = async() => {
+  const storageToken = await localStorage.getItem('session_token');
+
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
   axios.get('/api/users')
     .then((res: Record<string, any>) => {
       users.value = res.filter((user: Record<string, any>) => user.role === 'user')
@@ -129,10 +143,6 @@ const handlePressPagination = (page: number) => {
 
 
 // Created
-const init = () => {
-  users.value = userFake;
-  getListUsers();
-};
+getListUsers();
 
-init();
 </script>

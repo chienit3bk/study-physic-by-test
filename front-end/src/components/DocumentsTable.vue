@@ -43,10 +43,10 @@
       Stack(distribution="center", alignment="center")
         Pagination(
           :key="String(isLoading)",
-          :has-previous="hasPreviousPage",
-          :has-next="hasNextPage",
-          @previous="handlePressPagination(metaData.current_page - 1)",
-          @next="handlePressPagination(metaData.current_page + 1)",
+          :has-previous="currentPage !== 1",
+          :has-next="currentPage !== parseInt(`${documentStore.documents.length / 12}`) + 1",
+          @previous="handlePressPagination('prev')",
+          @next="handlePressPagination('next')",
         )
 Modal(
   :open="isActiveModalDelete",
@@ -126,14 +126,21 @@ Modal(
 
 <script setup lang="ts">
 import { ref, computed, inject, onMounted } from 'vue';
-import { useTagStore } from '@/stores';
+import { useTagStore, useDocumentStore } from '@/stores';
 import { debounce } from 'lodash';
 import DeleteMinor from '@icons/DeleteMinor.svg?component';
 import EditMinor from '@icons/EditMinor.svg?component';
 import SearchMinor from '@icons/SearchMinor.svg?component';
 
 const axios: any = inject('axios');
+
+const toastData: Record<string, any> = inject('toastData', {
+  content: '',
+  active: false,
+  error: false,
+});
 const tagStore = useTagStore();
+const documentStore = useDocumentStore();
 
 const documentSelected = ref<Record<string, any>>({
   id: 0,
@@ -163,7 +170,8 @@ const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalAdd = ref<boolean>(false);
 
 const metaData = ref<Record<string, any>>({});
-const paramsRequestGetSubs = ref<Record<string, any>>({ page: 1, per_page: 7 });
+const currentPage = ref<number>(1);
+const paramsRequestGetSubs = ref<Record<string, any>>({});
 
 const hasNextPage = computed<boolean>(() => metaData.value.current_page < metaData.value.last_page && !isLoading.value);
 const hasPreviousPage = computed<boolean>(() => metaData.value.current_page > 1 && !isLoading.value);
@@ -197,11 +205,17 @@ const confirmDeleteTag = () => {
   axios
     .delete(`/api/documents/${documentSelected.value.id}`)
     .then(() => {
-      alert('Xóa tài liệu thành công');
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Xóa tài liệu thành công';
       getDocuments();
       isActiveModalDelete.value = false;
     })
-    .catch(() => alert('Xóa tài liệu thất bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Xóa tài liệu thất bại';
+    });
 };
 
 const updateDocument = () => {
@@ -210,11 +224,17 @@ const updateDocument = () => {
   axios
     .put(`/api/documents/${documentSelected.value.id}`, { title, content, tagIds })
     .then(() => {
-      setTimeout(() => alert('Cập nhật tài liệu thành công'));
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Cập nhật tài liệu thành công';
       getDocuments();
       isActiveModalEdit.value = false;
     })
-    .catch(() => alert('Cập nhật tài liệu thất bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Cập nhật tài liệu thất bại';
+    });
 };
 
 const addDocument = () => {
@@ -222,28 +242,44 @@ const addDocument = () => {
 
   axios.post('/api/documents', { title, content, tagIds })
     .then(() => {
-      setTimeout(() => alert('Thêm tài liệu thành công'));
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Thêm tài liệu thành công';
       getDocuments();
       isActiveModalAdd.value = false;
     })
-    .catch(() => alert('Thêm tài liệu thất bại'));
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Thêm tài liệu thất bại';
+    });
 }
 const toggleModalDeleteTag = () => {
   isActiveModalDelete.value = !isActiveModalDelete.value;
 };
 
 
-const handlePressPagination = (page: number) => {
-  paramsRequestGetSubs.value.page = page;
+const handlePressPagination = (type: string) => {
+  if (type === 'prev') {
+    currentPage.value -= 1;
+  } else {
+    currentPage.value += 1;
+  }
+
+  getDocuments();
 };
 
-async function getDocuments(filterValue?: string, page?: number) {
+async function getDocuments(filterValue?: string) {
   isLoading.value = true;
+  const storageToken = await localStorage.getItem('session_token');
 
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
   await axios.get(`/api/documents`, {
-    // params: {
-    //   page: 1,
-    // }
+    params: {
+      page: currentPage.value,
+    }
   })
     .then((res: any) => {
       let data = res;
@@ -254,7 +290,9 @@ async function getDocuments(filterValue?: string, page?: number) {
       documents.value = data;
     })
     .catch((error: Error) => {
-      alert('Lấy dữ liệu thất bại');
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Lấy dữ liệu tài liệu thất bại';
     });
 
   isLoading.value = false;
