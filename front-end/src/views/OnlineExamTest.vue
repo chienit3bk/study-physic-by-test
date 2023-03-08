@@ -3,7 +3,7 @@
   Page.pb-5(
     full-width,
     :title="$t('online_exam.title')",
-    :subtitle="`${exam.time} ${$t('common.minute')}`",
+    :subtitle="`${data.time} ${$t('common.minute')}`",
     :breadcrumbs="[{content: 'OnlineExam', url: '/online-exam'}]",
   )
     Banner(
@@ -22,11 +22,11 @@
                 v-for="(question, index) in data.questions",
                 :key="index",
                 :primary="!!question.current_answer",
-                @click="handleButtonChangeQuestion(question, index)",
-              ) {{ index > 8 ? index + 1 : `0${index + 1}` }}
+                @click="handleButtonChangeQuestion(question, parseInt(index))",
+              ) {{ parseInt(index) > 8 ? index + 1 : `0${parseInt(index) + 1}` }}
           CardSection
             CountDownBox(
-              :time="1000*60*exam.time",
+              :time="1000*60*data.time",
             )
           Stack.pb-4(distribution="center")
             Button(primary, @click="requestSubmitAnswer", :disabled="isSubmited ") {{ $t('online_exam.submit_answer') }}
@@ -75,7 +75,7 @@
           template(#title)
             Text(as="h3" variant="heading2xl" alignment="center") {{ $t('online_exam.exam_title') }}
           CardSection(
-            v-for="question, index in questionStore.questionToManage",
+            v-for="question, index in data.questions",
             :key="index",
           )
             Question(
@@ -89,7 +89,7 @@
               :tags="question.tags",
               :current-answer="question.current_answer || null"
               :is-view-only="true",
-              :true-answer="currentQuestion.trueAnswer",
+              :true-answer="question.trueAnswer",
               :is-submited="isSubmited",
             )
 
@@ -108,11 +108,12 @@ Modal(
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import { useQuestionStore, useDocumentStore } from '@/stores';
 import { Question, CountDownBox } from '@/components/online-exam';
 
+const axios: any = inject('axios');
 const route = useRoute();
 
 const questionStore = useQuestionStore();
@@ -123,8 +124,15 @@ const isSubmited = ref<boolean>(false);
 const currentQuestionIndex = ref<number>(0);
 const currentQuestion = ref<Record<string, any>>({});
 
-const exam = reactive({ id: '', time: 0 });
-const data = reactive<Record<string, Record<string, any>[]>>({questions: []});
+const data: {
+  questions: Record<string, any>,
+  time: number,
+} = reactive({
+  questions: [],
+  time: 0
+});
+
+const examId = computed(() => route.params.id);
 
 const disabledPaginationButton = computed(() => {
   return {
@@ -146,19 +154,9 @@ const showNextQuestion = () => {
   }
 };
 
-onMounted(async () => {
-  if (route.params?.id) {
-    exam.id = route.params.id as string;
-    exam.time = parseInt(route.params.time as string);
-    await questionStore.getquestions();
-    data.questions = questionStore.questionToManage;
-    currentQuestion.value = data.questions[0];
-  }
-});
-
 const handleAnswerChange = (newAnswer: Record<string, any>): void => {
   currentQuestion.value.current_answer = newAnswer.answer;
-  const questionUpdate = data.questions.find(question => question.id === newAnswer.id);
+  const questionUpdate = data.questions.find((question: any) => question.id === newAnswer.id);
 
   if (questionUpdate) {
     questionUpdate.current_answer = newAnswer.answer;
@@ -177,7 +175,7 @@ const toggleModalSubmitAnswer = () => {
 const requestSubmitAnswer = () => {
   toggleModalSubmitAnswer();
 
-  const isFillAllQuestions = data.questions.every(question => question.current_answer);
+  const isFillAllQuestions = data.questions.every((question: any) => question.current_answer);
 
   if (!isFillAllQuestions) {
     isShowNotFillAllQuestion.value = true;
@@ -187,7 +185,7 @@ const requestSubmitAnswer = () => {
 };
 
 const numberTrueAnswer = () => {
-  return data.questions.reduce((sum, question) => {
+  return data.questions.reduce((sum: any, question: any) => {
     if (question.current_answer === question.trueAnswer) {
       return sum + 1;
     }
@@ -206,10 +204,28 @@ const handleSubmitAnser = () => {
   isShowSubmitAnswerModal.value = false;
 }
 
-
-
 const calculatePoints = () => {
   return;
 };
 
+async function getExams() {
+  const storageToken = await localStorage.getItem('session_token');
+
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+
+  axios.get(`/api/exams/${route.params.id}`)
+    .then((exam: Record<string, any>) => {
+      data.questions = exam.Questions;
+      data.time = exam.time / 1000 / 60;
+      currentQuestion.value = data.questions[0];
+    })
+}
+
+onMounted(async () => {
+  if (examId.value) {
+    getExams();
+  }
+});
 </script>

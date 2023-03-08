@@ -40,7 +40,7 @@ const routes = [
         component: OnlineExam,
       },
       {
-        path: '/online-exam/:id/:time',
+        path: '/online-exam/:id',
         name: 'online-exam-test',
         component: OnlineExamTest,
       },

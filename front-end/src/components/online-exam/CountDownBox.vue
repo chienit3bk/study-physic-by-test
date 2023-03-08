@@ -5,7 +5,8 @@ VueCountdown.qsc2-countdown-timer(
   :key="resetTimeKey",
   :transform="timeTransform",
   v-slot="{ hours, minutes, seconds }",
-) {{ $t('online_exam.time_remaining')}}{{ hours }}{{ minutes }}:{{ seconds }}
+)
+  TextStyle(variation="strong") {{ $t('online_exam.time_remaining')}}{{ hours }}{{ minutes }}:{{ seconds }}
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
@@ -26,8 +27,8 @@ const props = defineProps({
 });
 const resetTimeKey = ref(1);
 
-const timeTransform = (props) => {
-  const formattedProps = {};
+const timeTransform = (props: Record<string, any>) => {
+  const formattedProps: Record<string, any> = {};
   Object.entries(props).forEach(([key, value]) => {
     if (key === 'hours') {
       if (value) {

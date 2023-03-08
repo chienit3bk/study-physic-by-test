@@ -57,7 +57,7 @@ Page(
       Pagination(
         :key="String(isloading)",
         :has-previous="currentPage !== 1",
-        :has-next="currentPage !== parseInt(`${questionsStore.questionToManage}`) / 12 + 1",
+        :has-next="currentPage !== parseInt(`${questionsStore.questionToManage.length / 12}`) + 1",
         :nextKeys="['k']",
         :previousKeys="['j']",
         :nextTooltip="$t('online_exam.next_question')",
@@ -65,15 +65,7 @@ Page(
         @previous="handlePressPagination('prev')",
         @next="handlePressPagination('next')",
       )
-Modal(
-  :open="isActiveModalDelete",
-  @close="toggleModalDeleteQuestion",
-  :primary-action="{ content: $t('common.cancel'), onAction: toggleModalDeleteQuestion }",
-  :secondary-actions="[{ content: $t('common.delete'), onAction: confirmDeleteQuestion }]"
-)
-  template(#title) {{ $t('list_question.title_modal_delete') }}
-  template(#content)
-    ModalSection {{  $t('list_question.content_modal_delete') }}
+
 
 Modal(
   :open="isActiveModalEdit"
@@ -142,7 +134,19 @@ Modal(
               :key="index",
               @remove="handleTagSelected(tag)",
             ) {{ tagLabel(tag) }}
-          Button(primary submit @click="updateQuestion") Lưu
+          Stack(distribution="center")
+            Button(primary @click="updateQuestion") Thêm
+            Button(destructive @click="toggleModalDeleteQuestion") Xóa
+
+Modal(
+  :open="isActiveModalDelete",
+  @close="toggleModalDeleteQuestion",
+  :primary-action="{ content: $t('common.cancel'), onAction: toggleModalDeleteQuestion }",
+  :secondary-actions="[{ content: $t('common.delete'), onAction: confirmDeleteQuestion }]"
+)
+  template(#title) {{ $t('list_question.title_modal_delete') }}
+  template(#content)
+    ModalSection {{  $t('list_question.content_modal_delete') }}
 </template>
 
 <script setup lang="ts">

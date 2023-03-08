@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     verify: DataTypes.BOOLEAN,
     level: DataTypes.INTEGER,
     answer: DataTypes.JSONB,
+    totalUser: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Question',

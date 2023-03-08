@@ -5,8 +5,10 @@ class ExamController extends BaseController {
     try {
       const { totalQuestion, tags, level, time } = req.body;
       const avarageQuestionPerTag = Math.ceil(totalQuestion / tags.length);
+      const minQuestionPerTag = Math.floor(totalQuestion / tags.length);
+
       const userId = req.user.id;
-      console.log(req.body, userId);
+
       const { Question, sequelize, Exam } = req.app.get('db');
 
       const newExam = await Exam.build({
@@ -22,7 +24,6 @@ class ExamController extends BaseController {
 
       const question = {};
 
-
       const promiseList = tags.map((tag) => {
         return new Promise((resolve, reject) => {
           Question.findAll({
@@ -36,36 +37,50 @@ class ExamController extends BaseController {
             resolve();
           })
         });
-        // question[tag] = await Question.findAll({
-        //   where: {
-        //     mainTag: testQuestion[0].mainTag,
-        //   },
-        //   order: [sequelize.fn('RANDOM')],
-        //   limit: avarageQuestionPerTag
-        // });
-
-        // question[tag] = question[tag].map(i => i.dataValues);
-        // console.log(1, tag, question[tag]);
-
-        // if (question)
       });
+
 
       await Promise.allSettled(promiseList);
 
-      console.log(question);
+      let result = [];
 
-      res.status(200).send(question);
-      // const questions = Question.findAll({
-      //   where: {
-      //     mainTag: tags,
-      //   }
-      // });
+      Object.keys(question).forEach(tag => {
+        if (result.length <  totalQuestion) {
+          for (let i = 0; i < minQuestionPerTag; i++) {
+            result.push(question[tag][i]);
+          }
+        }
+      })
 
+      Object.keys(question).forEach(tag => {
+        if (question[tag].length > minQuestionPerTag && result.length < totalQuestion) {
+          result.push(question[tag][minQuestionPerTag]);
+        }
+      })
 
+      result = result.map(question => question.id);
+
+      newExam.setQuestions(result);
+
+      res.status(200).send(newExam);
 
     } catch (error) {
-      console.log(1, error)
-      res.status(400).send(error)
+      res.status(400).send(error);
+    }
+  };
+
+  static async getById(req, res) {
+    try {
+      const { Exam, Question } = req.app.get('db');
+      const result = await Exam.findOne({
+        where: {
+          'id': req.params.id,
+        },
+        include: Question,
+      });
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send(error);
     }
   }
 };

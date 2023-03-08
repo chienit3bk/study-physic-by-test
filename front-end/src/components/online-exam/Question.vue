@@ -47,7 +47,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-console.log(props.number);
+
 const isShowInstruction = ref<boolean>(false);
 const questionTimeStart = ref<number>(0);
 

@@ -3,16 +3,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
-    queryInterface.removeColumn('exams', 'content');
+    await queryInterface.addColumn('questions', 'totalUser', {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+    });
   },
 
   async down (queryInterface, Sequelize) {
+    await queryInterface.removeColumn('questions', 'totalUser');
+
     /**
      * Add reverting commands here.
      *

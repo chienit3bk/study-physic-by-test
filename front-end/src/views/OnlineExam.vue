@@ -1,4 +1,7 @@
 <template lang="pug">
+pre {{ examLevel }}
+pre {{ examTime }}
+pre {{ examChapterOptions }}
 .online-exam
   Page.pb-5(
     full-width,
@@ -63,7 +66,7 @@
               ) {{ option }}
 
         Stack.pt-3
-          Button(primary) {{ $t('select_exam.create_exam') }}
+          Button(primary @click="createExam") {{ $t('select_exam.create_exam') }}
       LayoutSection(
         full-width
       )
@@ -86,11 +89,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { ExamTest } from '@/components/online-exam';
 import { CHAPTERS, LEVELS, EXAM_TIME } from '@/configs';
 import { examTestsFake } from './dataFake';
+
+const axios: any = inject('axios');
 
 const router = useRouter();
 
@@ -133,11 +138,97 @@ const getChapterOptions = (chapter: Record<string, any>) => {
 };
 
 const getAndShowQuestions = (dataExam: Record<string, number>) => {
-  router.push({name: 'online-exam-test', params: { id: dataExam.id , time: dataExam.time }});
+  router.push({name: 'online-exam-test', params: { id: dataExam.id }});
 };
 
 const handleRemoveOptionTag = (tagOption: string) => {
   examChapterOptions.value = examChapterOptions.value.filter(option => option !== tagOption);
 };
 
+const totalQuestion = () => {
+  if (examLevel.value === '1') {
+    switch (examTime.value) {
+      case '3000':
+        return 50;
+      case '2400':
+        return 40;
+      case '1800':
+        return 30;
+      case '1200':
+        return 20;
+      case '900':
+        return 15;
+      case '600':
+        return 10;
+    }
+  }
+
+  if (examLevel.value === '2') {
+    switch (examTime.value) {
+      case '3000':
+        return 45;
+      case '2400':
+        return 35;
+      case '1800':
+        return 25;
+      case '1200':
+        return 15;
+      case '900':
+        return 12;
+      case '600':
+        return 8;
+    }
+  }
+
+  if (examLevel.value === '1') {
+    switch (examTime.value) {
+      case '3000':
+        return 36;
+      case '2400':
+        return 28;
+      case '1800':
+        return 20;
+      case '1200':
+        return 15;
+      case '900':
+        return 10;
+      case '600':
+        return 6;
+    }
+  }
+
+  if (examLevel.value === '1') {
+    switch (examTime.value) {
+      case '3000':
+        return 30;
+      case '2400':
+        return 24;
+      case '1800':
+        return 16;
+      case '1200':
+        return 12;
+      case '900':
+        return 6;
+      case '600':
+        return 4;
+    }
+  }
+}
+const createExam = async () => {
+  const storageToken = await localStorage.getItem('session_token');
+
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+
+  axios.post('/api/exams', {
+    totalQuestion: totalQuestion(),
+    level: parseInt(examLevel.value),
+    time: parseInt(examTime.value),
+    tags: examChapterOptions.value,
+  })
+    .then((res: any) => {
+      getAndShowQuestions(res);
+    });
+}
 </script>
