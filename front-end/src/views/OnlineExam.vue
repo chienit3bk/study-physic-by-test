@@ -1,7 +1,4 @@
 <template lang="pug">
-pre {{ examLevel }}
-pre {{ examTime }}
-pre {{ examChapterOptions }}
 .online-exam
   Page.pb-5(
     full-width,

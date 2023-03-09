@@ -14,7 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Result.init({
-    content: DataTypes.STRING,
+    UserId: DataTypes.INTEGER,
+    ExamId: DataTypes.INTEGER,
+    totalTime: DataTypes.INTEGER,
+    totalQuestion: DataTypes.INTEGER,
+    totalTrueQuestion: DataTypes.INTEGER,
+    score: DataTypes.FLOAT,
   }, {
     sequelize,
     modelName: 'Result',

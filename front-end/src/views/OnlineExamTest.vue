@@ -26,7 +26,10 @@
               ) {{ parseInt(index) > 8 ? index + 1 : `0${parseInt(index) + 1}` }}
           CardSection
             CountDownBox(
+              v-if="!isSubmited",
               :time="1000*60*data.time",
+              @end-countdown="handleCountDownEnd",
+              @submit="handleCountDownAbort"
             )
           Stack.pb-4(distribution="center")
             Button(primary, @click="requestSubmitAnswer", :disabled="isSubmited ") {{ $t('online_exam.submit_answer') }}
@@ -65,11 +68,18 @@
             CardSection
               Stack(vertical)
                 TextStyle(variation="strong") Số câu đúng: {{ numberTrueAnswer() }}
-                TextStyle(variation="strong") Thời gian làm bài:
+                TextStyle(variation="strong") Thời gian làm bài: {{ ((timeDoing.end - timeDoing.start) / 1000 / 60).toFixed(2) }} phút
                 TextStyle(variation="negative") Điểm số: {{  numberTrueAnswer() / data.questions.length * 10 }}
             CardSection
               template(#title) Tài liệu tham khảo
-              Stack
+              Stack(vertical)
+                StackItem(
+                  v-for="document, index in documentStore.documents"
+                  :key="String(index)",
+                )
+                  TextStyle(variation="strong") {{ document.title }}
+                  p {{ document.content }}
+
       LayoutSection
         Card
           template(#title)
@@ -110,19 +120,24 @@ Modal(
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, inject } from 'vue';
 import { useRoute } from 'vue-router';
-import { useQuestionStore, useDocumentStore } from '@/stores';
+import { useDocumentStore, useAuthStore } from '@/stores';
 import { Question, CountDownBox } from '@/components/online-exam';
 
 const axios: any = inject('axios');
 const route = useRoute();
 
-const questionStore = useQuestionStore();
+const documentStore = useDocumentStore();
+const authStore = useAuthStore();
 
 const isShowSubmitAnswerModal = ref<boolean>(false);
 const isShowNotFillAllQuestion = ref<boolean>(false);
 const isSubmited = ref<boolean>(false);
 const currentQuestionIndex = ref<number>(0);
 const currentQuestion = ref<Record<string, any>>({});
+const timeDoing = ref({
+  start: 0,
+  end: 0,
+})
 
 const data: {
   questions: Record<string, any>,
@@ -198,15 +213,40 @@ const numberTrueAnswer = () => {
 // const getDocuments = () => {
 //   const document = data.questions.map(question => question. )
 // };
+const handleCountDownEnd = () => {
+  isSubmited.value = true;
+  timeDoing.value.end = new Date().getTime();
+}
+
+const handleCountDownAbort = () => {
+  console.log(1);
+
+}
 
 const handleSubmitAnser = () => {
   isSubmited.value = true;
+  timeDoing.value.end = new Date().getTime();
   isShowSubmitAnswerModal.value = false;
+  createExamResult();
+  handleCountDownAbort();
 }
 
-const calculatePoints = () => {
-  return;
-};
+const createExamResult = async () => {
+  const storageToken = await localStorage.getItem('session_token');
+
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+
+  axios.post('/api/results', {
+    UserId: authStore.id,
+    totalQuestion: data.questions.length,
+    totalTrueQuestion: numberTrueAnswer(),
+    totalTime: data.time,
+    score: (numberTrueAnswer() / data.questions.length).toFixed(2),
+    ExamId: route.params.id,
+  });
+}
 
 async function getExams() {
   const storageToken = await localStorage.getItem('session_token');
@@ -226,6 +266,7 @@ async function getExams() {
 onMounted(async () => {
   if (examId.value) {
     getExams();
+    timeDoing.value.start = new Date().getTime();
   }
 });
 </script>

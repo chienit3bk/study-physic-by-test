@@ -83,6 +83,29 @@ class ExamController extends BaseController {
       res.status(400).send(error);
     }
   }
+
+  static async attachTags(req, document) {
+    const { Tag } = req.app.get('db');
+    const tagIds = req.body.tagIds;
+    if (Array.isArray(tagIds)) {
+      const tags = await Tag.findAll({
+        where: {
+          id: tagIds,
+        },
+      });
+
+      document.setTags(tags);
+    }
+  }
+
+  static async getList(req, res) {
+    try {
+      const result = await super.getList(req, 'Exam');
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
 };
 
 module.exports = ExamController;

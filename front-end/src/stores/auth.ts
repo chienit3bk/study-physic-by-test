@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 interface IuseAuthStore {
+  id: number,
   email: string,
   name: string,
   isAdmin: boolean,
@@ -13,6 +14,7 @@ const defaultState: IuseAuthStore = {
   isAdmin: false,
   token: '',
   refeshToken: '',
+  id: 0,
 }
 
 export const useAuthStore = defineStore({
@@ -23,8 +25,8 @@ export const useAuthStore = defineStore({
   actions: {
     setuseAuthStore(token: string) {
       const data = parseJwt(token);
-      const { email, name, role } = data.payload;
-
+      const { email, name, role, id } = data.payload;
+      this.id = id;
       this.email = email;
       this.name = name;
       this.isAdmin = role === 'admin';

@@ -5,13 +5,17 @@ VueCountdown.qsc2-countdown-timer(
   :key="resetTimeKey",
   :transform="timeTransform",
   v-slot="{ hours, minutes, seconds }",
+  @end="$emit('end-countdown')",
+  @abort="emit('submit')",
 )
   TextStyle(variation="strong") {{ $t('online_exam.time_remaining')}}{{ hours }}{{ minutes }}:{{ seconds }}
 </template>
+
 <script setup lang="ts">
 import { ref } from 'vue';
 import VueCountdown from '@chenfengyuan/vue-countdown';
-const props = defineProps({
+
+defineProps({
   message: {
     type: String,
     default: '',
@@ -25,6 +29,9 @@ const props = defineProps({
     default: '',
   },
 });
+
+const emit = defineEmits(['submit', 'end-countdown']);
+
 const resetTimeKey = ref(1);
 
 const timeTransform = (props: Record<string, any>) => {
@@ -42,6 +49,5 @@ const timeTransform = (props: Record<string, any>) => {
   });
   return formattedProps;
 };
-const handleCountDownEnd = () => {
-};
+
 </script>

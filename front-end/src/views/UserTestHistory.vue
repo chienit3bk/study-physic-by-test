@@ -7,6 +7,7 @@ Page(
 )
   Card(sectioned)
     IndexTable(
+      :key="String(isLoading)"
       :item-count="userResults.length",
       :headings="headings",
       :selectable="false",
@@ -18,10 +19,10 @@ Page(
         :position="index",
       )
         IndexTableCell {{ exam.id }}
-        IndexTableCell {{ exam.time }}
-        IndexTableCell {{ exam.total_question }}
-        IndexTableCell {{ exam.total_true_answer }}
-        IndexTableCell {{ exam.average_point }}
+        IndexTableCell {{ exam.totalTime }} phút
+        IndexTableCell {{ exam.totalQuestion }}
+        IndexTableCell {{ exam.totalTrueQuestion }}
+        IndexTableCell {{ exam.score }}
   //- .mt-3
   //-   Stack(distribution="center", alignment="center")
   //-     Pagination(
@@ -31,50 +32,38 @@ Page(
   //-       @previous="handlePressPagination(metaData.current_page - 1)",
   //-       @next="handlePressPagination(metaData.current_page + 1)",
   //-     )
-  </template>
+</template>
 
-  <script setup lang="ts">
-  import { ref } from 'vue';
-  import ViewMinor from '@icons/ViewMinor.svg?component';
-  const userExam = [
-  {
-    id: 1,
-    time: 50,
-    total_question: 40,
-    total_true_answer: 30,
-    average_point: 7.5,
-  },
-  {
-    id: 1,
-    time: 40,
-    total_question: 28,
-    total_true_answer: 25,
-    average_point: 9,
-  },
-  {
-    id: 1,
-    time: 20,
-    total_question: 15,
-    total_true_answer: 9,
-    average_point: 6,
-  },
-  {
-    id: 1,
-    time: 50,
-    total_question: 50,
-    total_true_answer: 40,
-    average_point: 8,
-  }
+<script setup lang="ts">
+import { ref, inject, computed } from 'vue';
+import { useAuthStore } from '@/stores';
+import ViewMinor from '@icons/ViewMinor.svg?component';
+
+const axios: any = inject('axios');
+const userId = computed(() => useAuthStore().id);
+const isLoading = ref<boolean>(false);
+const userResults = ref<Record<string, any>[]>([])
+
+const headings = [
+  { title: 'Mã bài thi' },
+  { title: 'Thời gian' },
+  { title: 'Số câu hỏi' },
+  { title: 'Số câu trả lời đúng' },
+  { title: 'Điểm' },
 ]
 
-  const isLoading = ref<boolean>(false);
-  const userResults = ref<Record<string, any>[]>(userExam)
+async function getExamsResult() {
+  const storageToken = await localStorage.getItem('session_token');
 
-  const headings = [
-    { title: 'Mã bài thi' },
-    { title: 'Thời gian' },
-    { title: 'Số câu hỏi' },
-    { title: 'Số câu trả lời đúng' },
-    { title: 'Điểm' },
-  ]
-  </script>
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+
+  axios.get(`/api/results`)
+    .then((examResult: Record<string, any>[]) => {
+      userResults.value = examResult.filter((result: Record<string, any>) => result.UserId === userId.value);
+    })
+}
+
+getExamsResult();
+</script>
