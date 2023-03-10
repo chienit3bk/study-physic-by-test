@@ -13,7 +13,29 @@ class QuestionController extends BaseController {
     } catch (error) {
       res.status(400).send(error);
     }
-  }
+  };
+
+  static async getListById(req, res) {
+    try {
+      const { ids } = req.body;
+      const { Question, Tag } = req.app.get('db');
+
+      const questions = await Question.findAll({
+        include: Tag,
+        where: {
+          id: ids,
+        }
+      });
+
+      if (questions) {
+        res.status(200).send(questions);
+      }
+
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  };
 
   static async getList(req, res) {
     try {

@@ -1,6 +1,7 @@
 const BaseController = require('./BaseController');
 
 class ExamController extends BaseController {
+  // Generate exam
   static async generate(req, res) {
     try {
       const { totalQuestion, tags, level, time } = req.body;
@@ -27,18 +28,21 @@ class ExamController extends BaseController {
       const promiseList = tags.map((tag) => {
         return new Promise((resolve, reject) => {
           Question.findAll({
+            include: req.app.get('db').Tag,
             where: {
               mainTag: tag,
             },
             order: [sequelize.fn('RANDOM')],
             limit: avarageQuestionPerTag
-          }).then(data => data.map(i => i.dataValues)).then((data) => {
+          }).then(data => {
+            console.log('question', data[0])
+            return data.map(i => i.dataValues)
+          }).then((data) => {
             question[tag] = data;
             resolve();
           })
         });
       });
-
 
       await Promise.allSettled(promiseList);
 
@@ -50,13 +54,13 @@ class ExamController extends BaseController {
             result.push(question[tag][i]);
           }
         }
-      })
+      });
 
       Object.keys(question).forEach(tag => {
         if (question[tag].length > minQuestionPerTag && result.length < totalQuestion) {
           result.push(question[tag][minQuestionPerTag]);
         }
-      })
+      });
 
       result = result.map(question => question.id);
 
@@ -84,7 +88,7 @@ class ExamController extends BaseController {
     }
   }
 
-  static async attachTags(req, document) {
+  static async attachTags(req, question) {
     const { Tag } = req.app.get('db');
     const tagIds = req.body.tagIds;
     if (Array.isArray(tagIds)) {
@@ -94,7 +98,7 @@ class ExamController extends BaseController {
         },
       });
 
-      document.setTags(tags);
+      question.setTags(tags);
     }
   }
 
@@ -106,6 +110,7 @@ class ExamController extends BaseController {
       res.status(400).send(error);
     }
   }
+
 };
 
 module.exports = ExamController;

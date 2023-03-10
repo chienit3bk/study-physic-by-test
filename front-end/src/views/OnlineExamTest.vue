@@ -170,12 +170,15 @@ const showNextQuestion = () => {
 };
 
 const handleAnswerChange = (newAnswer: Record<string, any>): void => {
+  console.log(1, newAnswer);
   currentQuestion.value.current_answer = newAnswer.answer;
-  const questionUpdate = data.questions.find((question: any) => question.id === newAnswer.id);
+  const questionUpdate = data.questions.find((question: any) => question.id == newAnswer.id);
 
   if (questionUpdate) {
     questionUpdate.current_answer = newAnswer.answer;
+    questionUpdate.questionTime = newAnswer.questionTime;
   }
+  console.log(questionUpdate);
 };
 
 const handleButtonChangeQuestion = (question: Record<string, any>, index: number) => {
@@ -223,6 +226,7 @@ const handleCountDownAbort = () => {
 
 }
 
+// Action for submit answer
 const handleSubmitAnser = () => {
   isSubmited.value = true;
   timeDoing.value.end = new Date().getTime();
@@ -243,10 +247,19 @@ const createExamResult = async () => {
     totalQuestion: data.questions.length,
     totalTrueQuestion: numberTrueAnswer(),
     totalTime: data.time,
-    score: (numberTrueAnswer() / data.questions.length).toFixed(2),
+    score: (numberTrueAnswer() * 10 / data.questions.length).toFixed(2),
     ExamId: route.params.id,
   });
 }
+
+const updateQuestionTime = async () => {
+  const questionTimes = data.questions.filter((question: Record<string, any>) => {
+    const time = question.questionTime;
+    // if (time && ) {
+
+    // }
+  });
+};
 
 async function getExams() {
   const storageToken = await localStorage.getItem('session_token');
