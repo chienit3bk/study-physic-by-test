@@ -2,7 +2,7 @@
 .document-list
   Card(sectioned)
     Stack.mb-2(distribution="trailing")
-      Button(primary @click="isActiveModalAdd = true") Thêm tài liệu
+      Button(primary @click="requestAddDocument") Thêm tài liệu
     Filters(
       v-model="paramsRequestGetSubs.inputFilterValue",
       :filters="[]",
@@ -90,6 +90,12 @@ Modal(
               :value="tag.value",
               :selected="isOptionSelected(tag.value)",
             ) {{ tag.label }}
+      Stack.mt-1
+        Tag(
+          v-for="tag, index in documentSelected.Tags",
+          :key="index",
+          @remove="handleTagSelected(tag)",
+        ) {{ tagLabel(tag) }}
 Modal(
   :open="isActiveModalAdd",
   @close="isActiveModalAdd = false",
@@ -122,6 +128,12 @@ Modal(
               :value="tag.value",
               :selected="isOptionSelected(tag.value)",
             ) {{ tag.label }}
+      Stack.mt-1
+        Tag(
+          v-for="tag, index in documentSelected.Tags",
+          :key="index",
+          @remove="handleTagSelected(tag)",
+        ) {{ tagLabel(tag) }}
 </template>
 
 <script setup lang="ts">
@@ -160,21 +172,22 @@ const handleTagSelected = (id: number): void => {
 };
 
 
-const isOptionSelected = (id: number) => {
-  return documentSelected.value.Tags?.some((item: number) => item === id);
+const isOptionSelected = (tag: string) => {
+  return documentSelected.value.Tags?.some((item: string) => item === tag);
 };
+const tagLabel = (id: number) => {
+  const tag = tagStore.tagOptions.find((tag: Record<string, any>) => tag.value === id);
+  return tag?.label;
+}
+
 const documents = ref<Record<string, any>[]>([]);
 const isLoading = ref<boolean>(false);
 const isActiveModalEdit = ref<boolean>(false);
 const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalAdd = ref<boolean>(false);
 
-const metaData = ref<Record<string, any>>({});
 const currentPage = ref<number>(1);
 const paramsRequestGetSubs = ref<Record<string, any>>({});
-
-const hasNextPage = computed<boolean>(() => metaData.value.current_page < metaData.value.last_page && !isLoading.value);
-const hasPreviousPage = computed<boolean>(() => metaData.value.current_page > 1 && !isLoading.value);
 
 const headings = [
   { title: 'ID' },
@@ -192,13 +205,14 @@ const handleChangeQuery = debounce(() => {getDocuments(paramsRequestGetSubs.valu
 
 const requestEditDocument = (document: Record<string, any>) => {
   documentSelected.value = document;
+  const Tags = document.Tags.map((item: Record<string, any>) => item.id);
+  documentSelected.value.Tags = Tags;
   isActiveModalEdit.value = true;
 };
 
 const requestDeleteDocument = (document: Record<string, any>) => {
   isActiveModalDelete.value = true;
   documentSelected.value = document;
-
 };
 
 const confirmDeleteTag = () => {
@@ -237,6 +251,17 @@ const updateDocument = () => {
     });
 };
 
+const requestAddDocument = () => {
+  documentSelected.value = {
+    id: 0,
+    title: '',
+    content: '',
+    Tags: [],
+  };
+
+  isActiveModalAdd.value = true
+};
+
 const addDocument = () => {
   const { title, content, Tags: tagIds } = documentSelected.value;
 
@@ -246,6 +271,12 @@ const addDocument = () => {
       toastData.error = false;
       toastData.content = 'Thêm tài liệu thành công';
       getDocuments();
+      documentSelected.value = {
+        id: 0,
+        title: '',
+        content: '',
+        Tags: [],
+      };
       isActiveModalAdd.value = false;
     })
     .catch(() => {
