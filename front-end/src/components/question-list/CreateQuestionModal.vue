@@ -129,7 +129,6 @@ const isOptionSelected = (id: number) => {
 };
 
 const tagLabel = (id: number) => {
-  console.log(tagsStore.tagOptions);
   const tag = tagsStore.tagOptions.find((tag: Record<string, any>) => tag.value === id);
   return tag?.label;
 }

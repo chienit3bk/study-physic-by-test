@@ -207,6 +207,7 @@ const requestEditDocument = (document: Record<string, any>) => {
   documentSelected.value = document;
   const Tags = document.Tags.map((item: Record<string, any>) => item.id);
   documentSelected.value.Tags = Tags;
+  console.log(documentSelected.value);
   isActiveModalEdit.value = true;
 };
 

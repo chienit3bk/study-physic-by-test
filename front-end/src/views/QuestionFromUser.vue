@@ -5,27 +5,27 @@
     subtitle="Thêm câu hỏi giúp cho ngân hàng câu hỏi chung thêm phần phong phú"
     :full-width="false",
     :breadcrumbs="[{content: 'DashBoard', url: '/'} ]",
-    :primary-action="{content: 'Đóng góp', onAction: () => handleAddQuestionFromUser}"
+    :primary-action="{content: 'Đóng góp', onAction: () => handleAddQuestionFromUser()}"
   )
     Card(sectioned)
       Form.p-3
         FormLayout
-          TextField(:multiline="4" v-model="questionCreate.question")
+          TextField(:multiline="4" v-model="questionCreate.description")
             template(#label) {{ $t('list_question.question_title') }}
           TextStyle {{ $t('list_question.question_answers') }}
           Stack(distribution="equalSpacing" vertical)
             Stack
-              TextField(v-model="questionCreate.answers[0]")
+              TextField(v-model="questionCreate.answer[0]")
             Stack
-              TextField(v-model="questionCreate.answers[1]")
+              TextField(v-model="questionCreate.answer[1]")
             Stack
-              TextField(v-model="questionCreate.answers[2]")
+              TextField(v-model="questionCreate.answer[2]")
             Stack
-              TextField(v-model="questionCreate.answers[3]")
+              TextField(v-model="questionCreate.answer[3]")
           Select(
-            v-if="questionCreate.answers.length > 0",
-            v-model="questionCreate.true_answer",
-            :options="questionCreate.answers.map((answer: string) => { return {label: answer, value: answer } })",
+            v-if="questionCreate.answer.length > 0",
+            v-model="questionCreate.trueAnswer",
+            :options="questionCreate.answer.map((answer: string) => { return {label: answer, value: answer } })",
             :placeholder="$t('list_question.question_select_true_answer')",
           )
             template(#label) {{ $t('list_question.question_true_answer') }}
@@ -46,19 +46,20 @@
               )
                 template(#prefix)
                   Icon(:source="SearchMinor", color="inkLighter")
+
             Listbox(@select="handleTagSelected")
               ListboxOption(
-                v-for="tag, index in TAGS"
+                v-for="tag, index in tagsStore.tagOptions"
                 :key="index"
-                :value="tag"
-                :selected="isOptionSelected(tag)"
-              ) {{ tag }}
+                :value="tag.value"
+                :selected="isOptionSelected(tag.value)"
+              ) {{ tag.label }}
           Stack
             Tag(
-              v-for="tag, index in questionCreate.tags",
+              v-for="tag, index in questionCreate.Tags",
               :key="index",
               @remove="handleTagSelected(tag)",
-            ) {{ tag }}
+            ) {{ tagLabel(tag) }}
 Modal(
   :open="isShowModalThank",
   :primary-action="{ content: 'Đóng', onAction: () => isShowModalThank = !isShowModalThank}"
@@ -70,42 +71,66 @@ Modal(
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
-import { TAGS, LEVELS } from '@/configs';
+import { ref, inject, reactive } from 'vue';
+import { useTagStore } from '@/stores';
+import { LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
 
-import { questionsFake } from './dataFake';
+const axios: any = inject('axios');
+const toastData: Record<string, any> = inject('toastData', {
+  active: false,
+  error: false,
+  content: '',
+});
+
+const tagsStore = useTagStore();
 
 // Question from user
 const questionCreate = reactive<Record<string, any>>({
-  id: '0',
-  number: '0',
-  tags: [],
-  question: '',
-  answers: ['A.', 'B.', 'C.', 'D.'],
-  true_answer: '',
-  level: '0',
-  average_time: 0,
-  instructions: '',
+  Tags: [],
+  description: '',
+  answer: ['A.', 'B.', 'C.', 'D.'],
+  trueAnswer: '',
+  level: 1,
+  mainTag: '',
+  instruction: '',
+  verify: false,
 });
 const tagsSelected = ref('');
 const isShowModalThank = ref(false);
-const handleTagSelected = (tag: string): void => {
-  const index = questionCreate.tags.indexOf(tag);
+const handleTagSelected = (id: number): void => {
+  const index = questionCreate.Tags?.indexOf(id);
 
   if (index === -1) {
-    questionCreate.tags.push(tag);
+    questionCreate.Tags?.push(id);
   } else {
-    questionCreate.tags = questionCreate.tags.filter((item: string) => item !== tag);
+    questionCreate.Tags = questionCreate.Tags?.filter((item: number) => item !== id);
   }
 };
 
-const isOptionSelected = (tag: string) => {
-  return questionCreate.tags?.some((item: string) => item === tag);
+const tagLabel = (id: number) => {
+  const tag = tagsStore.tagOptions.find((tag: Record<string, any>) => tag.value === id);
+  return tag?.label;
+}
+
+const isOptionSelected = (id: number) => {
+  return questionCreate.Tags?.some((item: number) => item === id);
 };
-
 const handleAddQuestionFromUser = () => {
+  const { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify } = questionCreate;
 
+  axios.post('/api/questions', { tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify })
+    .then(() => {
+      toastData.active = true;
+      toastData.error = false;
+      toastData.content = 'Đóng góp câu hỏi thành công';
+      
+    })
+    .catch(() => {
+      toastData.active = true;
+      toastData.error = true;
+      toastData.content = 'Đóng góp câu hỏi thất bại';
+    });
 }
 // Created
 </script>

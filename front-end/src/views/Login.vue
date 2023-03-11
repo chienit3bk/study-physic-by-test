@@ -90,7 +90,8 @@ const handleRegister = () => {
     email, password, name, address, phone, role
   })
     .then((res: any) => {
-      alert(res.message)
+      isLogin.value = true;
+      alert('Đăng ký thành công');
     })
     .catch(() => {
       isLogin.value = false;
