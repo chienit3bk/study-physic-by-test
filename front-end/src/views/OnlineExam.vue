@@ -76,7 +76,6 @@
           )
             ExamTest(
               :id="exam.id",
-              :title="exam.title",
               :numberQuestion="exam.number_question",
               :time="exam.time",
               :type="exam.type",
@@ -90,7 +89,6 @@ import { ref, computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { ExamTest } from '@/components/online-exam';
 import { CHAPTERS, LEVELS, EXAM_TIME } from '@/configs';
-import { examTestsFake } from './dataFake';
 
 const axios: any = inject('axios');
 
@@ -101,9 +99,38 @@ const examChapterOptions = ref([]);
 const examLevel = ref('');
 const examTime = ref('');
 
-const listExam = examTestsFake;
-const exams = listExam;
+const exams = ref<Record<string, any>[]>([]);
 
+async function getExamsResult() {
+  const storageToken = await localStorage.getItem('session_token');
+
+  if (storageToken) {
+    axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
+  }
+
+  axios.get(`/api/exams`)
+    .then((exam: Record<string, any>[]) => {
+      exams.value = exam
+        .filter((item: Record<string, any>) => item.UserId === 1)
+        .map((e: Record<string, any>) => {
+          let type;
+          if (e.level === 1) {
+            type = 'Lý thuyết';
+          } else if (e.level === 2) {
+            type = 'Nhận biết thông hiểu';
+          } else if (e.level === 3) {
+            type = 'Vận dụng thấp';
+          } else {
+            type = 'Vận dụng';
+          }
+          return { ...e, type};
+        })
+
+    })
+}
+
+// Created
+getExamsResult();
 
 const chapters = CHAPTERS.map((chapter: Record<string, any>, index: number) => {
   return {

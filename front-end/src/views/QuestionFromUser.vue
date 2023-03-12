@@ -72,11 +72,15 @@ Modal(
 
 <script setup lang="ts">
 import { ref, inject, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import { useTagStore } from '@/stores';
 import { LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
 
 const axios: any = inject('axios');
+
+const router = useRouter();
+
 const toastData: Record<string, any> = inject('toastData', {
   active: false,
   error: false,
@@ -124,7 +128,8 @@ const handleAddQuestionFromUser = () => {
       toastData.active = true;
       toastData.error = false;
       toastData.content = 'Đóng góp câu hỏi thành công';
-      
+      router.push({ name: 'dashboard' });
+
     })
     .catch(() => {
       toastData.active = true;

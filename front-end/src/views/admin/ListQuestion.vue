@@ -314,7 +314,7 @@ async function getQuestions() {
       data = data.map((question: Record<string, any>) => {
         question.Tags = question.Tags.map((tag: any) => tag.id);
         return question;
-      })
+      }).filter((question: Record<string, any>) => question.verify);
       questions.value = data;
     })
     .catch((error: Error) => {

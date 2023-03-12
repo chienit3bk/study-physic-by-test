@@ -21,7 +21,6 @@
               )
                 ExamTest(
                   :id="exam.id",
-                  :title="exam.title",
                   :numberQuestion="exam.totalQuestion",
                   :time="exam.time",
                   :type="exam.type",
@@ -95,21 +94,21 @@ const tabs = [
     accessibilityLabel: 'Tất cả các bài thi',
     panelID: 'all',
   },
-  {
-    id: '2',
-    content: '15 phút',
-    panelID: '2',
-  },
-  {
-    id: '3',
-    content: '30 phút',
-    panelID: '3',
-  },
-  {
-    id: '4',
-    content: '50 phút',
-    panelID: '4 ',
-  },
+  // {
+  //   id: '2',
+  //   content: '20 phút',
+  //   panelID: '2',
+  // },
+  // {
+  //   id: '3',
+  //   content: '30 phút',
+  //   panelID: '3',
+  // },
+  // {
+  //   id: '4',
+  //   content: '50 phút',
+  //   panelID: '4 ',
+  // },
 ];
 
 const exams = ref<Record<string, any>[]>(examTestsFake);

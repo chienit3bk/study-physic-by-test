@@ -44,7 +44,7 @@
         Pagination(
           :key="String(isLoading)",
           :has-previous="currentPage !== 1",
-          :has-next="currentPage !== parseInt(`${documentStore.documents.length / 12}`) + 1",
+          :has-next="documents.length === 12",
           @previous="handlePressPagination('prev')",
           @next="handlePressPagination('next')",
         )

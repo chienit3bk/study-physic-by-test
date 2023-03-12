@@ -43,7 +43,7 @@
         Pagination(
           :key="String(isLoading)",
           :has-previous="currentPage !== 1",
-          :has-next="currentPage !== parseInt(`${tagsStore.tags.length / 12}`) + 1",
+          :has-next="tags.length === 12",
           @previous="handlePressPagination('prev')",
           @next="handlePressPagination('next')",
         )

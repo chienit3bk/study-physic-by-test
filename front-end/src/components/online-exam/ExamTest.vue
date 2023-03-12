@@ -11,7 +11,7 @@ Card
 
 interface Props {
   id: number,
-  title: string,
+  title?: string,
   numberQuestion: number,
   time: number,
   type: string,

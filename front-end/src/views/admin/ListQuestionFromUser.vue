@@ -57,7 +57,7 @@ Page(
       Pagination(
         :key="String(isloading)",
         :has-previous="currentPage !== 1",
-        :has-next="currentPage !== parseInt(`${questionsStore.questionToManage.length / 12}`) + 1",
+        :has-next="questions.length === 12",
         :nextKeys="['k']",
         :previousKeys="['j']",
         :nextTooltip="$t('online_exam.next_question')",
@@ -177,7 +177,9 @@ const isActiveModalDelete = ref<boolean>(false);
 const isActiveModalEdit = ref<boolean>(false);
 const queryValue = ref<string>('');
 const currentPage = ref<number>(1);
-const selectedQuestion = ref<Record<string, any>>({});
+const selectedQuestion = ref<Record<string, any>>({
+  verify: true,
+});
 // const tagsSelected = ref([]);
 
 const tableHeadings = [
@@ -282,7 +284,7 @@ function updateQuestion() {
   const { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify } = selectedQuestion.value;
 
   axios
-    .put(`/api/questions/${selectedQuestion.value.id}`, { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify})
+    .put(`/api/questions/${selectedQuestion.value.id}`, { Tags: tagIds, answer, description, trueAnswer, mainTag, level, instruction, verify: true})
     .then(() => {
       toastData.active = true;
       toastData.error = false;
@@ -305,9 +307,9 @@ async function getQuestions() {
     axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
   }
   await axios.get('/api/questions', {
-    params: {
-      page: currentPage.value,
-    }
+    // params: {
+    //   page: currentPage.value,
+    // }
   })
     .then((res: any) => {
       let data = res;
