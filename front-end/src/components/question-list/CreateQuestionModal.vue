@@ -71,12 +71,11 @@ Modal(
 </template>
 <script setup lang="ts">
 import { ref, reactive, inject } from 'vue';
-import { useTagStore, useAuthStore } from '@/stores';
+import { useTagStore } from '@/stores';
 import { LEVELS } from '@/configs';
 import SearchMinor from '@icons/SearchMinor.svg?component';
 
 const tagsStore = useTagStore();
-const authStore = useAuthStore();
 
 const axios: any = inject('axios');
 const toastData: Record<string, any> = inject('toastData', {
@@ -93,7 +92,7 @@ const questionCreate = reactive<Record<string, any>>({
   level: 1,
   mainTag: '',
   instruction: '',
-  verify: authStore.isAdminUser,
+  verify: true,
 });
 
 
@@ -141,6 +140,12 @@ const addQuestion = () => {
       toastData.active = true;
       toastData.error = false;
       toastData.content = 'Tạo câu hỏi thành công';
+      // questionCreate.Tags = [];
+      questionCreate.description = '';
+      questionCreate.answer = ['A.', 'B.', 'C.', 'D.'];
+      // questionCreate.level = 1;
+      questionCreate.trueAnswer = '';
+      questionCreate.instruction = '';
       handleClose();
     })
     .catch(() => {

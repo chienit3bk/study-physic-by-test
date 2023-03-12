@@ -58,7 +58,7 @@ Page(
       Pagination(
         :key="String(isloading)",
         :has-previous="currentPage !== 1",
-        :has-next="currentPage !== parseInt(`${questionsStore.questionToManage}`) / 12 + 1",
+        :has-next="currentPage !== parseInt(`${questionsStore.questionToManage}`) / 12 - 1",
         :nextKeys="['k']",
         :previousKeys="['j']",
         :nextTooltip="$t('online_exam.next_question')",
@@ -314,8 +314,6 @@ async function getQuestions() {
       data = data.map((question: Record<string, any>) => {
         question.Tags = question.Tags.map((tag: any) => tag.id);
         return question;
-      }).filter((question: Record<string, any>) => {
-        return question.verify;
       })
       questions.value = data;
     })

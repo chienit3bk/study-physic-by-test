@@ -170,7 +170,6 @@ const showNextQuestion = () => {
 };
 
 const handleAnswerChange = (newAnswer: Record<string, any>): void => {
-  console.log(1, newAnswer);
   currentQuestion.value.current_answer = newAnswer.answer;
   const questionUpdate = data.questions.find((question: any) => question.id == newAnswer.id);
 
@@ -178,7 +177,6 @@ const handleAnswerChange = (newAnswer: Record<string, any>): void => {
     questionUpdate.current_answer = newAnswer.answer;
     questionUpdate.questionTime = newAnswer.questionTime;
   }
-  console.log(questionUpdate);
 };
 
 const handleButtonChangeQuestion = (question: Record<string, any>, index: number) => {
@@ -241,6 +239,17 @@ const createExamResult = async () => {
   if (storageToken) {
     axios.defaults.headers.common.Authorization = `Bearer ${storageToken}`;
   }
+  const questionTimes = data.questions
+    .filter((question: Record<string, any>) => {
+      const time = question.questionTime;
+      return time && time > 1000 && time < 300000
+    })
+    .map((question: Record<string, any>) => {
+      return {
+        id: question.id,
+        time: question.questionTime,
+      }
+    })
 
   axios.post('/api/results', {
     UserId: authStore.id,
@@ -249,16 +258,12 @@ const createExamResult = async () => {
     totalTime: data.time,
     score: (numberTrueAnswer() * 10 / data.questions.length).toFixed(2),
     ExamId: route.params.id,
+    questions: questionTimes,
   });
 }
 
 const updateQuestionTime = async () => {
-  const questionTimes = data.questions.filter((question: Record<string, any>) => {
-    const time = question.questionTime;
-    // if (time && ) {
 
-    // }
-  });
 };
 
 async function getExams() {
@@ -271,7 +276,7 @@ async function getExams() {
   axios.get(`/api/exams/${route.params.id}`)
     .then((exam: Record<string, any>) => {
       data.questions = exam.Questions;
-      data.time = exam.time / 1000 / 60;
+      data.time = exam.time / 60;
       currentQuestion.value = data.questions[0];
     })
 }
