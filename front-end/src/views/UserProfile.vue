@@ -41,8 +41,8 @@ const user = {
   name: 'chien',
   gmail: 'chien@gmail.com',
   phone: '0123456789',
-  address: 'Hai Ba Trung, Hà Nội',
-  total_time: '',
-  average_score: '',
+  address: 'Bình Xuyên, Vĩnh Phúc',
+  total_time: '300',
+  average_score: '6.8',
 }
 </script>
