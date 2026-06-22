@@ -67,9 +67,9 @@ Modal(
   template(#title) Chỉnh sửa tài liệu
   template(#content)
     ModalSection
-      TextField(v-model="documentSelected.title")
+      TextField(autoComplete="off" v-model="documentSelected.title")
         template(#label) Tiêu đề
-      TextField(v-model="documentSelected.content" :multiline="4")
+      TextField(autoComplete="off" v-model="documentSelected.content" :multiline="4")
         template(#label) Nội dung
       .mt-2
         Combobox.mt-2(allow-multiple)
@@ -105,9 +105,9 @@ Modal(
   template(#title) Thêm tài liệu
   template(#content)
     ModalSection
-      TextField(v-model="documentSelected.title")
+      TextField(autoComplete="off" v-model="documentSelected.title")
         template(#label) Tiêu đề
-      TextField(v-model="documentSelected.content" :multiline="4")
+      TextField(autoComplete="off" v-model="documentSelected.content" :multiline="4")
         template(#label) Nội dung
       .mt-2
         Combobox.mt-2(allow-multiple)
@@ -140,9 +140,9 @@ Modal(
 import { ref, computed, inject, onMounted } from 'vue';
 import { useTagStore, useDocumentStore } from '@/stores';
 import { debounce } from 'lodash';
-import DeleteMinor from '@icons/DeleteMinor.svg?component';
-import EditMinor from '@icons/EditMinor.svg?component';
-import SearchMinor from '@icons/SearchMinor.svg?component';
+import DeleteMinor from '@icons/DeleteIcon.svg?component';
+import EditMinor from '@icons/EditIcon.svg?component';
+import SearchMinor from '@icons/SearchIcon.svg?component';
 
 const axios: any = inject('axios');
 
@@ -161,7 +161,8 @@ const documentSelected = ref<Record<string, any>>({
   Tags: [],
 });
 
-const handleTagSelected = (id: number): void => {
+const handleTagSelected = (value: string): void => {
+  const id = Number(value);
   const index = documentSelected.value.Tags?.indexOf(id);
 
   if (index === -1) {

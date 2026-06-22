@@ -58,8 +58,8 @@ Page(
         :key="String(isloading)",
         :has-previous="currentPage !== 1",
         :has-next="questions.length === 12",
-        :nextKeys="['k']",
-        :previousKeys="['j']",
+        :nextKeys="(['k'] as any[])",
+        :previousKeys="(['j'] as any[])",
         :nextTooltip="$t('online_exam.next_question')",
         :previousTooltip="$t('online_exam.prev_question')",
         @previous="handlePressPagination('prev')",
@@ -78,18 +78,18 @@ Modal(
     ModalSection
       Form
         FormLayout
-          TextField(:multiline="4" v-model="selectedQuestion.description")
+          TextField(autoComplete="off" :multiline="4" v-model="selectedQuestion.description")
             template(#label) {{ $t('list_question.question_title') }}
           TextStyle {{ $t('list_question.question_answers') }}
           Stack(distribution="equalSpacing")
             Stack
-              TextField(v-model="selectedQuestion.answer[0]")
+              TextField(autoComplete="off" v-model="selectedQuestion.answer[0]")
             Stack
-              TextField(v-model="selectedQuestion.answer[1]")
+              TextField(autoComplete="off" v-model="selectedQuestion.answer[1]")
             Stack
-              TextField(v-model="selectedQuestion.answer[2]")
+              TextField(autoComplete="off" v-model="selectedQuestion.answer[2]")
             Stack
-              TextField(v-model="selectedQuestion.answer[3]")
+              TextField(autoComplete="off" v-model="selectedQuestion.answer[3]")
           Select(
             v-if="selectedQuestion.answer.length > 0",
             v-model="selectedQuestion.trueAnswer",
@@ -109,7 +109,7 @@ Modal(
             :options="LEVELS",
           )
               template(#label) {{ $t('select_exam.level_label')}}
-          TextField(:multiline="4" v-model="selectedQuestion.instruction")
+          TextField(autoComplete="off" :multiline="4" v-model="selectedQuestion.instruction")
             template(#label) Hướng dẫn
           Combobox(allow-multiple)
             template(#activator)
@@ -153,10 +153,10 @@ Modal(
 import { ref, onMounted, inject } from 'vue';
 import { useQuestionStore, useTagStore } from '@/stores';
 import { CreateQuestionModal } from '@/components';
-import DeleteMinor from '@icons/DeleteMinor.svg?component';
-import EditMinor from '@icons/EditMinor.svg?component';
+import DeleteMinor from '@icons/DeleteIcon.svg?component';
+import EditMinor from '@icons/EditIcon.svg?component';
 import { LEVELS } from '@/configs';
-import SearchMinor from '@icons/SearchMinor.svg?component';
+import SearchMinor from '@icons/SearchIcon.svg?component';
 import { debounce } from 'lodash';
 
 const axios: any = inject('axios');

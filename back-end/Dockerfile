@@ -1,22 +1,22 @@
-FROM node:18-alpine
-
-WORKDIR /usr/src/alt-app
-
-COPY . /usr/src/alt-app
-
-RUN npm install
-RUN npm install -g nodemon
+# syntax=docker/dockerfile:1
+FROM node:22-alpine
 
 WORKDIR /usr/src/app
 
-COPY entrypoint.sh /
+# Install dependencies first for better layer caching.
+COPY package*.json ./
+RUN npm install
 
-ENV PORT 3000
+# Copy the rest of the source.
+COPY . .
 
+ENV PORT=3000
 EXPOSE 3000
 
-RUN ["chmod", "+x", "/entrypoint.sh"]
+# entrypoint waits for Postgres, runs migrations + seeds, then starts the server.
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
-ENTRYPOINT [ "/entrypoint.sh" ]
-
-CMD tail -f /dev/null
+# Default to the hot-reload dev server (overridable in docker-compose / CLI).
+CMD ["npm", "run", "dev"]

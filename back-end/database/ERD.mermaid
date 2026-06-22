@@ -1,0 +1,100 @@
+erDiagram
+    users ||--o{ exams : "creates"
+    users ||--o{ results : "takes"
+    exams ||--o{ results : "produces"
+    exams ||--o{ exam_question : "contains"
+    questions ||--o{ exam_question : "in"
+    questions ||--o{ question_tag : "tagged"
+    tags ||--o{ question_tag : "labels"
+    documents ||--o{ document_tag : "tagged"
+    tags ||--o{ document_tag : "labels"
+
+    users {
+        int id PK
+        string name
+        string email UK
+        string password
+        string phone
+        string address
+        string role
+        float level
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+
+    questions {
+        int id PK
+        string description
+        string trueAnswer
+        int averateTime
+        string mainTag
+        string instruction
+        string image
+        bool verify
+        int level
+        jsonb answer
+        int totalUser
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+
+    tags {
+        int id PK
+        string content
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+
+    documents {
+        int id PK
+        string title
+        string content
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+
+    exams {
+        int id PK
+        int UserId FK
+        int level
+        int totalQuestion
+        int time
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+
+    results {
+        int id PK
+        int UserId FK
+        int ExamId FK
+        int totalTime
+        int totalQuestion
+        int totalTrueQuestion
+        float score
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+
+    exam_question {
+        int id PK
+        int QuestionId FK
+        int ExamId FK
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+
+    question_tag {
+        int id PK
+        int QuestionId FK
+        int TagId FK
+        timestamptz createdAt
+        timestamptz updatedAt
+    }
+
+    document_tag {
+        int id PK
+        int DocumentId FK
+        int TagId FK
+        timestamptz createdAt
+        timestamptz updatedAt
+    }

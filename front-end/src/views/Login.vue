@@ -5,9 +5,9 @@
       Card.mt-5.p-2(sectioned)
         template(#title) Chào mừng bạn đến với Web học Vật Lý lớp 12
         Stack(vertical distribution="center" spacing="base" v-if="isLogin")
-          TextField(v-model="userInput.email" type="email")
+          TextField(autoComplete="off" v-model="userInput.email" type="email")
             template(#label) Email (Tên đăng nhập)
-          TextField(v-model="userInput.password", :type="inputType")
+          TextField(autoComplete="off" v-model="userInput.password", :type="inputType")
             template(#label) Mật khẩu
             template(#suffix)
               Stack.pt-1(alignment="center")
@@ -18,19 +18,19 @@
             Button(primary @click="handleLogin") Đăng nhập
             Button(secondary @click="isLogin = false") Đăng ký tại đây
         Stack(vertical distribution="center" spacing="base" v-else)
-          TextField(v-model="userInput.email")
+          TextField(autoComplete="off" v-model="userInput.email")
             template(#label) Email (Tên đăng nhập)
-          TextField(v-model="userInput.name")
+          TextField(autoComplete="off" v-model="userInput.name")
             template(#label) Tên học sinh
-          TextField(v-model="userInput.address")
+          TextField(autoComplete="off" v-model="userInput.address")
             template(#label) Địa chỉ
-          TextField(v-model="userInput.phone")
+          TextField(autoComplete="off" v-model="userInput.phone")
             template(#label) SĐT
-          //- TextField(v-model="userInput.averatePoint")
+          //- TextField(autoComplete="off" v-model="userInput.averatePoint")
           //-   template(#label) Điêm trung bình hiện tại
-          TextField(v-model="userInput.password" type="password")
+          TextField(autoComplete="off" v-model="userInput.password" type="password")
             template(#label) Mật khẩu
-          TextField(v-model="userInput.confirmPassword" type="password")
+          TextField(autoComplete="off" v-model="userInput.confirmPassword" type="password")
             template(#label) Xác nhận mật khẩu
           Stack(v-if="userInput.password !== userInput.confirmPassword" distribution="center")
             TextStyle(variation="negative") Xác nhận mật khẩu chưa chính xác
@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue';
 import { useAuthStore } from '@/stores';
-import ViewMajor from '@icons/ViewMajor.svg?component';
+import ViewMajor from '@icons/ViewIcon.svg?component';
 import router from '@/router';
 const axios: any = inject('axios');
 

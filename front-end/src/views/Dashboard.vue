@@ -33,10 +33,10 @@ import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { ExamTest, VerticalTabList } from '@/components';
 import { examTestsFake } from './dataFake';
-import AppsMajor from '@icons/AppsMajor.svg?component';
-import CircleTickMajor from '@icons/CircleTickMajor.svg?component';
-import TimelineAttachmentMajor from '@icons/TimelineAttachmentMajor.svg?component';
-import StatusActiveMajor from '@icons/StatusActiveMajor.svg?component';
+import AppsMajor from '@icons/AppsIcon.svg?component';
+import CircleTickMajor from '@icons/CheckCircleIcon.svg?component';
+import TimelineAttachmentMajor from '@icons/AttachmentIcon.svg?component';
+import StatusActiveMajor from '@icons/StatusActiveIcon.svg?component';
 
 const axios: any = inject('axios');
 

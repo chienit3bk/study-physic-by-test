@@ -10,7 +10,7 @@ Modal(
     ModalSection
       Form
         FormLayout
-          TextField(:multiline="4" v-model="questionCreate.description")
+          TextField(autoComplete="off" :multiline="4" v-model="questionCreate.description")
             template(#label) {{ $t('list_question.question_title') }}
           Select(
             placeholder="Chọn nhãn chính",
@@ -21,13 +21,13 @@ Modal(
           TextStyle {{ $t('list_question.question_answers') }}
           Stack(distribution="equalSpacing")
             Stack
-              TextField(v-model="questionCreate.answer[0]")
+              TextField(autoComplete="off" v-model="questionCreate.answer[0]")
             Stack
-              TextField(v-model="questionCreate.answer[1]")
+              TextField(autoComplete="off" v-model="questionCreate.answer[1]")
             Stack
-              TextField(v-model="questionCreate.answer[2]")
+              TextField(autoComplete="off" v-model="questionCreate.answer[2]")
             Stack
-              TextField(v-model="questionCreate.answer[3]")
+              TextField(autoComplete="off" v-model="questionCreate.answer[3]")
           Select(
             v-if="questionCreate.answer.length > 0",
             v-model="questionCreate.true_answer",
@@ -71,7 +71,7 @@ Modal(
 import { ref, reactive, inject } from 'vue';
 import { useTagStore, useAuthStore } from '@/stores';
 import { LEVELS } from '@/configs';
-import SearchMinor from '@icons/SearchMinor.svg?component';
+import SearchMinor from '@icons/SearchIcon.svg?component';
 
 const tagsStore = useTagStore();
 const authStore = useAuthStore();
@@ -105,7 +105,8 @@ const handleClose = (): void => {
   emits('close');
 };
 
-const handleTagSelected = (id: number): void => {
+const handleTagSelected = (value: string): void => {
+  const id = Number(value);
   const index = questionCreate.Tags?.indexOf(id);
 
   if (index === -1) {

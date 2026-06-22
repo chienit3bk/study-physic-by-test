@@ -37,7 +37,7 @@ Page(
 <script setup lang="ts">
 import { ref, inject, computed } from 'vue';
 import { useAuthStore } from '@/stores';
-import ViewMinor from '@icons/ViewMinor.svg?component';
+import ViewMinor from '@icons/ViewIcon.svg?component';
 
 const axios: any = inject('axios');
 const userId = computed(() => useAuthStore().id);

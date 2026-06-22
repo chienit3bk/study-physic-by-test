@@ -5,9 +5,7 @@ const defaultState = {
   questions: [] as Record<string, any>[],
 }
 
-export const useQuestionStore = defineStore({
-  id: 'questions',
-
+export const useQuestionStore = defineStore('questions', {
   state: () => ( defaultState ),
 
   actions: {

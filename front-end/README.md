@@ -1,16 +1,62 @@
-# Vue 3 + TypeScript + Vite
+# Front-end — study-physic-by-test
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Single-page app for the physics quiz platform. **Vue 3 + Vite + Polaris-Vue + Pinia +
+vue-router + vue-i18n.** Templates are written in **pug**; the codebase is fully typed
+and checked with vue-tsc.
 
-## Recommended IDE Setup
+## Requirements
+- Node.js ≥ 20
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+## Setup
+```bash
+cd front-end
+npm install
+# set VITE_API_URL in .env (e.g. http://localhost:4000)
+```
 
-## Type Support For `.vue` Imports in TS
+## Run
+```bash
+npm run dev        # Vite dev server (default http://localhost:3600)
+```
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+## Scripts
+| Script | Purpose |
+| --- | --- |
+| `npm run dev` | Vite dev server |
+| `npm run build` | Production build → `dist/` |
+| `npm run typecheck` | `vue-tsc --noEmit` (must be 0 errors) |
+| `npm run build:check` | Type-check **and** build |
+| `npm run preview` | Preview the production build |
+| `npm run lint` | ESLint (flat config) |
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+## Structure
+```
+front-end/
+├── src/
+│   ├── main.ts            # app bootstrap (pinia, router, i18n, Polaris)
+│   ├── App.vue
+│   ├── router/            # vue-router routes
+│   ├── stores/            # Pinia stores (defineStore('id', {...}))
+│   ├── views/ · components/   # pages and UI (pug + Polaris-Vue)
+│   ├── layout/            # AppLayout
+│   ├── bootstrap/         # axios interceptor (auth, baseURL, 401 handling)
+│   ├── lang/              # vue-i18n setup + vi.ts messages
+│   ├── configs/ · services/ · scss/
+│   └── types.ts
+├── types/                 # ambient .d.ts (env, svg, polaris-vue global components)
+├── vite.config.ts · tsconfig.json · eslint.config.js
+└── index.html
+```
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+## Conventions
+- **Templates use pug** (`<template lang="pug">`).
+- **Polaris-Vue v2:** `TextField` requires `autoComplete`; `Select`/`OptionList`
+  options are `{ label, value }[]`; `OptionList` uses `:selected` + `@change`.
+  Icons: `import X from '@icons/<Name>Icon.svg?component'` (v9 `*Icon` names).
+- **Pinia 3:** `defineStore('id', { ... })`.
+- **API:** call through `@/bootstrap/api-interceptor` (adds the Bearer token, unwraps
+  `response.data`, redirects to `/logout` on 401).
+- **i18n:** `$t('key')` in templates; add strings to `src/lang/vi.ts`.
+
+Keep `npm run typecheck` at 0 errors. See `../CLAUDE.md` and `../.claude/` for the full
+conventions, agents, and skills.

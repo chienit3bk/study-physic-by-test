@@ -38,7 +38,7 @@ onMounted(() => {
 
 const emit = defineEmits(['updateAnswers']);
 
-const user_answer = ref<string>(props.currentAnswer || '');
+const user_answer = ref<string[]>(props.currentAnswer ? [props.currentAnswer] : []);
 
 const choices = props.answers.map((answer: string) => {
   return {
@@ -51,7 +51,7 @@ const handleAnswerChange = () => {
   const timeDoing = new Date().getTime() - questionTimeStart.value;
   const newAnswer = {
     id: props.id,
-    answer: user_answer.value,
+    answer: user_answer.value[0],
     questionTime: timeDoing > 10000 ? timeDoing - 2000 : timeDoing,
   };
 

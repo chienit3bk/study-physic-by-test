@@ -10,18 +10,18 @@ Modal(
     ModalSection
       Form
         FormLayout
-          TextField(:multiline="4" v-model="questionEdit.question")
+          TextField(autoComplete="off" :multiline="4" v-model="questionEdit.question")
             template(#label) {{ $t('list_question.question_title') }}
           TextStyle {{ $t('list_question.question_answers') }}
           Stack(distribution="equalSpacing")
             Stack
-              TextField(v-model="questionEdit.answers[0]")
+              TextField(autoComplete="off" v-model="questionEdit.answers[0]")
             Stack
-              TextField(v-model="questionEdit.answers[1]")
+              TextField(autoComplete="off" v-model="questionEdit.answers[1]")
             Stack
-              TextField(v-model="questionEdit.answers[2]")
+              TextField(autoComplete="off" v-model="questionEdit.answers[2]")
             Stack
-              TextField(v-model="questionEdit.answers[3]")
+              TextField(autoComplete="off" v-model="questionEdit.answers[3]")
           Select(
             v-if="questionEdit.answers.length > 0",
             v-model="questionEdit.true_answer",
@@ -67,7 +67,7 @@ Modal(
 import { ref, computed } from 'vue';
 import { TAGS, LEVELS } from '@/configs';
 import type { QuestionType } from '@/types';
-import SearchMinor from '@icons/SearchMinor.svg?component';
+import SearchMinor from '@icons/SearchIcon.svg?component';
 
 const tagsSelected = ref('');
 

@@ -37,15 +37,15 @@ Frame(
 import { ref, reactive, computed, provide, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore, useQuestionStore, useTagStore, useDocumentStore } from '@/stores'
-import HomeMajor from '@icons/HomeMajor.svg?component';
-import NoteMajor from '@icons/NoteMajor.svg?component';
-import CustomersMajor from '@icons/CustomersMajor.svg?component';
-import QuestionMarkMajor from '@icons/QuestionMarkMajor.svg?component';
-import TimelineAttachmentMajor from '@icons/TimelineAttachmentMajor.svg?component';
-import InsertDynamicSourceMajor from '@icons/InsertDynamicSourceMajor.svg?component';
-import ProfileMajor from '@icons/ProfileMajor.svg?component';
-import ListMajor from '@icons/ListMajor.svg?component';
-import ProductsMajor from '@icons/ProductsMajor.svg?component';
+import HomeMajor from '@icons/HomeIcon.svg?component';
+import NoteMajor from '@icons/NoteIcon.svg?component';
+import CustomersMajor from '@icons/PersonIcon.svg?component';
+import QuestionMarkMajor from '@icons/QuestionCircleIcon.svg?component';
+import TimelineAttachmentMajor from '@icons/AttachmentIcon.svg?component';
+import InsertDynamicSourceMajor from '@icons/WandIcon.svg?component';
+import ProfileMajor from '@icons/ProfileIcon.svg?component';
+import ListMajor from '@icons/ListBulletedIcon.svg?component';
+import ProductsMajor from '@icons/ProductIcon.svg?component';
 
 const router = useRouter();
 const route = useRoute();
