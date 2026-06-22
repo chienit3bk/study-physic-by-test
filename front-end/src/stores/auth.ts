@@ -17,9 +17,7 @@ const defaultState: IuseAuthStore = {
   id: 0,
 }
 
-export const useAuthStore = defineStore({
-  id: 'auth',
-
+export const useAuthStore = defineStore('auth', {
   state: () => (defaultState),
 
   actions: {

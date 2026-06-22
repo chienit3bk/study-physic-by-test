@@ -5,9 +5,7 @@ const defaultState = {
   documents: [] as Record<string, any>[],
 }
 
-export const useDocumentStore = defineStore({
-  id: 'documents',
-
+export const useDocumentStore = defineStore('documents', {
   state: () => ( defaultState ),
 
   actions: {

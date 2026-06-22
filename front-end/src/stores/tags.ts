@@ -5,9 +5,7 @@ const defaultState = {
   tags: [] as Record<string, any>[],
 }
 
-export const useTagStore = defineStore({
-  id: 'tags',
-
+export const useTagStore = defineStore('tags', {
   state: () => ( defaultState ),
 
   actions: {
@@ -35,7 +33,7 @@ export const useTagStore = defineStore({
   },
 
   getters: {
-    tagOptions(): Record<string, any>[] {
+    tagOptions(): { label: string; value: any }[] {
       return this.tags.map((tag: Record<string, any>) => {
         return {
           label: tag.content,
@@ -43,7 +41,7 @@ export const useTagStore = defineStore({
         }
       })
     },
-    tagOptionsLabel(): Record<string, any>[] {
+    tagOptionsLabel(): { label: string; value: any }[] {
       return this.tags.map((tag: Record<string, any>) => {
         return {
           label: tag.content,

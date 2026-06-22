@@ -66,7 +66,7 @@ Modal(
   template(#title) Chỉnh sửa nhãn
   template(#content)
     ModalSection
-      TextField(v-model="tagSelected.content")
+      TextField(autoComplete="off" v-model="tagSelected.content")
         template(#label) Nội dung nhãn
 
 Modal(
@@ -78,7 +78,7 @@ Modal(
   template(#title) Thêm nhãn
   template(#content)
     ModalSection
-      TextField(v-model="tagSelected.content")
+      TextField(autoComplete="off" v-model="tagSelected.content")
         template(#label) Nội dung nhãn
 </template>
 
@@ -86,8 +86,8 @@ Modal(
 import { ref, inject, onMounted } from 'vue';
 import { useTagStore } from '@/stores';
 import { debounce } from 'lodash';
-import DeleteMinor from '@icons/DeleteMinor.svg?component';
-import EditMinor from '@icons/EditMinor.svg?component';
+import DeleteMinor from '@icons/DeleteIcon.svg?component';
+import EditMinor from '@icons/EditIcon.svg?component';
 
 const axios: any = inject('axios');
 const init = async () => {

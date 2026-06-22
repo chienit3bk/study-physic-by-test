@@ -1,36 +1,43 @@
-version: "3.7"
 services:
   physic-test-postgres:
-    image: postgres:14-alpine3.17
+    image: postgres:16-alpine
     container_name: physic-test-postgres
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: postgres
     volumes:
       - './data:/var/lib/postgresql/data'
     ports:
-      - 4002:5432
+      - '4002:5432'
     networks:
       - physic-test-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   physic-test-api:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: physic-test-network
+    image: physic-test-api
     container_name: physic-test-api
     working_dir: /usr/src/app
+    env_file:
+      - .env
     ports:
-      - 4000:3000
+      - '4000:3000'
     volumes:
-      - ./:/usr/src/app
+      - './:/usr/src/app'
+      - '/usr/src/app/node_modules'
     depends_on:
-      - physic-test-postgres
+      physic-test-postgres:
+        condition: service_healthy
     networks:
       - physic-test-network
+
 networks:
   physic-test-network:
     driver: bridge

@@ -55,8 +55,8 @@
               Pagination(
                 :has-previous="disabledPaginationButton.prev",
                 :has-next="disabledPaginationButton.next",
-                :nextKeys="['']",
-                :previousKeys="['j']",
+                :nextKeys="([''] as any[])",
+                :previousKeys="(['j'] as any[])",
                 :nextTooltip="$t('online_exam.next_question')",
                 :previousTooltip="$t('online_exam.prev_question')",
                 @previous="showPrevQuestion",

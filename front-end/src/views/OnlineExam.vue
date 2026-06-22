@@ -15,7 +15,8 @@
           GridCell(:columnSpan="{ xs: 6, sm: 2, md: 2, lg: 2, xl: 2 }")
             Card
               OptionList(
-                v-model="examChapter"
+                :selected="examChapter"
+                @change="examChapter = $event"
                 :title="$t('select_exam.choose_type')"
                 :options="chapters"
               )
@@ -94,8 +95,8 @@ const axios: any = inject('axios');
 
 const router = useRouter();
 
-const examChapter = ref([]);
-const examChapterOptions = ref([]);
+const examChapter = ref<any[]>([]);
+const examChapterOptions = ref<string[]>([]);
 const examLevel = ref('');
 const examTime = ref('');
 

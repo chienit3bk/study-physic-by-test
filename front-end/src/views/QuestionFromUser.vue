@@ -10,18 +10,18 @@
     Card(sectioned)
       Form.p-3
         FormLayout
-          TextField(:multiline="4" v-model="questionCreate.description")
+          TextField(autoComplete="off" :multiline="4" v-model="questionCreate.description")
             template(#label) {{ $t('list_question.question_title') }}
           TextStyle {{ $t('list_question.question_answers') }}
           Stack(distribution="equalSpacing" vertical)
             Stack
-              TextField(v-model="questionCreate.answer[0]")
+              TextField(autoComplete="off" v-model="questionCreate.answer[0]")
             Stack
-              TextField(v-model="questionCreate.answer[1]")
+              TextField(autoComplete="off" v-model="questionCreate.answer[1]")
             Stack
-              TextField(v-model="questionCreate.answer[2]")
+              TextField(autoComplete="off" v-model="questionCreate.answer[2]")
             Stack
-              TextField(v-model="questionCreate.answer[3]")
+              TextField(autoComplete="off" v-model="questionCreate.answer[3]")
           Select(
             v-if="questionCreate.answer.length > 0",
             v-model="questionCreate.trueAnswer",
@@ -75,7 +75,7 @@ import { ref, inject, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useTagStore } from '@/stores';
 import { LEVELS } from '@/configs';
-import SearchMinor from '@icons/SearchMinor.svg?component';
+import SearchMinor from '@icons/SearchIcon.svg?component';
 
 const axios: any = inject('axios');
 
@@ -102,7 +102,8 @@ const questionCreate = reactive<Record<string, any>>({
 });
 const tagsSelected = ref('');
 const isShowModalThank = ref(false);
-const handleTagSelected = (id: number): void => {
+const handleTagSelected = (value: string): void => {
+  const id = Number(value);
   const index = questionCreate.Tags?.indexOf(id);
 
   if (index === -1) {

@@ -15,7 +15,7 @@ import { useAuthStore } from '@/stores';
 import { TAGS } from '@/configs';
 import { TagsTable, DocumentsTable } from '@/components';
 import { LayoutSection } from '@ownego/polaris-vue';
-import SearchMinor from '@icons/SearchMinor.svg?component';
+import SearchMinor from '@icons/SearchIcon.svg?component';
 
 
 const axios: any = inject('axios');

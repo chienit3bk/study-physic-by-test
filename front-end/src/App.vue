@@ -1,5 +1,5 @@
 <template lang="pug">
-AppProvider
+AppProvider(:i18n="{}")
   router-view
 </template>
 

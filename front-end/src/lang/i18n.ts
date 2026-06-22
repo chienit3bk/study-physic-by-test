@@ -6,7 +6,12 @@ const messages = {
 };
 
 export const i18n = createI18n({
+  legacy: false,
+  globalInjection: true, // keep $t() available in templates
   locale: 'vi',
+  fallbackLocale: 'vi',
   messages,
-  warnHtmlInMessage: 'off', // disable of the Detected HTML in message
-})
+  warnHtmlInMessage: 'off',
+});
+
+export default i18n;

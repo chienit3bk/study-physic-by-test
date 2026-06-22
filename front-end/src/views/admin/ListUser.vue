@@ -66,8 +66,8 @@ import { userFake } from '../dataFake';
 import { ref, computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { debounce } from 'lodash';
-import DeleteMinor from '@icons/DeleteMinor.svg?component';
-import ViewMinor from '@icons/ViewMinor.svg?component';
+import DeleteMinor from '@icons/DeleteIcon.svg?component';
+import ViewMinor from '@icons/ViewIcon.svg?component';
 
 const axios: any = inject('axios');
 const init = async () => {

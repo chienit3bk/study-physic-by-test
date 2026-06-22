@@ -47,7 +47,7 @@
           )
             CalloutCard.shadow-none(
               :title="selectedTabSection.title",
-              :primary-action="selectedTabSection.primaryAction",
+              :primary-action="(selectedTabSection.primaryAction as any)",
               :illustration="selectedTabSection.illustration || ''",
             )
               span {{ selectedTabSection.content }}
@@ -67,14 +67,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, inject, computed } from 'vue';
-import CircleTickMajor from '@icons/CircleTickMajor.svg?component';
-import InfoMinor from '@icons/InfoMinor.svg?component';
+import CircleTickMajor from '@icons/CheckCircleIcon.svg?component';
+import InfoMinor from '@icons/InfoIcon.svg?component';
 import type { VueElementConstructor } from 'vue';
 
 interface Tab {
   id: string,
   content: string,
-  icon: string | 'placeholder' | VueElementConstructor,
+  icon: string | 'placeholder' | VueElementConstructor | Record<string, any>,
   marked?: boolean,
   section: {
     title: string,
