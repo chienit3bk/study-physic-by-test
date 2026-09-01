@@ -16,11 +16,19 @@ Monorepo with two apps:
 
 ## Commands
 
+Root (repo root — runs both apps via `--prefix`):
+- `npm run setup` — copies each app's `.env.example` → `.env`, then installs both
+- `npm run dev` — API (`dev:api`) + Web (`dev:web`) together via `concurrently`
+- `npm run db:up` / `db:down` — PostgreSQL only, in Docker (host port 4002)
+- `npm run db:migrate` | `db:seed` | `db:seed:sql` | `db:reset`
+- `npm run up` / `down` — everything in Docker (API on host port 4000)
+- `npm run typecheck` / `build` / `lint` — fan out to both apps
+
 Backend (`cd back-end`):
 - `npm run dev` — hot-reload dev server (tsx watch)
 - `npm run build` / `npm start` — compile to `dist/` / run compiled
 - `npm run typecheck` — `tsc --noEmit` (must stay clean)
-- `npm run db:migrate` | `db:seed` | `db:reset`
+- `npm run db:migrate` | `db:seed` | `db:seed:sql` | `db:reset`
 - `docker compose up -d` — Postgres + API
 
 Frontend (`cd front-end`):
@@ -40,7 +48,8 @@ Frontend (`cd front-end`):
   Register new models in `src/models/index.ts` and add to the `ModelName` union.
 - Routes use plain `/:id` (no inline regex params). API routes sit behind JWT auth;
   admin-only routes add the `admin` middleware.
-- Config/secrets only through `src/config`; never hard-code. `.env` is git-ignored.
+- Config/secrets only through `src/config`; never hard-code. `.env` is git-ignored;
+  `.env.example` is the checked-in template — never commit a real `.env`.
 
 **Frontend**
 - Templates in pug. Polaris-Vue v2: `TextField` requires `autoComplete`;

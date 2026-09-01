@@ -1,0 +1,31 @@
+{
+  "name": "study-physic-by-test",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepo runner for back-end (API) and front-end (SPA) — see README.md.",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "env:init": "node -e \"const fs=require('fs');for(const d of ['back-end','front-end']){const t=d+'/.env';if(!fs.existsSync(t)){fs.copyFileSync(d+'/.env.example',t);console.log('created '+t)}}\"",
+    "install:all": "npm install --prefix back-end && npm install --prefix front-end",
+    "setup": "npm run env:init && npm run install:all",
+    "db:up": "docker compose -f back-end/docker-compose.yml up -d physic-test-postgres",
+    "db:down": "docker compose -f back-end/docker-compose.yml down",
+    "db:migrate": "npm --prefix back-end run db:migrate",
+    "db:seed": "npm --prefix back-end run db:seed",
+    "db:seed:sql": "npm --prefix back-end run db:seed:sql",
+    "db:reset": "npm --prefix back-end run db:reset",
+    "dev:api": "npm --prefix back-end run dev",
+    "dev:web": "npm --prefix front-end run dev",
+    "dev": "concurrently -n api,web -c blue,green \"npm:dev:api\" \"npm:dev:web\"",
+    "up": "docker compose -f back-end/docker-compose.yml up -d --build",
+    "down": "docker compose -f back-end/docker-compose.yml down",
+    "typecheck": "npm --prefix back-end run typecheck && npm --prefix front-end run typecheck",
+    "build": "npm --prefix back-end run build && npm --prefix front-end run build",
+    "lint": "npm --prefix front-end run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

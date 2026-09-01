@@ -5,13 +5,16 @@ vue-router + vue-i18n.** Templates are written in **pug**; the codebase is fully
 and checked with vue-tsc.
 
 ## Requirements
-- Node.js ≥ 20
+- Node.js `^20.19.0` or `>=22.12.0` (Vite 8 requirement; `nvm use 20` alone may resolve to
+  an older 20.x and fail — see the root `.nvmrc`)
 
 ## Setup
 ```bash
 cd front-end
 npm install
-# set VITE_API_URL in .env (e.g. http://localhost:4000)
+cp .env.example .env
+# VITE_API_URL defaults to http://localhost:3000 (host-run API);
+# use http://localhost:4000 if the API is running in Docker (npm run up at the root)
 ```
 
 ## Run
