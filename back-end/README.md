@@ -10,30 +10,45 @@ REST API for the physics quiz platform. **TypeScript + Express 5 + Sequelize 6 +
 ```bash
 cd back-end
 npm install
-# configure .env (see table below)
+cp .env.example .env
+# generate a real secret instead of the placeholder:
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+# paste it into JWT_SECRET (and REFRESH_TOKEN_SECRET) in .env
 ```
 
 ### Environment (`.env`)
 | Variable | Description |
 | --- | --- |
-| `DB_HOST` `DB_PORT` `DB_DATABASE` `DB_USERNAME` `DB_PASSWORD` | PostgreSQL connection |
-| `JWT_SECRET` | Secret for signing access tokens (use a long random value) |
+| `DB_HOST` | Postgres host — `localhost` for host runs (`db:up` exposes 4002), overridden to `physic-test-postgres` by `docker-compose.yml` for the API container |
+| `DB_PORT` | Postgres port — `4002` for host runs, overridden to `5432` in the container |
+| `DB_DATABASE` `DB_USERNAME` `DB_PASSWORD` | PostgreSQL connection |
+| `JWT_SECRET` | Secret for signing access tokens (use a long random value; logs an error at startup if unset) |
 | `JWT_EXPIRES_IN` | Access-token lifetime (default `1d`) |
+| `REFRESH_TOKEN_SECRET` | Secret for signing refresh tokens (ships with an insecure fallback — override it) |
+| `REFRESH_TOKEN_EXPIRES_IN` | Refresh-token lifetime (default `2d`) |
+| `SALT_ROUND` | bcrypt cost factor (default `10`) |
 | `PORT` | API port (default `3000`) |
+| `APP_NAME` | Service name used in logs and `/health` (default `iLrn`) |
+| `NODE_ENV` | `development` / `production` / `test` (default `development`) |
 
 ## Run
 
 ### With Docker (recommended)
 ```bash
-docker compose up -d
+docker compose up -d                          # Postgres + API
+docker compose up -d physic-test-postgres     # Postgres only (for a host-run API)
 ```
-Starts PostgreSQL and the API. The API container waits for the DB, runs migrations,
-and seeds demo data automatically. API is exposed on **http://localhost:4000**.
+`physic-test-postgres` exposes Postgres on host port **4002** (in-network `5432`) with
+data persisted to `./data`. `physic-test-api` exposes the API on host port **4000**
+(in-network `3000`); its `entrypoint.sh` waits for the DB, runs migrations, and seeds
+demo data automatically (`environment:` in `docker-compose.yml` points it at
+`physic-test-postgres:5432` regardless of what `DB_HOST`/`DB_PORT` say in `.env`).
 
 ### Locally
 ```bash
-npm run db:migrate     # create tables (needs a running Postgres)
-npm run db:seed        # insert demo data
+npm run db:migrate     # create tables (needs a running Postgres — e.g. db:up above)
+npm run db:seed        # insert demo users
+npm run db:seed:sql    # insert demo tags/questions/documents (idempotent)
 npm run dev            # hot-reload dev server (default port 3000)
 ```
 
@@ -45,7 +60,8 @@ npm run dev            # hot-reload dev server (default port 3000)
 | `npm start` | Run the compiled server (`node dist/app.js`) |
 | `npm run typecheck` | Type-check only (`tsc --noEmit`) |
 | `npm run db:migrate` / `db:migrate:undo` | Apply / undo migrations |
-| `npm run db:seed` | Seed demo data |
+| `npm run db:seed` | Seed demo users (idempotent) |
+| `npm run db:seed:sql` | Seed demo tags/questions/documents via `psql` (idempotent, `ON CONFLICT DO NOTHING`) |
 | `npm run db:reset` | Undo all → migrate → seed |
 
 ## Structure
@@ -67,6 +83,17 @@ back-end/
 ├── Dockerfile · docker-compose.yml · entrypoint.sh
 └── tsconfig.json
 ```
+
+## Demo accounts
+`npm run db:seed` creates these accounts (password **`123456`** for all):
+
+| Email | Role |
+| --- | --- |
+| `admin@test.com` | admin |
+| `student@test.com` | user |
+| `test0@test.com` | user |
+| `test1@test.com` | user |
+| `test2@test.com` | user |
 
 ## API overview
 - Public (`/auth`): `POST /auth/sign-up`, `POST /auth/login`, `GET /auth/refresh`.

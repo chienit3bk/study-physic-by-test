@@ -16,7 +16,8 @@ At runtime the schema is built by **Sequelize migrations**, not by `schema.sql`:
 
 ```bash
 npm run db:migrate     # create/upgrade tables
-npm run db:seed        # insert demo data
+npm run db:seed        # insert demo users
+npm run db:seed:sql    # insert demo tags/questions/documents (via psql, idempotent)
 npm run db:reset       # undo all, migrate, then seed
 ```
 
@@ -29,6 +30,9 @@ psql "$DATABASE_URL" -f database/schema.sql
 psql "$DATABASE_URL" -f database/seed.sql
 ```
 
+Or, against the Docker Postgres container: `npm run db:seed:sql` (root or back-end),
+which runs `docker exec -i physic-test-postgres psql ... -f - < database/seed.sql`.
+
 ## Demo accounts
 
 All seeded accounts use the password **`123456`**.
@@ -38,6 +42,13 @@ All seeded accounts use the password **`123456`**.
 | `admin@test.com` | admin |
 | `student@test.com` | user |
 | `test0@test.com` | user |
+| `test1@test.com` | user |
+| `test2@test.com` | user |
+
+## Known gap
+
+The `create_users_table` migration does not declare `email` as `UNIQUE`, even though
+this file's `schema.sql` does (`users_email_unique`). Not fixed here — follow-up migration.
 
 ## Schema overview
 

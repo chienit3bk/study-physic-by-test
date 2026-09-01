@@ -5,6 +5,14 @@ const bcrypt = require('bcrypt');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
+    const [existing] = await queryInterface.sequelize.query(
+      "SELECT id FROM users WHERE email = 'admin@test.com' LIMIT 1",
+    );
+    if (existing.length > 0) {
+      console.log('demo users already seeded, skipping');
+      return;
+    }
+
     const now = new Date();
     const password = bcrypt.hashSync('123456', 10);
 

@@ -11,16 +11,19 @@ PostgreSQL via Sequelize. Config: `back-end/config/sequelize-cli.cjs` (CLI) and
 ## Run the database (Docker)
 ```bash
 cd back-end
-docker compose up -d        # starts Postgres (+ api). Healthcheck-gated.
+docker compose up -d                          # starts Postgres (+ api). Healthcheck-gated.
+docker compose up -d physic-test-postgres     # Postgres only (host port 4002)
 ```
 The api container's `entrypoint.sh` waits for Postgres, runs migrations, and seeds.
+From the repo root, `npm run db:up` is the DB-only command above.
 
 ## Common commands (run in back-end/)
 | Task | Command |
 | --- | --- |
 | Apply pending migrations | `npm run db:migrate` |
 | Undo all migrations | `npm run db:migrate:undo` |
-| Seed demo data | `npm run db:seed` |
+| Seed demo users | `npm run db:seed` (idempotent — skips if `admin@test.com` exists) |
+| Seed demo tags/questions/documents | `npm run db:seed:sql` (runs `database/seed.sql` via `psql`, `ON CONFLICT DO NOTHING`) |
 | Full reset (undo → migrate → seed) | `npm run db:reset` |
 
 ## Create a new migration
@@ -44,4 +47,10 @@ node -e "const {newDb}=require('pg-mem');const fs=require('fs');const db=newDb()
 ```
 
 ## Demo accounts (after seeding)
-`admin@test.com` (admin) / `student@test.com` / `test0@test.com` — all password `123456`.
+`admin@test.com` (admin) / `student@test.com` / `test0@test.com` / `test1@test.com` /
+`test2@test.com` — all password `123456`.
+
+## Known gap (not fixed here)
+The `create_users_table` migration doesn't declare `email` as `UNIQUE`, even though
+`database/schema.sql` does (`users_email_unique`). Follow-up migration, not part of
+this change.
